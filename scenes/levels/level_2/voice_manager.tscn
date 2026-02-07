@@ -1,0 +1,20 @@
+[gd_scene load_steps=5 format=3 uid="uid://xheu2ilfn6da"]
+
+[ext_resource type="Script" uid="uid://t6j5sfjhkpxg" path="res://scenes/levels/level_2/VoiceManager.gd" id="1_o7g84"]
+[ext_resource type="WhisperResource" uid="uid://du6lklj6mqpj5" path="res://addons/ggml-tiny.en.bin" id="2_14pxq"]
+[ext_resource type="Script" uid="uid://bah6ooxpu4f0w" path="res://addons/godot_whisper/capture_stream_to_text.gd" id="3_va2mp"]
+
+[sub_resource type="AudioStreamMicrophone" id="AudioStreamMicrophone_j5tns"]
+
+[node name="VoiceManager" type="Node"]
+script = ExtResource("1_o7g84")
+
+[node name="CaptureStreamToText" type="SpeechToText" parent="."]
+language_model = ExtResource("2_14pxq")
+script = ExtResource("3_va2mp")
+use_dynamic_audio_context = false
+metadata/_custom_type_script = "uid://bah6ooxpu4f0w"
+
+[node name="MicPlayer" type="AudioStreamPlayer" parent="."]
+stream = SubResource("AudioStreamMicrophone_j5tns")
+bus = &"Record"
