@@ -4,41 +4,60 @@ extends CharacterBody2D
 const SPEED = 80.0
 const JUMP_VELOCITY = -200.0  # Adjusted for 2-tile jump height
 const GRAVITY = 580.0
+const DASH_DISTANCE = 20.0  
+const DASH_DURATION = 0.08  # Time in seconds for dash to complete
 
 # Cartridge abilities (to be enabled/disabled per cartridge)
-var can_dash = false
+var can_dash = true
 var can_double_jump = false
 var has_used_double_jump = false
+var has_used_dash = false
+var is_dashing = false
+var dash_timer = 0.0
+var dash_direction = 0  # 1 for right, -1 for left
 
 func _ready():
 	# Player setup
 	pass
 
 func _physics_process(delta):
+	# Handle dash timing
+	if is_dashing:
+		dash_timer -= delta
+		if dash_timer <= 0:
+			is_dashing = false
+	
 	# Apply gravity
 	if not is_on_floor():
 		velocity.y += GRAVITY * delta
 	else:
 		# Reset double jump when landing
 		has_used_double_jump = false
+		# Reset dash when landing
+		has_used_dash = false
 	
 	# Handle jump
-	if Input.is_action_just_pressed("ui_accept") or Input.is_action_just_pressed("ui_up"):
+	if Input.is_action_just_pressed("up"):
 		if is_on_floor():
 			jump()
 		elif can_double_jump and not has_used_double_jump:
 			double_jump()
 	
+	# Handle dash
+	if Input.is_action_just_pressed("dash") and can_dash and not has_used_dash:
+		dash()
+	
 	# Handle horizontal movement
-	var direction = Input.get_axis("ui_left", "ui_right")
+	var direction = Input.get_axis("left", "right")
 	if direction:
 		velocity.x = direction * SPEED
+		dash_direction = direction  # Update facing direction
 	else:
 		velocity.x = move_toward(velocity.x, 0, SPEED)
 	
-	# TODO: Add dash ability here when needed
-	# if Input.is_action_just_pressed("ui_dash") and can_dash:
-	#     dash()
+	# Override horizontal velocity if dashing
+	if is_dashing and dash_direction != 0:
+		velocity.x = dash_direction * (DASH_DISTANCE / DASH_DURATION)
 	
 	move_and_slide()
 
@@ -50,8 +69,11 @@ func double_jump():
 	has_used_double_jump = true
 
 func dash():
-	# Placeholder for dash ability
-	pass
+	if dash_direction != 0:  # Only dash if we have a direction
+		is_dashing = true
+		dash_timer = DASH_DURATION
+		has_used_dash = true
+		velocity.x = dash_direction * (DASH_DISTANCE / DASH_DURATION)
 
 # Called by game_manager when cartridge changes
 func set_cartridge_abilities(dash: bool, double_jump: bool):
