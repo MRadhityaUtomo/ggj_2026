@@ -1,18 +1,110 @@
-[gd_scene load_steps=4 format=3 uid="uid://bih70aup8l3ak"]
+[gd_scene load_steps=17 format=3 uid="uid://bih70aup8l3ak"]
 
-[ext_resource type="Texture2D" uid="uid://8mpfpgmxbq64" path="res://icon.svg" id="1_76ss4"]
+[ext_resource type="Texture2D" uid="uid://cd8vckvgwjiv2" path="res://star.png" id="2_32e5v"]
 [ext_resource type="Script" uid="uid://cceifvapuvqgj" path="res://scenes/flag.gd" id="2_flag"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_76ss4"]
 radius = 8.0
 
+[sub_resource type="AtlasTexture" id="AtlasTexture_q38m2"]
+atlas = ExtResource("2_32e5v")
+region = Rect2(0, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_tjkec"]
+atlas = ExtResource("2_32e5v")
+region = Rect2(32, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_s5mf2"]
+atlas = ExtResource("2_32e5v")
+region = Rect2(64, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_7kq5u"]
+atlas = ExtResource("2_32e5v")
+region = Rect2(96, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_msxbw"]
+atlas = ExtResource("2_32e5v")
+region = Rect2(128, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_rjvi2"]
+atlas = ExtResource("2_32e5v")
+region = Rect2(160, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_df0v8"]
+atlas = ExtResource("2_32e5v")
+region = Rect2(192, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_mir1r"]
+atlas = ExtResource("2_32e5v")
+region = Rect2(224, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_aofb0"]
+atlas = ExtResource("2_32e5v")
+region = Rect2(256, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_suq27"]
+atlas = ExtResource("2_32e5v")
+region = Rect2(288, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_s6cpg"]
+atlas = ExtResource("2_32e5v")
+region = Rect2(320, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_qfyfp"]
+atlas = ExtResource("2_32e5v")
+region = Rect2(352, 0, 32, 32)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_py37q"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_q38m2")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_tjkec")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_s5mf2")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_7kq5u")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_msxbw")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_rjvi2")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_df0v8")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_mir1r")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_aofb0")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_suq27")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_s6cpg")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_qfyfp")
+}],
+"loop": true,
+"name": &"default",
+"speed": 12.0
+}]
+
 [node name="flag" type="Area2D"]
 texture_filter = 1
 script = ExtResource("2_flag")
 
-[node name="Icon" type="Sprite2D" parent="."]
-scale = Vector2(0.09375, 0.09375)
-texture = ExtResource("1_76ss4")
-
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 shape = SubResource("CircleShape2D_76ss4")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+sprite_frames = SubResource("SpriteFrames_py37q")
+autoplay = "default"
