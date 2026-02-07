@@ -1,0 +1,18 @@
+[gd_scene load_steps=4 format=3 uid="uid://bih70aup8l3ak"]
+
+[ext_resource type="Texture2D" uid="uid://8mpfpgmxbq64" path="res://icon.svg" id="1_76ss4"]
+[ext_resource type="Script" uid="uid://cceifvapuvqgj" path="res://scenes/flag.gd" id="2_flag"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_76ss4"]
+radius = 8.0
+
+[node name="flag" type="Area2D"]
+texture_filter = 1
+script = ExtResource("2_flag")
+
+[node name="Icon" type="Sprite2D" parent="."]
+scale = Vector2(0.09375, 0.09375)
+texture = ExtResource("1_76ss4")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CircleShape2D_76ss4")

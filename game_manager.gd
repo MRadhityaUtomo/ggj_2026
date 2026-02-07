@@ -15,6 +15,7 @@ var current_state = GameState.PLAYING
 
 # Camera
 var camera: Camera2D
+var zoom_tween: Tween
 
 # Player reference
 var player: CharacterBody2D
@@ -23,6 +24,11 @@ var player_scene = preload("res://player.tscn")
 # Store player state when pausing
 var stored_player_position: Vector2
 var stored_player_velocity: Vector2
+
+# Zoom animation settings
+const ZOOM_DURATION = 0.3  # Duration in seconds (adjust for faster/slower)
+const ZOOM_TRANS_TYPE = Tween.TRANS_CUBIC  # Smooth easing
+const ZOOM_EASE_TYPE = Tween.EASE_IN_OUT  # Ease in and out
 
 # Cartridge abilities configuration
 # [can_dash, can_double_jump]
@@ -77,7 +83,7 @@ func spawn_player():
 
 func set_playing_view():
 	current_state = GameState.PLAYING
-	camera.zoom = Vector2(1.0, 1.0)  # Full viewport size (shows 192x128 area)
+	animate_camera_zoom(Vector2(1.0, 1.0))  # Zoom in
 	camera.position = Vector2(96, 64)  # Static camera centered on level
 	if player:
 		# Unpause physics
@@ -87,13 +93,26 @@ func set_playing_view():
 
 func set_selection_view():
 	current_state = GameState.PAUSED_SELECTION
-	camera.zoom = Vector2(0.5, 0.5)  # Zoomed out to show cartridges side by side (shows 384x256 area)
+	animate_camera_zoom(Vector2(0.5, 0.5))  # Zoom out
 	camera.position = Vector2(96, 64)
 	if player:
 		# Freeze player
 		stored_player_position = player.position
 		stored_player_velocity = player.velocity
 		player.set_physics_process(false)
+
+func animate_camera_zoom(target_zoom: Vector2):
+	# Kill existing tween if running
+	if zoom_tween:
+		zoom_tween.kill()
+	
+	# Create new tween
+	zoom_tween = create_tween()
+	zoom_tween.set_trans(ZOOM_TRANS_TYPE)
+	zoom_tween.set_ease(ZOOM_EASE_TYPE)
+	
+	# Animate the zoom
+	zoom_tween.tween_property(camera, "zoom", target_zoom, ZOOM_DURATION)
 
 func pause_and_show_selection():
 	preview_cartridge_index = current_cartridge_index
