@@ -61,12 +61,13 @@ func _physics_process(delta):
 		velocity.y = 0
 	
 	move_and_slide()
+	check_tile_collisions()
 
 func jump():
 	velocity.y = JUMP_VELOCITY
 
 func double_jump():
-	velocity.y = JUMP_VELOCITY *0.5
+	velocity.y = JUMP_VELOCITY
 	has_used_double_jump = true
 
 func dash():
@@ -82,3 +83,20 @@ func set_cartridge_abilities(dash: bool, double_jump: bool):
 	can_dash = dash
 	can_double_jump = double_jump
 	has_used_double_jump = false
+
+func check_tile_collisions():
+	for i in get_slide_collision_count():
+		var collision = get_slide_collision(i)
+		var collider = collision.get_collider()
+		
+		# Check if we collided with a TileMapLayer
+		if collider is TileMapLayer:
+			handle_tile_collision(collider)
+
+func handle_tile_collision(tile_layer: TileMapLayer):
+
+
+	# Example:
+	if tile_layer.name == "Obstacle":
+		LevelProgression.on_lose_condition_met()
+	pass

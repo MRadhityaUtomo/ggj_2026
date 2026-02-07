@@ -29,4 +29,4 @@ cartridge_configs = Array[ExtResource("2_rej77")]([SubResource("Resource_ogj6a")
 spawn_marker = NodePath("Marker2D")
 
 [node name="Marker2D" type="Marker2D" parent="."]
-position = Vector2(177, 81)
+position = Vector2(173, 80)
