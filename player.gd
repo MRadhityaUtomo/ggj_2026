@@ -27,8 +27,8 @@ func _physics_process(delta):
 		if dash_timer <= 0:
 			is_dashing = false
 	
-	# Apply gravity
-	if not is_on_floor():
+	# Apply gravity (skip during dash for flat horizontal movement)
+	if not is_on_floor() and not is_dashing:
 		velocity.y += GRAVITY * delta
 	else:
 		# Reset double jump when landing
@@ -46,7 +46,7 @@ func _physics_process(delta):
 	# Handle dash
 	if Input.is_action_just_pressed("dash") and can_dash and not has_used_dash:
 		dash()
-	
+
 	# Handle horizontal movement
 	var direction = Input.get_axis("left", "right")
 	if direction:
@@ -55,9 +55,10 @@ func _physics_process(delta):
 	else:
 		velocity.x = move_toward(velocity.x, 0, SPEED)
 	
-	# Override horizontal velocity if dashing
+	# Override velocity if dashing — flat horizontal, no vertical
 	if is_dashing and dash_direction != 0:
 		velocity.x = dash_direction * (DASH_DISTANCE / DASH_DURATION)
+		velocity.y = 0
 	
 	move_and_slide()
 
@@ -65,7 +66,7 @@ func jump():
 	velocity.y = JUMP_VELOCITY
 
 func double_jump():
-	velocity.y = JUMP_VELOCITY
+	velocity.y = JUMP_VELOCITY *0.5
 	has_used_double_jump = true
 
 func dash():
@@ -73,6 +74,7 @@ func dash():
 		is_dashing = true
 		dash_timer = DASH_DURATION
 		has_used_dash = true
+		velocity.y = 0  # Zero out vertical so we move flat
 		velocity.x = dash_direction * (DASH_DISTANCE / DASH_DURATION)
 
 # Called by game_manager when cartridge changes
