@@ -13,7 +13,7 @@ func _ready() -> void:
 	#for cell in cells:
 		#print("Tile at:", cell)
 	
-	_generate_text("test")
+	#_generate_text("test")
 	voice_manager.connect("command_detected", _generate_text)
 
 func _generate_text(text : String) -> void:

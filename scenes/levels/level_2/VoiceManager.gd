@@ -3,6 +3,7 @@ extends Node
 signal command_detected(text)
 
 var text = "test"
+var is_initialized = false
 
 @onready var speech_to_text = $CaptureStreamToText
 @onready var mic_player = $MicPlayer
@@ -10,6 +11,15 @@ var text = "test"
 var bus_layout_path = "res://samples/godot_whisper/sample_bus_layout.tres"
 
 func _ready():
+	# Don't auto-setup anymore
+	# Setup will be triggered manually when cartridge becomes active
+	pass
+
+func initialize():
+	if is_initialized:
+		return
+	
+	is_initialized = true
 	#_setup_audio_system()
 	_setup_mic()
 	_setup_speech_to_text()
@@ -48,5 +58,11 @@ func _on_transcribed_msg(is_partial, new_text):
 	text = clean_text
 
 func _exit_tree():
+	cleanup()
+
+func cleanup():
 	if speech_to_text:
 		speech_to_text.recording = false
+	if mic_player and mic_player.playing:
+		mic_player.stop()
+	is_initialized = false

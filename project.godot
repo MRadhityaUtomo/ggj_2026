@@ -20,7 +20,7 @@ config/icon="res://icon.svg"
 buses/default_bus_layout="uid://cagv60w6i242n"
 driver/enable_input=true
 driver/mix_rate=16000
-buses/channel_disable_threshold_db=-20.6
+buses/channel_disable_threshold_db=-16.0
 
 [display]
 
