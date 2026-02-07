@@ -1,6 +1,7 @@
-[gd_scene load_steps=6 format=4 uid="uid://c2wv4ftrbmhqw"]
+[gd_scene load_steps=7 format=4 uid="uid://c2wv4ftrbmhqw"]
 
 [ext_resource type="Texture2D" uid="uid://cnfixigj0cmp" path="res://tilemap fire.png" id="1_iwpxm"]
+[ext_resource type="PackedScene" uid="uid://bih70aup8l3ak" path="res://scenes/flag.tscn" id="2_icbrf"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_iwpxm"]
 texture = ExtResource("1_iwpxm")
@@ -174,3 +175,6 @@ tile_set = SubResource("TileSet_6kjmi")
 position = Vector2(16, 16)
 tile_map_data = PackedByteArray("AAD//wQAAAABAAQAAAD//wMAAAAGAAMAAAD//wIAAAAGAAMAAFD//wEAAAAAAAEAAAD//wAAAAADAAMAAFD//wUAAAAFAAMAAAD//wYAAAACAAQAAAAAAAYAAAAAAAUAAAABAAYAAAAAAAQAAAADAAYAAAAAAAEAAAAEAAYAAAADAAQAAAAFAAYAAAAEAAQAAAAGAAYAAAABAAUAAAAHAAYAAAABAAQAAAAJAAYAAAABAAQAAAAIAAYAAAAEAAUAAAD/////AAAAAAEAAAAKAAIAAAAAAAEAAAAKAAMAAAAIAAQAAAAKAAQAAAAFAAMAAGAKAAUAAAACAAQAAAAKAAYAAAAAAAMAAAAKAAEAAAAAAAMAAAAKAAAAAAABAAMAAAAKAP//AAAAAAEAAAAJAP//AAAEAAMAAAAIAP//AAABAAUAAAAHAP//AAADAAMAAAAGAP//AAAIAAQAAAAEAP//AAAIAAQAAAAFAP//AAAEAAMAAAADAP//AAAEAAMAAAACAP//AAADAAMAAAABAP//AAAIAAQAAAAAAP//AAABAAUAAAACAAYAAAAEAAQAAAAAAAMAAAADAAQAAAABAAMAAAAIAAMAAAA=")
 tile_set = SubResource("TileSet_wmi5b")
+
+[node name="flag" parent="." instance=ExtResource("2_icbrf")]
+position = Vector2(164, 48)

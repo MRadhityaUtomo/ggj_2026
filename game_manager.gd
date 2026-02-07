@@ -1,7 +1,15 @@
 extends Node2D
 
-# Cartridges will be populated dynamically from children
-var cartridges = []
+## ─── CONFIGURATION ───────────────────────────────────────────────────────────
+## Drag cartridge scenes here and pick their type (RED / BLUE / GREEN)
+@export var cartridge_configs: Array[CartridgeConfig] = []
+
+## Optional: place a Marker2D child named "SpawnPoint" in this scene.
+## The player will spawn there on first load. If missing, falls back to (32, 80).
+@export var spawn_marker: Marker2D
+
+## ─── INTERNAL STATE ──────────────────────────────────────────────────────────
+var cartridges: Array[Cartridge] = []  # instantiated cartridge nodes
 var current_cartridge_index = 0
 var preview_cartridge_index = 0
 
@@ -11,6 +19,7 @@ var current_state = GameState.PLAYING
 
 # Camera
 var camera: Camera2D
+var zoom_tween: Tween
 
 # Player reference
 var player: CharacterBody2D
@@ -20,36 +29,34 @@ var player_scene = preload("res://player.tscn")
 var stored_player_position: Vector2
 var stored_player_velocity: Vector2
 
-# Cartridge abilities configuration
-# [can_dash, can_double_jump]
-var cartridge_abilities = [
-	[false, false],  # Cartridge 1: basic jump only
-	[true, false],   # Cartridge 2: dash ability
-	[false, true]    # Cartridge 3: double jump ability
-]
+# Zoom animation settings
+const ZOOM_DURATION = 0.3
+const ZOOM_TRANS_TYPE = Tween.TRANS_CUBIC
+const ZOOM_EASE_TYPE = Tween.EASE_IN_OUT
 
 func _ready():
 	# Setup camera
 	camera = Camera2D.new()
 	add_child(camera)
 	camera.enabled = true
-	# Pixel-perfect camera settings
-	camera.position_smoothing_enabled = false  # Disable smoothing for pixel-perfect
-	
-	# Dynamically get all cartridge children from root node
-	for child in get_children():
-		if child.name.begins_with("cartridge_"):
-			cartridges.append(child)
-	
-	# Sort cartridges by name to ensure consistent ordering
-	cartridges.sort_custom(func(a, b): return a.name < b.name)
-	
+	camera.position_smoothing_enabled = false  # Pixel-perfect
+
+	# Instantiate cartridge scenes from configs
+	for config in cartridge_configs:
+		if config and config.scene:
+			var instance = config.scene.instantiate()
+			# Ensure it has the Cartridge script for collision toggling
+			if not instance is Cartridge:
+				instance.set_script(preload("res://cartridge.gd"))
+			add_child(instance)
+			cartridges.append(instance)
+
 	# Spawn player
 	spawn_player()
-	
+
 	# Initialize cartridge visibility and collisions
 	update_cartridge_visibility()
-	
+
 	# Start in playing mode
 	set_playing_view()
 	update_player_abilities()
@@ -61,9 +68,9 @@ func _process(_delta):
 				pause_and_show_selection()
 		
 		GameState.PAUSED_SELECTION:
-			if Input.is_action_just_pressed("ui_left"):
+			if Input.is_action_just_pressed("left"):
 				cycle_preview(-1)
-			elif Input.is_action_just_pressed("ui_right"):
+			elif Input.is_action_just_pressed("right"):
 				cycle_preview(1)
 			elif Input.is_action_just_pressed("ui_accept"):  # Enter/Space
 				confirm_cartridge_change()
@@ -72,13 +79,16 @@ func _process(_delta):
 
 func spawn_player():
 	player = player_scene.instantiate()
-	# Spawn at a reasonable starting position (center-left of screen)
-	player.position = Vector2(32, 80)
+	# Use spawn marker if set, otherwise fallback
+	if spawn_marker:
+		player.position = spawn_marker.global_position
+	else:
+		player.position = Vector2(32, 80)
 	add_child(player)
 
 func set_playing_view():
 	current_state = GameState.PLAYING
-	camera.zoom = Vector2(1.0, 1.0)  # Full viewport size (shows 192x128 area)
+	animate_camera_zoom(Vector2(1.0, 1.0))  # Zoom in
 	camera.position = Vector2(96, 64)  # Static camera centered on level
 	if player:
 		# Unpause physics
@@ -88,13 +98,26 @@ func set_playing_view():
 
 func set_selection_view():
 	current_state = GameState.PAUSED_SELECTION
-	camera.zoom = Vector2(0.5, 0.5)  # Zoomed out to show cartridges side by side (shows 384x256 area)
+	animate_camera_zoom(Vector2(0.5, 0.5))  # Zoom out
 	camera.position = Vector2(96, 64)
 	if player:
 		# Freeze player
 		stored_player_position = player.position
 		stored_player_velocity = player.velocity
 		player.set_physics_process(false)
+
+func animate_camera_zoom(target_zoom: Vector2):
+	# Kill existing tween if running
+	if zoom_tween:
+		zoom_tween.kill()
+	
+	# Create new tween
+	zoom_tween = create_tween()
+	zoom_tween.set_trans(ZOOM_TRANS_TYPE)
+	zoom_tween.set_ease(ZOOM_EASE_TYPE)
+	
+	# Animate the zoom
+	zoom_tween.tween_property(camera, "zoom", target_zoom, ZOOM_DURATION)
 
 func pause_and_show_selection():
 	preview_cartridge_index = current_cartridge_index
@@ -119,9 +142,9 @@ func update_cartridge_preview():
 	for i in range(cartridges.size()):
 		var is_preview = (i == preview_cartridge_index)
 		cartridges[i].visible = is_preview
-		cartridges[i].modulate = Color(1, 1, 1, 1)  # Full brightness
+		cartridges[i].modulate = Color(1, 1, 1, 1)
 		# Keep collisions disabled during preview since physics is paused
-		set_cartridge_collision_enabled(cartridges[i], false)
+		cartridges[i].set_collision_enabled(false)
 
 func confirm_cartridge_change():
 	current_cartridge_index = preview_cartridge_index
@@ -133,21 +156,10 @@ func update_cartridge_visibility():
 	for i in range(cartridges.size()):
 		var is_active = (i == current_cartridge_index)
 		cartridges[i].visible = is_active
-		cartridges[i].modulate = Color(1, 1, 1, 1)  # Reset modulation
-		# Enable collisions only for the active cartridge
-		set_cartridge_collision_enabled(cartridges[i], is_active)
-
-func set_cartridge_collision_enabled(cartridge: Node2D, enabled: bool):
-	# Find all TileMapLayer nodes and toggle their collision
-	for child in cartridge.get_children():
-		if child is TileMapLayer:
-			# Instead of disabling the entire layer, just toggle collision
-			if enabled:
-				child.collision_enabled = true
-			else:
-				child.collision_enabled = false
+		cartridges[i].modulate = Color(1, 1, 1, 1)
+		cartridges[i].set_collision_enabled(is_active)
 
 func update_player_abilities():
-	if player and current_cartridge_index < cartridge_abilities.size():
-		var abilities = cartridge_abilities[current_cartridge_index]
-		player.set_cartridge_abilities(abilities[0], abilities[1])
+	if player and current_cartridge_index < cartridge_configs.size():
+		var abilities = cartridge_configs[current_cartridge_index].get_abilities()
+		player.set_cartridge_abilities(abilities["can_dash"], abilities["can_double_jump"])

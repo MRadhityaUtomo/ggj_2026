@@ -1,6 +1,5 @@
-[gd_scene load_steps=7 format=4 uid="uid://kg4jnf1ldr8d"]
+[gd_scene load_steps=6 format=4 uid="uid://kg4jnf1ldr8d"]
 
-[ext_resource type="Script" uid="uid://d2wpcol18aujn" path="res://scenes/levels/level_2/game_manager.gd" id="1_mnov4"]
 [ext_resource type="Texture2D" uid="uid://cnfixigj0cmp" path="res://tilemap fire.png" id="2_mdhae"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_iwpxm"]
@@ -165,7 +164,6 @@ physics_layer_0/collision_layer = 1
 sources/0 = SubResource("TileSetAtlasSource_icbrf")
 
 [node name="cartridge_5" type="Node2D"]
-script = ExtResource("1_mnov4")
 
 [node name="Background" type="TileMapLayer" parent="."]
 position = Vector2(16, 16)
