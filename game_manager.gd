@@ -1,10 +1,6 @@
 extends Node2D
 
-# References to cartridges - FIXED node references
-@onready var cartridge_1 = $cartridge_1
-@onready var cartridge_2 = $cartridge_2  # Fixed: was pointing to cartridge_3
-@onready var cartridge_3 = $cartridge_3  # Fixed: was pointing to cartridge_2
-
+# Cartridges will be populated dynamically from children
 var cartridges = []
 var current_cartridge_index = 0
 var preview_cartridge_index = 0
@@ -40,8 +36,13 @@ func _ready():
 	# Pixel-perfect camera settings
 	camera.position_smoothing_enabled = false  # Disable smoothing for pixel-perfect
 	
-	# Store cartridges in array
-	cartridges = [cartridge_1, cartridge_2, cartridge_3]
+	# Dynamically get all cartridge children from root node
+	for child in get_children():
+		if child.name.begins_with("cartridge_"):
+			cartridges.append(child)
+	
+	# Sort cartridges by name to ensure consistent ordering
+	cartridges.sort_custom(func(a, b): return a.name < b.name)
 	
 	# Spawn player
 	spawn_player()
