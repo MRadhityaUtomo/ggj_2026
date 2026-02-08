@@ -34,12 +34,52 @@ const ZOOM_DURATION = 0.3
 const ZOOM_TRANS_TYPE = Tween.TRANS_CUBIC
 const ZOOM_EASE_TYPE = Tween.EASE_IN_OUT
 
+# Add to your variables section
+var tv_container: Node2D  # Container for TV frame and decorations
+var tv_frame: Sprite2D    # The TV bezel/frame
+var tv_frame_area: Area2D  # For mouse detection
+var tv_rotation: float = 0.0  # Current TV rotation for gravity changes
+var rotation_index: int = 0  # 0=0°, 1=90°, 2=180°, 3=270°
+
 func _ready():
 	# Setup camera
 	camera = Camera2D.new()
 	add_child(camera)
 	camera.enabled = true
 	camera.position_smoothing_enabled = false  # Pixel-perfect
+
+	# Create TV container (this will rotate when gravity changes)
+	tv_container = Node2D.new()
+	add_child(tv_container)
+	tv_container.z_index = 100  # Render above gameplay
+	tv_container.position = Vector2(96, 64)  # Set pivot point to center of screen
+
+	# Add TV frame sprite (relative to container)
+	tv_frame = Sprite2D.new()
+	tv_frame.texture = preload("res://tv_frame.png")  # Your TV bezel sprite
+	tv_frame.centered = true
+	tv_frame.position = Vector2.ZERO  # Centered on container pivot
+	tv_frame.visible = false  # Hidden during normal gameplay
+	tv_container.add_child(tv_frame)
+
+	# Create clickable area for the TV frame
+	tv_frame_area = Area2D.new()
+	tv_frame.add_child(tv_frame_area)
+
+	# Add collision shape that matches your frame size
+	var collision_shape = CollisionShape2D.new()
+	var shape = RectangleShape2D.new()
+	shape.size = Vector2(384, 256)  # Size of your zoomed-out frame
+	collision_shape.shape = shape
+	tv_frame_area.add_child(collision_shape)
+
+	# Connect mouse signals
+	tv_frame_area.input_event.connect(_on_tv_frame_input)
+	tv_frame_area.mouse_entered.connect(_on_tv_frame_mouse_entered)
+	tv_frame_area.mouse_exited.connect(_on_tv_frame_mouse_exited)
+
+	# Make sure Area2D can receive input
+	tv_frame_area.input_pickable = true
 
 	# Instantiate cartridge scenes from configs
 	for config in cartridge_configs:
@@ -48,11 +88,20 @@ func _ready():
 			# Ensure it has the Cartridge script for collision toggling
 			if not instance is Cartridge:
 				instance.set_script(preload("res://cartridge.gd"))
-			add_child(instance)
+			# Parent cartridges to tv_container so they rotate with the TV
+			tv_container.add_child(instance)
+			# Offset cartridges relative to container center
+			instance.position -= Vector2(96, 64)
 			cartridges.append(instance)
 
 	# Spawn player
 	spawn_player()
+	# Parent player to tv_container so it rotates with the screen
+	if player:
+		var player_world_pos = player.global_position
+		remove_child(player)
+		tv_container.add_child(player)
+		player.position = player_world_pos - Vector2(96, 64)
 
 	# Initialize cartridge visibility and collisions
 	update_cartridge_visibility()
@@ -84,7 +133,7 @@ func spawn_player():
 		player.position = spawn_marker.global_position
 	else:
 		player.position = Vector2(32, 80)
-	add_child(player)
+	add_child(player)  # Temporarily add to get position, will reparent in _ready
 
 func set_playing_view():
 	current_state = GameState.PLAYING
@@ -100,6 +149,11 @@ func set_selection_view():
 	current_state = GameState.PAUSED_SELECTION
 	animate_camera_zoom(Vector2(0.5, 0.5))  # Zoom out
 	camera.position = Vector2(96, 64)
+	
+	# Show the TV frame
+	if tv_frame:
+		tv_frame.visible = true
+
 	if player:
 		# Freeze player
 		stored_player_position = player.position
@@ -163,3 +217,44 @@ func update_player_abilities():
 	if player and current_cartridge_index < cartridge_configs.size():
 		var abilities = cartridge_configs[current_cartridge_index].get_abilities()
 		player.set_cartridge_abilities(abilities["can_dash"], abilities["can_double_jump"])
+
+# For later when you implement gravity rotation
+func rotate_tv_and_gravity(new_rotation_degrees: float):
+	tv_rotation = deg_to_rad(new_rotation_degrees)
+	
+	# Rotate the TV visuals AND the gameplay screen
+	var tween = create_tween()
+	tween.tween_property(tv_container, "rotation", tv_rotation, 0.5).set_trans(Tween.TRANS_CUBIC)
+	
+	# Change gravity direction
+	var gravity_vector = Vector2.DOWN.rotated(tv_rotation)
+	PhysicsServer2D.area_set_param(
+		get_viewport().find_world_2d().space,
+		PhysicsServer2D.AREA_PARAM_GRAVITY_VECTOR,
+		gravity_vector
+	)
+
+func _on_tv_frame_input(_viewport: Node, event: InputEvent, _shape_idx: int):
+	if event is InputEventMouseButton:
+		if event.pressed and event.button_index == MOUSE_BUTTON_LEFT:
+			rotate_tv_90_degrees()
+
+func _on_tv_frame_mouse_entered():
+	# Optional: Visual feedback when hovering
+	if tv_frame and current_state == GameState.PAUSED_SELECTION:
+		tv_frame.modulate = Color(1.2, 1.2, 1.2)  # Brighten slightly
+
+func _on_tv_frame_mouse_exited():
+	# Reset visual feedback
+	if tv_frame:
+		tv_frame.modulate = Color(1, 1, 1)
+
+func rotate_tv_90_degrees():
+	if current_state != GameState.PAUSED_SELECTION:
+		return  # Only allow rotation during selection
+	
+	# Cycle through 90° rotations
+	rotation_index = (rotation_index + 1) % 4
+	var target_rotation = deg_to_rad(rotation_index * 90)
+	
+	rotate_tv_and_gravity(rotation_index * 90)

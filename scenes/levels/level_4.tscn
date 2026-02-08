@@ -1,0 +1,32 @@
+[gd_scene load_steps=9 format=3 uid="uid://csrmmxihd7y3i"]
+
+[ext_resource type="Script" uid="uid://ccolkwnulxhj4" path="res://game_manager.gd" id="1_anwe6"]
+[ext_resource type="Script" uid="uid://xpg4lm27qjs1" path="res://cartridge_config.gd" id="2_rej77"]
+[ext_resource type="PackedScene" uid="uid://dhhfd3q16sb7o" path="res://scenes/cartridge/cartridge_4_1.tscn" id="3_w6h2s"]
+[ext_resource type="PackedScene" uid="uid://byesxht5jqejv" path="res://scenes/cartridge/cartridge_4_2.tscn" id="4_ogj6a"]
+[ext_resource type="PackedScene" uid="uid://xoun3e5g7fy6" path="res://scenes/cartridge/cartridge_4_3.tscn" id="5_anwe6"]
+
+[sub_resource type="Resource" id="Resource_ogj6a"]
+script = ExtResource("2_rej77")
+scene = ExtResource("3_w6h2s")
+type = 2
+metadata/_custom_type_script = "uid://xpg4lm27qjs1"
+
+[sub_resource type="Resource" id="Resource_anwe6"]
+script = ExtResource("2_rej77")
+scene = ExtResource("4_ogj6a")
+type = 1
+metadata/_custom_type_script = "uid://xpg4lm27qjs1"
+
+[sub_resource type="Resource" id="Resource_rej77"]
+script = ExtResource("2_rej77")
+scene = ExtResource("5_anwe6")
+metadata/_custom_type_script = "uid://xpg4lm27qjs1"
+
+[node name="Level4" type="Node2D" node_paths=PackedStringArray("spawn_marker")]
+script = ExtResource("1_anwe6")
+cartridge_configs = Array[ExtResource("2_rej77")]([SubResource("Resource_ogj6a"), SubResource("Resource_anwe6"), SubResource("Resource_rej77")])
+spawn_marker = NodePath("Marker2D")
+
+[node name="Marker2D" type="Marker2D" parent="."]
+position = Vector2(173, 80)
