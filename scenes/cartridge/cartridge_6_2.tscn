@@ -1,4 +1,4 @@
-[gd_scene load_steps=16 format=4 uid="uid://b8gl6o5ruk444"]
+[gd_scene load_steps=18 format=4 uid="uid://b8gl6o5ruk444"]
 
 [ext_resource type="Texture2D" uid="uid://cnfixigj0cmp" path="res://tilemap fire.png" id="1_6m3pu"]
 [ext_resource type="Texture2D" uid="uid://bj0x5l72tqumo" path="res://TILEMAP_water.png" id="2_sbqgv"]
@@ -6,6 +6,8 @@
 [ext_resource type="Texture2D" uid="uid://8mpfpgmxbq64" path="res://icon.svg" id="4_ijfgd"]
 [ext_resource type="Texture2D" uid="uid://bncof3xvw67mr" path="res://spikesmall.png" id="5_xnxva"]
 [ext_resource type="PackedScene" uid="uid://bih70aup8l3ak" path="res://scenes/flag.tscn" id="6_xnxva"]
+[ext_resource type="Texture2D" uid="uid://dr83m1ttnspci" path="res://assets/rotate-right-svgrepo-com.png" id="7_7gcjn"]
+[ext_resource type="Texture2D" uid="uid://cvo127royv0au" path="res://assets/mouse-left-button-svgrepo-com.png" id="8_t87ql"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_d1ai2"]
 texture = ExtResource("1_6m3pu")
@@ -538,3 +540,17 @@ tile_set = SubResource("TileSet_ejql5")
 
 [node name="flag" parent="." instance=ExtResource("6_xnxva")]
 position = Vector2(31, 36)
+
+[node name="RotateRightSvgrepoCom" type="Sprite2D" parent="."]
+z_index = 300
+texture_filter = 1
+position = Vector2(129, -35)
+scale = Vector2(0.18, 0.18)
+texture = ExtResource("7_7gcjn")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+z_index = 300
+texture_filter = 1
+position = Vector2(87, -43)
+scale = Vector2(0.18, 0.18)
+texture = ExtResource("8_t87ql")
