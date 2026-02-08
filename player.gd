@@ -9,10 +9,6 @@ const DEATH_SFX = preload("res://sounds/death_sfx.wav")
 
 # Movement parameters
 const SPEED = 90.0
-const ACCELERATION = 400.0  # Reduced from 600.0
-const FRICTION = 300.0      # Reduced from 400.0 to match
-const AIR_RESISTANCE = 150.0  # Reduced from 200.0
-
 const JUMP_VELOCITY = -200.0
 const JUMP_CUT_MULTIPLIER = 0.5  # How much to reduce upward velocity when releasing jump early
 const GRAVITY = 580.0
@@ -96,13 +92,11 @@ func _physics_process(delta):
 	if Input.is_action_just_pressed("dash") and can_dash and dash_cooldown_timer == 0:
 		start_dash()
 	
-	# Horizontal movement with acceleration (Celeste-style)
+	# Horizontal movement (instant speed, no acceleration)
 	var input_direction = Input.get_axis("left", "right")
 	
 	if input_direction != 0:
-		# Accelerate toward max speed
-		var accel = ACCELERATION if is_on_floor() else AIR_RESISTANCE
-		velocity.x = move_toward(velocity.x, input_direction * SPEED, accel * delta)
+		velocity.x = input_direction * SPEED
 		
 		# Update facing direction
 		if input_direction > 0:
@@ -110,9 +104,7 @@ func _physics_process(delta):
 		elif input_direction < 0:
 			dash_direction = Vector2.LEFT
 	else:
-		# Apply friction when no input
-		var friction = FRICTION if is_on_floor() else AIR_RESISTANCE
-		velocity.x = move_toward(velocity.x, 0, friction * delta)
+		velocity.x = 0
 	
 	move_and_slide()
 	check_tile_collisions()
