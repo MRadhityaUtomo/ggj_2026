@@ -17,7 +17,7 @@ config/icon="res://icon.svg"
 
 [audio]
 
-buses/default_bus_layout="uid://cagv60w6i242n"
+buses/default_bus_layout="uid://cqynkf4b72bvv"
 driver/enable_input=true
 driver/mix_rate=16000
 buses/channel_disable_threshold_db=-16.0

@@ -1,7 +1,7 @@
-[gd_scene load_steps=7 format=3 uid="uid://coy3egc103bjr"]
+[gd_scene load_steps=7 format=3 uid="uid://b75ww0c0mpvqt"]
 
 [ext_resource type="Script" uid="uid://ccolkwnulxhj4" path="res://game_manager.gd" id="1_y2agi"]
-[ext_resource type="Script" path="res://cartridge_config.gd" id="2_g44gb"]
+[ext_resource type="Script" uid="uid://xpg4lm27qjs1" path="res://cartridge_config.gd" id="2_g44gb"]
 [ext_resource type="PackedScene" uid="uid://be51m28ja8x7n" path="res://scenes/levels/level_2/cartridge_4.tscn" id="3_741xk"]
 [ext_resource type="PackedScene" uid="uid://kg4jnf1ldr8d" path="res://scenes/levels/level_2/cartridge_5.tscn" id="4_i0fhw"]
 

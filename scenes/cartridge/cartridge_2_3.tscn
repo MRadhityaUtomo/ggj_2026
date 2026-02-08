@@ -665,6 +665,7 @@ texture = ExtResource("5_7p8r4")
 5:2/0 = 0
 5:1/0 = 0
 5:0/0 = 0
+5:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 0, 0, 8, 8, -8, 8)
 4:0/0 = 0
 4:1/0 = 0
 6:1/0 = 0
@@ -672,9 +673,13 @@ texture = ExtResource("5_7p8r4")
 6:2/0 = 0
 7:2/0 = 0
 7:1/0 = 0
+7:1/0/physics_layer_0/polygon_0/points = PackedVector2Array(0, -8, 8, -8, 8, 0, 0, 0)
 8:1/0 = 0
+8:1/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 0, -8, 0, 0, -8, 0)
 8:0/0 = 0
+8:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, 0, 0, 0, 0, 8, -8, 8)
 7:0/0 = 0
+7:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(0, 0, 8, 0, 8, 8, 0, 8)
 8:2/0 = 0
 
 [sub_resource type="TileSet" id="TileSet_n11cy"]
@@ -696,5 +701,5 @@ tile_map_data = PackedByteArray("AAD//wQAAAACAAQAAAD//wUAAAADAAMAAAD//wIAAAADAAQ
 tile_set = SubResource("TileSet_k46ih")
 
 [node name="Obstacle" type="TileMapLayer" parent="."]
-tile_map_data = PackedByteArray("AAACAAYAAQAEAAEAAAABAAUAAQADAAAAAAABAAYAAQADAAEAAAABAAcAAQADAAIAAAACAAUAAQAEAAAAAAACAAcAAQAEAAIAAAADAAUAAQAFAAAAAAADAAYAAQAFAAEAAAADAAcAAQAFAAIAAAA=")
+tile_map_data = PackedByteArray("AAACAAYAAQAHAAEAAAABAAUAAQADAAAAAAABAAYAAQADAAEAAAABAAcAAQADAAIAAAACAAUAAQAHAAAAAAACAAcAAQAEAAIAAAADAAUAAQAIAAAAAAADAAYAAQAIAAEAAAADAAcAAQAFAAIAAAA=")
 tile_set = SubResource("TileSet_n11cy")
