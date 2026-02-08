@@ -29,7 +29,7 @@ func _ready() -> void:
 
 ## Mark a level as finished
 ## level_idx: 0-based index (Level 1 = 0) OR 1-based number handled via helper
-func finish_level(level_number: int) -> void:
+func finish_level(level_number: int, return_to_menu: bool = false) -> void:
 	var index = level_number 
 	if index < 0 or index >= TOTAL_LEVELS:
 		push_error("LevelProgression: Invalid level number %d" % level_number)
@@ -37,6 +37,16 @@ func finish_level(level_number: int) -> void:
 		
 	level_flags[index] = true
 	print("✓ Level %d Completed. valid for progression." % level_number)
+	
+	if return_to_menu:
+		return_to_main_menu()
+	else:
+		# Auto-load next level
+		if index + 1 < TOTAL_LEVELS:
+			load_level_scene(index + 1)
+		else:
+			# Game completed, show end screen or return to menu
+			return_to_main_menu()
 
 ## Determined by looking for the first incomplete level
 func get_current_level_index() -> int:
@@ -72,3 +82,6 @@ func reset_progress() -> void:
 	for i in range(level_flags.size()):
 		level_flags[i] = false
 	print("⟲ Progress Reset")
+
+func return_to_main_menu():
+	get_tree().change_scene_to_file("res://scenes/main_menu/main_menu.tscn")

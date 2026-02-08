@@ -39,7 +39,8 @@ var tv_container: Node2D  # Container for TV frame and decorations
 var tv_frame: Sprite2D    # The TV bezel/frame
 var tv_frame_area: Area2D  # For mouse detection
 var tv_rotation: float = 0.0  # Current TV rotation for gravity changes
-var rotation_index: int = 0  # 0=0°, 1=90°, 2=180°, 3=270°
+var rotation_index: int = 0  # Track number of rotations (can be > 4)
+var tv_bg: Sprite2D  # Background - NOT rotated
 
 func _ready():
 	# Setup camera
@@ -48,19 +49,29 @@ func _ready():
 	camera.enabled = true
 	camera.position_smoothing_enabled = false  # Pixel-perfect
 
+	# Add TV background sprite OUTSIDE tv_container (so it doesn't rotate)
+	tv_bg = Sprite2D.new()
+	tv_bg.texture = preload("res://tv_bg.png")
+	tv_bg.centered = true
+	tv_bg.position = Vector2(96, 64)  # Fixed position
+	tv_bg.z_index = -200  # Render behind everything
+	tv_bg.visible = false  # Hidden during gameplay
+	add_child(tv_bg)  # Add to main scene, not tv_container
+
 	# Create TV container (this will rotate when gravity changes)
 	tv_container = Node2D.new()
 	add_child(tv_container)
 	tv_container.z_index = 100  # Render above gameplay
 	tv_container.position = Vector2(96, 64)  # Set pivot point to center of screen
 
-	# Add TV frame sprite (relative to container)
+	# Add TV frame sprite (rotates with container)
 	tv_frame = Sprite2D.new()
-	tv_frame.texture = preload("res://tv_frame.png")  # Your TV bezel sprite
+	tv_frame.texture = preload("res://tv_frame.png")
 	tv_frame.centered = true
-	tv_frame.position = Vector2.ZERO  # Centered on container pivot
-	tv_frame.visible = false  # Hidden during normal gameplay
-	tv_container.add_child(tv_frame)
+	tv_frame.position = Vector2.ZERO
+	tv_frame.z_index = 200  # Render in front
+	tv_frame.visible = false
+	tv_container.add_child(tv_frame)  # Inside tv_container - will rotate
 
 	# Create clickable area for the TV frame
 	tv_frame_area = Area2D.new()
@@ -69,7 +80,7 @@ func _ready():
 	# Add collision shape that matches your frame size
 	var collision_shape = CollisionShape2D.new()
 	var shape = RectangleShape2D.new()
-	shape.size = Vector2(384, 256)  # Size of your zoomed-out frame
+	shape.size = Vector2(384, 256)
 	collision_shape.shape = shape
 	tv_frame_area.add_child(collision_shape)
 
@@ -77,8 +88,6 @@ func _ready():
 	tv_frame_area.input_event.connect(_on_tv_frame_input)
 	tv_frame_area.mouse_entered.connect(_on_tv_frame_mouse_entered)
 	tv_frame_area.mouse_exited.connect(_on_tv_frame_mouse_exited)
-
-	# Make sure Area2D can receive input
 	tv_frame_area.input_pickable = true
 
 	# Instantiate cartridge scenes from configs
@@ -137,8 +146,17 @@ func spawn_player():
 
 func set_playing_view():
 	current_state = GameState.PLAYING
-	animate_camera_zoom(Vector2(1.0, 1.0))  # Zoom in
-	camera.position = Vector2(96, 64)  # Static camera centered on level
+	# Adjust zoom based on rotation to fit the screen
+	var target_zoom = get_zoom_for_rotation(tv_rotation)
+	animate_camera_zoom(target_zoom)
+	camera.position = Vector2(96, 64)
+	
+	# Hide the TV frame and background during gameplay
+	if tv_frame:
+		tv_frame.visible = false
+	if tv_bg:
+		tv_bg.visible = false
+	
 	if player:
 		# Unpause physics
 		player.set_physics_process(true)
@@ -150,9 +168,11 @@ func set_selection_view():
 	animate_camera_zoom(Vector2(0.5, 0.5))  # Zoom out
 	camera.position = Vector2(96, 64)
 	
-	# Show the TV frame
+	# Show the TV frame and background
 	if tv_frame:
 		tv_frame.visible = true
+	if tv_bg:
+		tv_bg.visible = true
 
 	if player:
 		# Freeze player
@@ -226,8 +246,9 @@ func rotate_tv_and_gravity(new_rotation_degrees: float):
 	var tween = create_tween()
 	tween.tween_property(tv_container, "rotation", tv_rotation, 0.5).set_trans(Tween.TRANS_CUBIC)
 	
-	# Change gravity direction
-	var gravity_vector = Vector2.DOWN.rotated(tv_rotation)
+	# For gravity, normalize to 0-360 range
+	var normalized_rotation = fmod(new_rotation_degrees, 360.0)
+	var gravity_vector = Vector2.DOWN.rotated(deg_to_rad(normalized_rotation))
 	PhysicsServer2D.area_set_param(
 		get_viewport().find_world_2d().space,
 		PhysicsServer2D.AREA_PARAM_GRAVITY_VECTOR,
@@ -253,8 +274,28 @@ func rotate_tv_90_degrees():
 	if current_state != GameState.PAUSED_SELECTION:
 		return  # Only allow rotation during selection
 	
-	# Cycle through 90° rotations
-	rotation_index = (rotation_index + 1) % 4
-	var target_rotation = deg_to_rad(rotation_index * 90)
+	# Increment rotation index (no wrapping, keeps increasing)
+	rotation_index += 1
 	
-	rotate_tv_and_gravity(rotation_index * 90)
+	# Calculate target rotation as continuous value
+	var target_rotation_degrees = rotation_index * 90.0
+	
+	rotate_tv_and_gravity(target_rotation_degrees)
+
+
+# Calculate appropriate zoom based on TV rotation
+func get_zoom_for_rotation(rotation_rad: float) -> Vector2:
+	# Normalize rotation to 0-360 degrees for calculation
+	var rotation_deg = fmod(rad_to_deg(rotation_rad), 360.0)
+	if rotation_deg < 0:
+		rotation_deg += 360.0
+	
+	# Check if rotation is vertical (90° or 270°)
+	var is_vertical = (abs(rotation_deg - 90.0) < 5.0) or (abs(rotation_deg - 270.0) < 5.0)
+	
+	if is_vertical:
+		# When vertical, zoom out to fit the rotated screen
+		return Vector2(0.67, 0.67)
+	else:
+		# Normal horizontal view - standard zoom
+		return Vector2(1.0, 1.0)
