@@ -226,6 +226,10 @@ func rotate_tv_and_gravity(new_rotation_degrees: float):
 	var tween = create_tween()
 	tween.tween_property(tv_container, "rotation", tv_rotation, 0.5).set_trans(Tween.TRANS_CUBIC)
 	
+	# Tell player to counter-rotate its sprite
+	if player and player.has_method("set_parent_rotation"):
+		player.set_parent_rotation(tv_rotation)
+	
 	# Change gravity direction
 	var gravity_vector = Vector2.DOWN.rotated(tv_rotation)
 	PhysicsServer2D.area_set_param(
