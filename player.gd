@@ -1,5 +1,12 @@
 extends CharacterBody2D
 
+@onready var audio_player = $AudioStreamPlayer2D
+
+const WALK_SFX = preload("res://sounds/walk_sfx.wav")
+const JUMP_SFX = preload("res://sounds/error Sfx.wav")#Will Change
+const DASH_SFX = preload("res://sounds/temp_dash.wav")
+const DEATH_SFX = preload("res://sounds/death_sfx.wav")
+
 # Movement parameters
 const SPEED = 90.0
 const ACCELERATION = 400.0  # Reduced from 600.0
@@ -112,11 +119,20 @@ func _physics_process(delta):
 	update_animation()
 
 func jump():
+	audio_player.stop()
 	velocity.y = JUMP_VELOCITY
+	audio_player.stream = JUMP_SFX
+	audio_player.volume_db = -20
+	audio_player.play()
+	audio_player.volume_db = 0
 
 func double_jump():
 	velocity.y = JUMP_VELOCITY
 	has_used_double_jump = true
+	audio_player.stream = JUMP_SFX
+	audio_player.volume_db = -20
+	audio_player.play()
+	audio_player.volume_db = 0
 
 func start_dash():
 	# Get dash direction from input or last facing direction
@@ -181,5 +197,14 @@ func update_animation():
 			animated_sprite.play("default")
 
 func handle_tile_collision(tile_layer: TileMapLayer):
-	if tile_layer.name == "Obstacle" or tile_layer.name == "Spikes":
-		LevelProgression.on_lose_condition_met()
+	# Example:
+	if tile_layer.name == "Obstacle" or tile_layer.name == "Obstacle2" or tile_layer.name == "Spikes":
+		die()
+	pass
+
+func die():
+	set_physics_process(false)
+	audio_player.stream = DEATH_SFX
+	audio_player.play()
+	await get_tree().create_timer(.2).timeout
+	ScreenTransition.death_transition(func(): LevelProgression.on_lose_condition_met())

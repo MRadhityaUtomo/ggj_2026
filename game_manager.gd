@@ -42,6 +42,11 @@ var tv_rotation: float = 0.0  # Current TV rotation for gravity changes
 var rotation_index: int = 0  # Track number of rotations (can be > 4)
 var tv_bg: Sprite2D  # Background - NOT rotated
 
+# Audio
+var zoom_audio: AudioStreamPlayer
+const ZOOM_OUT_SFX = preload("res://sounds/Temp_Zoom_out.wav")
+const ZOOM_IN_SFX = preload("res://sounds/Temp_Zoom_in.mp3")
+
 func _ready():
 	# Setup camera
 	camera = Camera2D.new()
@@ -57,6 +62,11 @@ func _ready():
 	tv_bg.z_index = -200  # Render behind everything
 	tv_bg.visible = false  # Hidden during gameplay
 	add_child(tv_bg)  # Add to main scene, not tv_container
+	# Setup zoom audio player (non-positional so it plays at full volume)
+	zoom_audio = AudioStreamPlayer.new()
+	zoom_audio.stream = ZOOM_OUT_SFX
+	zoom_audio.bus = "Master"
+	add_child(zoom_audio)
 
 	# Create TV container (this will rotate when gravity changes)
 	tv_container = Node2D.new()
@@ -122,7 +132,7 @@ func _ready():
 func _process(_delta):
 	match current_state:
 		GameState.PLAYING:
-			if Input.is_action_just_pressed("ui_cancel"):  # ESC key
+			if Input.is_action_just_pressed("exit"):  # ESC key
 				pause_and_show_selection()
 		
 		GameState.PAUSED_SELECTION:
@@ -130,10 +140,10 @@ func _process(_delta):
 				cycle_preview(-1)
 			elif Input.is_action_just_pressed("right"):
 				cycle_preview(1)
-			elif Input.is_action_just_pressed("ui_accept"):  # Enter/Space
+			elif Input.is_action_just_pressed("exit"):  # Enter/Space
 				confirm_cartridge_change()
-			elif Input.is_action_just_pressed("ui_cancel"):  # ESC to go back
-				resume_game()
+			#elif Input.is_action_just_pressed("ui_cancel"):  # ESC to go back
+				#resume_game()
 
 func spawn_player():
 	player = player_scene.instantiate()
@@ -146,17 +156,9 @@ func spawn_player():
 
 func set_playing_view():
 	current_state = GameState.PLAYING
-	# Adjust zoom based on rotation to fit the screen
-	var target_zoom = get_zoom_for_rotation(tv_rotation)
-	animate_camera_zoom(target_zoom)
-	camera.position = Vector2(96, 64)
-	
-	# Hide the TV frame and background during gameplay
-	if tv_frame:
-		tv_frame.visible = false
-	if tv_bg:
-		tv_bg.visible = false
-	
+	animate_camera_zoom(Vector2(1.0, 1.0))  # Zoom in
+	play_zoom_sfx(true)  # Reversed (zoom in)
+	camera.position = Vector2(96, 64)  # Static camera centered on level
 	if player:
 		# Unpause physics
 		player.set_physics_process(true)
@@ -166,6 +168,7 @@ func set_playing_view():
 func set_selection_view():
 	current_state = GameState.PAUSED_SELECTION
 	animate_camera_zoom(Vector2(0.5, 0.5))  # Zoom out
+	play_zoom_sfx(false)  # Normal (zoom out)
 	camera.position = Vector2(96, 64)
 	
 	# Show the TV frame and background
@@ -179,6 +182,19 @@ func set_selection_view():
 		stored_player_position = player.position
 		stored_player_velocity = player.velocity
 		player.set_physics_process(false)
+
+## Play zoom SFX.
+##   - Zoom out: Temp_Zoom_out.wav at normal pitch
+##   - Zoom in:  Temp_Zoom_in.mp3 at pitch 2.4
+func play_zoom_sfx(zoom_in: bool) -> void:
+	zoom_audio.stop()
+	if zoom_in:
+		zoom_audio.stream = ZOOM_IN_SFX
+		zoom_audio.pitch_scale = 2.4
+	else:
+		zoom_audio.stream = ZOOM_OUT_SFX
+		zoom_audio.pitch_scale = 1.0
+	zoom_audio.play()
 
 func animate_camera_zoom(target_zoom: Vector2):
 	# Kill existing tween if running

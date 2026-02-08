@@ -14,6 +14,8 @@ var level_scenes: Array[String] = [
 	#"res://scenes/levels/level_6.tscn"
 ]
 
+const MAIN_MENU_SCENE: String = "res://scenes/Main_Menu.tscn"
+
 # ─── STATE ────────────────────────────────────────────────────────────────────
 # Track completion status for 6 levels
 var level_flags: Array[bool] = [false, false, false, false, false, false]
@@ -83,5 +85,5 @@ func reset_progress() -> void:
 		level_flags[i] = false
 	print("⟲ Progress Reset")
 
-func return_to_main_menu():
-	get_tree().change_scene_to_file("res://scenes/main_menu/main_menu.tscn")
+func go_to_main_menu() -> void:
+	get_tree().change_scene_to_file(MAIN_MENU_SCENE)
