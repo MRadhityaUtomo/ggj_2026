@@ -1,5 +1,12 @@
 extends CharacterBody2D
 
+@onready var audio_player = $AudioStreamPlayer2D
+
+const WALK_SFX = preload("res://sounds/walk_sfx.wav")
+const JUMP_SFX = preload("res://sounds/error Sfx.wav")#Will Change
+const DASH_SFX = preload("res://sounds/temp_dash.wav")
+const DEATH_SFX = preload("res://sounds/death_sfx.wav")
+
 # Movement parameters
 const SPEED = 80.0
 const JUMP_VELOCITY = -200.0  # Adjusted for 2-tile jump height
@@ -52,8 +59,15 @@ func _physics_process(delta):
 	if direction:
 		velocity.x = direction * SPEED
 		dash_direction = direction  # Update facing direction
+		
+		if is_on_floor() and not is_dashing:
+			if not audio_player.playing:
+				audio_player.stream = WALK_SFX
+				audio_player.play()
 	else:
 		velocity.x = move_toward(velocity.x, 0, SPEED)
+		if audio_player.stream == WALK_SFX and audio_player.playing:
+			audio_player.stop()
 	
 	# Override velocity if dashing — flat horizontal, no vertical
 	if is_dashing and dash_direction != 0:
@@ -64,11 +78,20 @@ func _physics_process(delta):
 	check_tile_collisions()
 
 func jump():
+	audio_player.stop()
 	velocity.y = JUMP_VELOCITY
+	audio_player.stream = JUMP_SFX
+	audio_player.volume_db = -20
+	audio_player.play()
+	audio_player.volume_db = 0
 
 func double_jump():
 	velocity.y = JUMP_VELOCITY
 	has_used_double_jump = true
+	audio_player.stream = JUMP_SFX
+	audio_player.volume_db = -20
+	audio_player.play()
+	audio_player.volume_db = 0
 
 func dash():
 	if dash_direction != 0:  # Only dash if we have a direction
@@ -77,6 +100,8 @@ func dash():
 		has_used_dash = true
 		velocity.y = 0  # Zero out vertical so we move flat
 		velocity.x = dash_direction * (DASH_DISTANCE / DASH_DURATION)
+		audio_player.stream = DASH_SFX
+		audio_player.play()
 
 # Called by game_manager when cartridge changes
 func set_cartridge_abilities(dash: bool, double_jump: bool):
@@ -94,9 +119,14 @@ func check_tile_collisions():
 			handle_tile_collision(collider)
 
 func handle_tile_collision(tile_layer: TileMapLayer):
-
-
 	# Example:
 	if tile_layer.name == "Obstacle":
-		LevelProgression.on_lose_condition_met()
+		die()
 	pass
+
+func die():
+	set_physics_process(false)
+	audio_player.stream = DEATH_SFX
+	audio_player.play()
+	await audio_player.finished
+	LevelProgression.on_lose_condition_met()
