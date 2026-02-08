@@ -39,8 +39,8 @@ var can_double_jump = false
 var has_used_double_jump = false
 var is_dashing = false
 var dash_timer = 0.0
-var dash_direction = Vector2.ZERO
-
+var dash_direction = 0  # 1 for right, -1 for left
+var parent_rotation: float = 0.0  # Track parent rotation for counter-rotation
 @onready var animated_sprite = $AnimatedSprite2D
 
 func _ready():
@@ -116,6 +116,7 @@ func _physics_process(delta):
 	
 	move_and_slide()
 	check_tile_collisions()
+	counter_rotate_sprite()
 	update_animation()
 
 func jump():
@@ -165,6 +166,14 @@ func set_cartridge_abilities(dash: bool, double_jump: bool):
 	can_dash = dash
 	can_double_jump = double_jump
 	has_used_double_jump = false
+
+# Called by game_manager when TV/gravity rotates
+func set_parent_rotation(rotation_rad: float):
+	parent_rotation = rotation_rad
+
+# Counter-rotate the entire player so it stays upright
+func counter_rotate_sprite():
+	self.rotation = -parent_rotation
 
 func check_tile_collisions():
 	for i in get_slide_collision_count():

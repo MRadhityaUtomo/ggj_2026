@@ -50,6 +50,9 @@ func _unhandled_input(event: InputEvent) -> void:
 		if event.keycode == KEY_M or event.physical_keycode == KEY_M:
 			if not is_transitioning:
 				transition_to_main_menu()
+		elif event.keycode == KEY_R or event.physical_keycode == KEY_R:
+			if not is_transitioning:
+				restart_level_transition()
 
 # ─── DEATH TRANSITION ────────────────────────────────────────────────────────
 
@@ -138,13 +141,13 @@ func level_completed_transition(callback: Callable) -> void:
 
 	# Phase 1: Fade to grey
 	var fade_in_tween = create_tween()
-	fade_in_tween.tween_property(color_rect, "color", Color(0.5, 0.5, 0.5, 1), FADE_DURATION)
+	fade_in_tween.tween_property(color_rect, "color", Color(0.111, 0.111, 0.111, 1.0), FADE_DURATION)
 	await fade_in_tween.finished
 
 	# Phase 2: Typewriter text "Level Completed?"
 	dot_label.visible = true
 	dot_label.text = ""
-	var complete_text = "Level Completed?"
+	var complete_text = "Level Completed"
 	
 	for i in range(complete_text.length()):
 		dot_label.text = complete_text.substr(0, i + 1)
@@ -182,6 +185,30 @@ func transition_to_main_menu() -> void:
 	await fade_in_tween.finished
 
 	LevelProgression.go_to_main_menu()
+
+	await get_tree().create_timer(HOLD_DURATION).timeout
+
+	var fade_out_tween = create_tween()
+	fade_out_tween.tween_property(color_rect, "color", Color(0, 0, 0, 0), FADE_DURATION)
+	await fade_out_tween.finished
+
+	color_rect.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	is_transitioning = false
+
+# ─── RESTART LEVEL TRANSITION ────────────────────────────────────────────────
+
+func restart_level_transition() -> void:
+	if is_transitioning:
+		return
+	is_transitioning = true
+	color_rect.mouse_filter = Control.MOUSE_FILTER_STOP
+
+	# Quick dark fade
+	var fade_in_tween = create_tween()
+	fade_in_tween.tween_property(color_rect, "color", Color(0, 0, 0, 1), FADE_DURATION)
+	await fade_in_tween.finished
+
+	LevelProgression.on_lose_condition_met()
 
 	await get_tree().create_timer(HOLD_DURATION).timeout
 
