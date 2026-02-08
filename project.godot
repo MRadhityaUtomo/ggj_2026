@@ -15,6 +15,13 @@ run/main_scene="uid://b2kh06aqwljnr"
 config/features=PackedStringArray("4.5", "Forward Plus")
 config/icon="res://icon.svg"
 
+[audio]
+
+buses/default_bus_layout="uid://cagv60w6i242n"
+driver/enable_input=true
+driver/mix_rate=16000
+buses/channel_disable_threshold_db=-16.0
+
 [autoload]
 
 LevelProgression="*res://Level_progression.gd"
