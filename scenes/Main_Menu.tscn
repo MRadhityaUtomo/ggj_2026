@@ -1,0 +1,107 @@
+[gd_scene load_steps=2 format=3 uid="uid://vj0mgnfvx0od"]
+
+[ext_resource type="Script" uid="uid://5n6naeakvhxp" path="res://scenes/main_menu.gd" id="1_script"]
+
+[node name="MainMenu" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_script")
+
+[node name="Background" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.07, 0.07, 0.11, 1)
+
+[node name="TitleLabel" type="Label" parent="."]
+layout_mode = 0
+offset_left = 46.0
+offset_top = 6.0
+offset_right = 146.0
+offset_bottom = 22.0
+theme_override_font_sizes/font_size = 10
+text = "GAME TITLE"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="TitleSprite" type="TextureRect" parent="."]
+visible = false
+layout_mode = 0
+offset_left = 56.0
+offset_top = 2.0
+offset_right = 136.0
+offset_bottom = 26.0
+stretch_mode = 5
+
+[node name="StartButton" type="Button" parent="."]
+layout_mode = 0
+offset_left = 71.0
+offset_top = 34.0
+offset_right = 121.0
+offset_bottom = 46.0
+theme_override_font_sizes/font_size = 6
+text = "Start"
+
+[node name="TutorialButton" type="Button" parent="."]
+layout_mode = 0
+offset_left = 71.0
+offset_top = 50.0
+offset_right = 121.0
+offset_bottom = 62.0
+theme_override_font_sizes/font_size = 6
+text = "Tutorial"
+
+[node name="CreditsButton" type="Button" parent="."]
+layout_mode = 0
+offset_left = 71.0
+offset_top = 66.0
+offset_right = 121.0
+offset_bottom = 78.0
+theme_override_font_sizes/font_size = 6
+text = "Credits"
+
+[node name="CartridgeContainer" type="HBoxContainer" parent="."]
+layout_mode = 0
+offset_left = 26.0
+offset_top = 88.0
+offset_right = 166.0
+offset_bottom = 118.0
+theme_override_constants/separation = 4
+alignment = 1
+
+[node name="Cartridge1" type="ColorRect" parent="CartridgeContainer"]
+custom_minimum_size = Vector2(20, 26)
+layout_mode = 2
+color = Color(0.35, 0.55, 0.85, 1)
+
+[node name="Cartridge2" type="ColorRect" parent="CartridgeContainer"]
+custom_minimum_size = Vector2(20, 26)
+layout_mode = 2
+color = Color(0.85, 0.35, 0.4, 1)
+
+[node name="Cartridge3" type="ColorRect" parent="CartridgeContainer"]
+custom_minimum_size = Vector2(20, 26)
+layout_mode = 2
+color = Color(0.35, 0.8, 0.45, 1)
+
+[node name="Cartridge4" type="ColorRect" parent="CartridgeContainer"]
+custom_minimum_size = Vector2(20, 26)
+layout_mode = 2
+color = Color(0.9, 0.75, 0.3, 1)
+
+[node name="Cartridge5" type="ColorRect" parent="CartridgeContainer"]
+custom_minimum_size = Vector2(20, 26)
+layout_mode = 2
+color = Color(0.7, 0.4, 0.85, 1)
+
+[node name="Cartridge6" type="ColorRect" parent="CartridgeContainer"]
+custom_minimum_size = Vector2(20, 26)
+layout_mode = 2
+color = Color(0.9, 0.5, 0.3, 1)
