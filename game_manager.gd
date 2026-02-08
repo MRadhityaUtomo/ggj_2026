@@ -132,18 +132,25 @@ func _ready():
 func _process(_delta):
 	match current_state:
 		GameState.PLAYING:
-			if Input.is_action_just_pressed("exit"):  # ESC key
+			if Input.is_action_just_pressed("exit"):  # ESC key / Y button
 				pause_and_show_selection()
 		
 		GameState.PAUSED_SELECTION:
-			if Input.is_action_just_pressed("left"):
+			# Cycle cartridges: arrow keys OR LB/RB
+			if Input.is_action_just_pressed("left") or Input.is_action_just_pressed("cycle_left"):
 				cycle_preview(-1)
-			elif Input.is_action_just_pressed("right"):
+			elif Input.is_action_just_pressed("right") or Input.is_action_just_pressed("cycle_right"):
 				cycle_preview(1)
-			elif Input.is_action_just_pressed("exit"):  # Enter/Space
+			elif Input.is_action_just_pressed("exit"):  # Enter/Space / Y button
 				confirm_cartridge_change()
 			#elif Input.is_action_just_pressed("ui_cancel"):  # ESC to go back
 				#resume_game()
+			
+			# Spin level: RT (clockwise) / LT (counter-clockwise)
+			if Input.is_action_just_pressed("rotate_right"):
+				rotate_tv_90_degrees()
+			elif Input.is_action_just_pressed("rotate_left"):
+				rotate_tv_90_degrees_ccw()
 
 func spawn_player():
 	player = player_scene.instantiate()
@@ -297,6 +304,17 @@ func rotate_tv_90_degrees():
 	rotation_index += 1
 	
 	# Calculate target rotation as continuous value
+	var target_rotation_degrees = rotation_index * 90.0
+	
+	rotate_tv_and_gravity(target_rotation_degrees)
+
+func rotate_tv_90_degrees_ccw():
+	if current_state != GameState.PAUSED_SELECTION:
+		return  # Only allow rotation during selection
+	
+	# Decrement rotation index for counter-clockwise
+	rotation_index -= 1
+	
 	var target_rotation_degrees = rotation_index * 90.0
 	
 	rotate_tv_and_gravity(target_rotation_degrees)

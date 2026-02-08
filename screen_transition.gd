@@ -46,13 +46,19 @@ func _ready() -> void:
 	add_child(dot_label)
 
 func _unhandled_input(event: InputEvent) -> void:
+	if is_transitioning:
+		return
+
 	if event is InputEventKey and event.pressed and not event.echo:
 		if event.keycode == KEY_M or event.physical_keycode == KEY_M:
-			if not is_transitioning:
-				transition_to_main_menu()
+			transition_to_main_menu()
 		elif event.keycode == KEY_R or event.physical_keycode == KEY_R:
-			if not is_transitioning:
-				restart_level_transition()
+			restart_level_transition()
+	elif event is InputEventJoypadButton and event.pressed:
+		if event.button_index == JOY_BUTTON_BACK:       # Select/View → main menu
+			transition_to_main_menu()
+		elif event.button_index == JOY_BUTTON_START:     # Start/Menu → restart level
+			restart_level_transition()
 
 # ─── DEATH TRANSITION ────────────────────────────────────────────────────────
 

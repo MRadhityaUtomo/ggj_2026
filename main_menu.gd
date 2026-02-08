@@ -105,9 +105,9 @@ func _process(_delta):
 				start_level(0)
 		
 		MenuState.SELECTION:
-			if Input.is_action_just_pressed("left"):
+			if Input.is_action_just_pressed("left") or Input.is_action_just_pressed("cycle_left"):
 				cycle_preview(-1)
-			elif Input.is_action_just_pressed("right"):
+			elif Input.is_action_just_pressed("right") or Input.is_action_just_pressed("cycle_right"):
 				cycle_preview(1)
 			elif Input.is_action_just_pressed("ui_accept"):
 				start_level(current_preview_index)
