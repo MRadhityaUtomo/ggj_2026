@@ -15,6 +15,7 @@ var has_used_dash = false
 var is_dashing = false
 var dash_timer = 0.0
 var dash_direction = 0  # 1 for right, -1 for left
+@onready var animated_sprite = $AnimatedSprite2D
 
 func _ready():
 	# Player setup
@@ -62,6 +63,7 @@ func _physics_process(delta):
 	
 	move_and_slide()
 	check_tile_collisions()
+	update_animation()
 
 func jump():
 	velocity.y = JUMP_VELOCITY
@@ -92,6 +94,32 @@ func check_tile_collisions():
 		# Check if we collided with a TileMapLayer
 		if collider is TileMapLayer:
 			handle_tile_collision(collider)
+
+func update_animation():
+	if not animated_sprite:
+		return
+	
+	# Update sprite direction based on movement
+	if dash_direction != 0:
+		animated_sprite.flip_h = dash_direction < 0
+	
+	# Choose animation based on state
+	if not is_on_floor():
+		# In the air
+		if velocity.y < 0:
+			# Going up
+			animated_sprite.play("jump")
+		else:
+			# Falling down
+			animated_sprite.play("mid_jumping")
+	else:
+		# On the ground
+		if abs(velocity.x) > 5:
+			# Moving
+			animated_sprite.play("move")
+		else:
+			# Idle
+			animated_sprite.play("default")
 
 func handle_tile_collision(tile_layer: TileMapLayer):
 
