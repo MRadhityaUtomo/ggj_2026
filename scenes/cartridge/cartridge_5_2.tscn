@@ -1,8 +1,9 @@
-[gd_scene load_steps=12 format=4 uid="uid://dmg6l4iudpvs1"]
+[gd_scene load_steps=13 format=4 uid="uid://dmg6l4iudpvs1"]
 
 [ext_resource type="Texture2D" uid="uid://cnfixigj0cmp" path="res://tilemap fire.png" id="1_knbcw"]
 [ext_resource type="Texture2D" uid="uid://bj0x5l72tqumo" path="res://TILEMAP_water.png" id="2_bwslk"]
 [ext_resource type="Texture2D" uid="uid://cq0in16oteeku" path="res://green.png" id="3_0orus"]
+[ext_resource type="PackedScene" uid="uid://bih70aup8l3ak" path="res://scenes/flag.tscn" id="4_bwslk"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_knbcw"]
 texture = ExtResource("1_knbcw")
@@ -525,3 +526,6 @@ tile_set = SubResource("TileSet_vvsja")
 position = Vector2(16, 16)
 tile_map_data = PackedByteArray("AAADAAEAAAAHAAQAAAADAAIAAAAHAAUAAAADAAMAAAAHAAQAAAAEAAEAAAAHAAQAAAAEAAMAAAAHAAQAAAAFAAEAAAAHAAQAAAAGAAEAAAAHAAQAAAAGAAIAAAAHAAUAADAGAAMAAAAHAAQAAAAFAAMAAAAHAAUAAAAAAP//AAAEAAUAAFABAP//AAAAAAQAAAACAP//AAABAAQAAAADAP//AAADAAUAAAAEAP//AAAFAAMAADAFAP//AAAGAAMAADAGAP//AAADAAMAAAAHAP//AAAEAAUAAAAIAP//AAABAAQAAAAJAP//AAAIAAQAAAAKAAEAAAADAAUAAAAKAAIAAAAEAAUAAAAKAAMAAAADAAQAAAAKAAQAAAAAAAQAAAAKAAUAAAAAAAUAAAAAAAYAAAAEAAQAAFABAAYAAAAEAAUAAAACAAYAAAAHAAMAAAADAAYAAAACAAMAAAAEAAYAAAAEAAMAAAAFAAYAAAADAAMAAAAGAAYAAAAHAAMAAAAHAAYAAAAGAAMAAAAIAAYAAAAAAAMAAAD//wEAAAABAAUAAAD//wIAAAAEAAQAAAD//wMAAAAAAAUAADD//wQAAAADAAQAAAAJAAYAAAAGAAMAAAAKAAYAAAAHAAUAAAAKAAAAAAAIAAQAAAAKAP//AAABAAQAAAD//wUAAAACAAUAAAD//wYAAAADAAQAADD//wAAAAAEAAUAAFD/////AAACAAUAAGA=")
 tile_set = SubResource("TileSet_0sh5h")
+
+[node name="flag" parent="." instance=ExtResource("4_bwslk")]
+position = Vector2(96, 55)
