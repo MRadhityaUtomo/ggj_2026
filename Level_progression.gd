@@ -7,7 +7,7 @@ extends Node
 # Paths to your level scenes. Update these to match your actual file structure.
 var level_scenes: Array[String] = [
 	"res://scenes/levels/level_1.tscn",
-	#"res://scenes/levels/level_2.tscn",
+	"res://scenes/levels/level_2.tscn",
 	#"res://scenes/levels/level_3.tscn",
 	"res://scenes/levels/level_4.tscn",
 	#"res://scenes/levels/level_5.tscn",
@@ -20,7 +20,7 @@ var level_flags: Array[bool] = [false, false, false, false, false, false]
 
 
 
-const TOTAL_LEVELS: int = 2
+const TOTAL_LEVELS: int = 3
 
 func _ready() -> void:
 	pass
