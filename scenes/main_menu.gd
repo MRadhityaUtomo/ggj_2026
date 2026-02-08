@@ -28,14 +28,13 @@ func _ready() -> void:
 	title_sprite.visible = use_sprite_title
 
 	# Store button references and their resting Y positions for wave anim
-	buttons = [start_button, tutorial_button, credits_button]
+	buttons = [start_button, tutorial_button]
 	for btn in buttons:
 		button_base_y.append(btn.position.y)
 
 	# Connect button signals
 	start_button.pressed.connect(_on_start_pressed)
 	tutorial_button.pressed.connect(_on_tutorial_pressed)
-	credits_button.pressed.connect(_on_credits_pressed)
 
 	# Setup cartridge visuals & click handling
 	_setup_cartridges()
@@ -82,9 +81,7 @@ func _on_tutorial_pressed() -> void:
 	# TODO: replace with your tutorial scene path
 	print("Tutorial pressed")
 
-func _on_credits_pressed() -> void:
-	# TODO: replace with your credits scene path
-	print("Credits pressed")
+
 
 # ─── TITLE HELPERS (call at runtime to swap) ──────────────────────────────────
 

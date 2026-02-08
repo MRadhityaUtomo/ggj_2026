@@ -148,7 +148,7 @@ func update_animation():
 
 func handle_tile_collision(tile_layer: TileMapLayer):
 	# Example:
-	if tile_layer.name == "Obstacle":
+	if tile_layer.name == "Obstacle" or tile_layer.name == "Obstacle2" :
 		die()
 	pass
 
@@ -156,5 +156,5 @@ func die():
 	set_physics_process(false)
 	audio_player.stream = DEATH_SFX
 	audio_player.play()
-	await audio_player.finished
-	LevelProgression.on_lose_condition_met()
+	await get_tree().create_timer(.2).timeout
+	ScreenTransition.death_transition(func(): LevelProgression.on_lose_condition_met())

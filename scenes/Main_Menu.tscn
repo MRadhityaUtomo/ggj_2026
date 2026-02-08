@@ -42,30 +42,21 @@ stretch_mode = 5
 
 [node name="StartButton" type="Button" parent="."]
 layout_mode = 0
-offset_left = 71.0
-offset_top = 34.0
-offset_right = 121.0
-offset_bottom = 46.0
+offset_left = 45.0
+offset_top = 59.0
+offset_right = 95.0
+offset_bottom = 76.0
 theme_override_font_sizes/font_size = 6
 text = "Start"
 
 [node name="TutorialButton" type="Button" parent="."]
 layout_mode = 0
-offset_left = 71.0
-offset_top = 50.0
-offset_right = 121.0
-offset_bottom = 62.0
+offset_left = 100.0
+offset_top = 60.0
+offset_right = 150.0
+offset_bottom = 77.0
 theme_override_font_sizes/font_size = 6
 text = "Tutorial"
-
-[node name="CreditsButton" type="Button" parent="."]
-layout_mode = 0
-offset_left = 71.0
-offset_top = 66.0
-offset_right = 121.0
-offset_bottom = 78.0
-theme_override_font_sizes/font_size = 6
-text = "Credits"
 
 [node name="CartridgeContainer" type="HBoxContainer" parent="."]
 layout_mode = 0

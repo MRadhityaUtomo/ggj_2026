@@ -33,11 +33,10 @@ func _on_body_entered(body: Node2D) -> void:
 		if not audio_player.playing:
 			audio_player.stream = Flag_sfx
 			audio_player.play()
-			await audio_player.finished
+			await get_tree().create_timer(.2).timeout
 		level_completed.emit()
 		LevelProgression.finish_level(LevelProgression.get_current_level_index())
 		print(LevelProgression.get_current_level_index())
-		LevelProgression.load_level_scene(LevelProgression.get_current_level_index())
-		# Optional: Play a sound or animation here
+		ScreenTransition.level_completed_transition(func(): LevelProgression.load_level_scene(LevelProgression.get_current_level_index()))
 		
 		queue_free()
