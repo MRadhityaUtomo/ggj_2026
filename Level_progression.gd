@@ -40,15 +40,6 @@ func finish_level(level_number: int, return_to_menu: bool = false) -> void:
 	level_flags[index] = true
 	print("✓ Level %d Completed. valid for progression." % level_number)
 	
-	if return_to_menu:
-		return_to_main_menu()
-	else:
-		# Auto-load next level
-		if index + 1 < TOTAL_LEVELS:
-			load_level_scene(index + 1)
-		else:
-			# Game completed, show end screen or return to menu
-			return_to_main_menu()
 
 ## Determined by looking for the first incomplete level
 func get_current_level_index() -> int:
