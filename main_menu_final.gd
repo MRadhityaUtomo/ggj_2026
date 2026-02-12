@@ -185,6 +185,11 @@ func update_level_preview():
 
 func start_level(index: int):
 	if index >= 0 and index < LevelProgression.level_scenes.size():
-		LevelProgression.load_level_scene(index)
+		# Use the main scene manager directly
+		var main_manager = get_tree().root.get_node_or_null("MainSceneManager")
+		if main_manager and main_manager.has_method("change_level"):
+			main_manager.change_level(index)
+		else:
+			push_error("MainSceneManager not found! Cannot load level.")
 	else:
 		push_error("MainMenu: Invalid level index: %d" % index)

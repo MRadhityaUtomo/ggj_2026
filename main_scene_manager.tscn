@@ -2,5 +2,5 @@
 
 [ext_resource type="Script" uid="uid://bhr4mocu1vq55" path="res://main_scene_manager.gd" id="1_nuf7v"]
 
-[node name="main_scene_manager" type="Node2D" unique_id=748042333]
+[node name="MainSceneManager" type="Node2D" unique_id=748042333]
 script = ExtResource("1_nuf7v")

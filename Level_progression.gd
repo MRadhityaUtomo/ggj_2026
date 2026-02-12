@@ -82,15 +82,12 @@ func load_level_scene(index: int) -> void:
 	if index >= 0 and index < TOTAL_LEVELS:
 		active_level_index = index
 		
-		# Use MainSceneManager if it exists, otherwise fall back to direct scene change
+		# Use MainSceneManager - DO NOT fall back to direct scene change
 		var main_manager = get_tree().root.get_node_or_null("MainSceneManager")
 		if main_manager and main_manager.has_method("change_level"):
 			main_manager.change_level(index)
 		else:
-			# Fallback to direct scene switching
-			var path = level_scenes[index]
-			if ResourceLoader.exists(path):
-				get_tree().change_scene_to_file(path)
+			push_error("CRITICAL: MainSceneManager not found! Cannot load level. Make sure main_scene_manager.tscn is the main scene.")
 	else:
 		push_error("LevelProgression: Invalid level index for loading: %d" % index)
 
@@ -107,5 +104,4 @@ func go_to_main_menu() -> void:
 	if main_manager and main_manager.has_method("return_to_main_menu"):
 		main_manager.return_to_main_menu()
 	else:
-		# Fallback
-		get_tree().change_scene_to_file(MAIN_MENU_SCENE)
+		push_error("CRITICAL: MainSceneManager not found! Cannot return to menu.")

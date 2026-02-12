@@ -1,40 +1,7 @@
 [gd_scene format=3 uid="uid://qvjkwbd8k81w"]
 
 [ext_resource type="Script" uid="uid://dgc4h4066p252" path="res://viewport_wrapper.gd" id="1_aj74m"]
-[ext_resource type="PackedScene" uid="uid://c363tskrwem0j" path="res://scenes/levels/main_menu.tscn" id="2_734b6"]
-[ext_resource type="FontFile" uid="uid://d37q1ocuu8mfi" path="res://assets/boldpixels/BoldsPixels.ttf" id="3_734b6"]
-
-[sub_resource type="FontFile" id="FontFile_842wa"]
-cache/0/variation_coordinates = {}
-cache/0/face_index = 0
-cache/0/embolden = 0.0
-cache/0/transform = Transform2D(1, 0, 0, 1, 0, 0)
-cache/0/spacing_top = 0
-cache/0/spacing_bottom = 0
-cache/0/spacing_space = 0
-cache/0/spacing_glyph = 0
-cache/0/baseline_offset = 0.0
-cache/0/16/0/ascent = 0.0
-cache/0/16/0/descent = 0.0
-cache/0/16/0/underline_position = 0.0
-cache/0/16/0/underline_thickness = 0.0
-cache/0/16/0/scale = 1.0
-cache/0/21/0/ascent = 0.0
-cache/0/21/0/descent = 0.0
-cache/0/21/0/underline_position = 0.0
-cache/0/21/0/underline_thickness = 0.0
-cache/0/21/0/scale = 1.0
-
-[sub_resource type="Theme" id="Theme_vkfh4"]
-default_font = SubResource("FontFile_842wa")
-
-[sub_resource type="LabelSettings" id="LabelSettings_erq43"]
-font = ExtResource("3_734b6")
-font_size = 128
-
-[sub_resource type="LabelSettings" id="LabelSettings_734b6"]
-font = ExtResource("3_734b6")
-font_size = 48
+[ext_resource type="Texture2D" uid="uid://c2sitn6auvhsm" path="res://Assets_Imlek_WaterFountain_01.png" id="2_4nsvf"]
 
 [node name="viewport_wrapper" type="Node2D" unique_id=1478139259]
 script = ExtResource("1_aj74m")
@@ -53,8 +20,6 @@ physics_object_picking = true
 size = Vector2i(40, 40)
 render_target_update_mode = 4
 
-[node name="MainMenu" parent="SubViewportContainer/SubViewport" unique_id=244847274 instance=ExtResource("2_734b6")]
-
 [node name="UILayer" type="CanvasLayer" parent="." unique_id=809391176]
 
 [node name="Control" type="Control" parent="UILayer" unique_id=1501190134]
@@ -65,7 +30,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="Label" type="Label" parent="UILayer/Control" unique_id=842916872]
+[node name="TextureRect" type="TextureRect" parent="UILayer/Control" unique_id=814977104]
 texture_filter = 1
 layout_mode = 1
 anchors_preset = 8
@@ -73,32 +38,12 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -30.0
-offset_top = -184.0
-offset_right = 30.0
-offset_bottom = -161.0
+offset_left = 679.9999
+offset_top = 136.0
+offset_right = 983.015
+offset_bottom = 473.5564
 grow_horizontal = 2
 grow_vertical = 2
-theme = SubResource("Theme_vkfh4")
-text = "FALL THROUGH"
-label_settings = SubResource("LabelSettings_erq43")
-
-[node name="Label2" type="Label" parent="UILayer/Control" unique_id=1463046314]
-texture_filter = 1
-layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -420.0
-offset_top = -84.5
-offset_right = 420.0
-offset_bottom = 27.5
-grow_horizontal = 2
-grow_vertical = 2
-theme = SubResource("Theme_vkfh4")
-text = "Press \"SPACE\" to Start"
-label_settings = SubResource("LabelSettings_734b6")
-horizontal_alignment = 1
-vertical_alignment = 1
+rotation = 0.38092694
+texture = ExtResource("2_4nsvf")
+expand_mode = 1
