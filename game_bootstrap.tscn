@@ -1,0 +1,46 @@
+[gd_scene format=3 uid="uid://dn4h7hnf36g4w"]
+
+[sub_resource type="GDScript" id="GDScript_s3fhf"]
+script/source = "extends Node
+class_name GameBootstrap
+
+## Persistent root scene. Game runs inside a SubViewport (192x128 pixel-art),
+## while UI renders at the full window resolution on a separate CanvasLayer.
+
+static var instance: GameBootstrap
+
+var viewport_wrapper: Node2D
+var current_scene: Node
+
+const MAIN_MENU_PATH = \"res://scenes/levels/main_menu.tscn\"
+
+func _ready():
+	instance = self
+
+	var wrapper_scene = load(\"res://viewport_wrapper.tscn\")
+	viewport_wrapper = wrapper_scene.instantiate()
+	add_child(viewport_wrapper)
+	
+	# Load main menu into the game viewport
+	load_game_scene(MAIN_MENU_PATH)
+
+func load_game_scene(scene_path: String) -> Node:
+	if current_scene:
+		current_scene.queue_free()
+		current_scene = null
+	
+	var sub_viewport = viewport_wrapper.get_game_viewport()
+	var scene = load(scene_path)
+	current_scene = scene.instantiate()
+	sub_viewport.add_child(current_scene)
+	return current_scene
+
+func get_game_viewport() -> SubViewport:
+	return viewport_wrapper.get_game_viewport()
+
+func get_ui_layer() -> CanvasLayer:
+	return viewport_wrapper.get_ui_layer()
+"
+
+[node name="game_bootstrap" type="Node2D" unique_id=6758016]
+script = SubResource("GDScript_s3fhf")

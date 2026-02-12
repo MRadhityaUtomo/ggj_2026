@@ -79,17 +79,18 @@ func on_lose_condition_met() -> void:
 
 ## Helper to safely load a level scene by index
 func load_level_scene(index: int) -> void:
-	if index >= 0 and index < level_scenes.size():
-		set_active_level(index)  # Track which level we're loading
-		var path = level_scenes[index]
-		if ResourceLoader.exists(path):
-			get_tree().change_scene_to_file(path)
+	if index >= 0 and index < TOTAL_LEVELS:
+		active_level_index = index
+		
+		# Use MainSceneManager if it exists, otherwise fall back to direct scene change
+		var main_manager = get_tree().root.get_node_or_null("MainSceneManager")
+		if main_manager and main_manager.has_method("change_level"):
+			main_manager.change_level(index)
 		else:
-			push_error("LevelProgression: Scene path not found: %s" % path)
-	elif index >= TOTAL_LEVELS:
-		# All levels done - return to main menu or show credits
-		print("🎉 All levels complete!")
-		go_to_main_menu()
+			# Fallback to direct scene switching
+			var path = level_scenes[index]
+			if ResourceLoader.exists(path):
+				get_tree().change_scene_to_file(path)
 	else:
 		push_error("LevelProgression: Invalid level index for loading: %d" % index)
 
@@ -102,4 +103,9 @@ func reset_progress() -> void:
 	print("⟲ Progress Reset")
 
 func go_to_main_menu() -> void:
-	get_tree().change_scene_to_file(MAIN_MENU_SCENE)
+	var main_manager = get_tree().root.get_node_or_null("MainSceneManager")
+	if main_manager and main_manager.has_method("return_to_main_menu"):
+		main_manager.return_to_main_menu()
+	else:
+		# Fallback
+		get_tree().change_scene_to_file(MAIN_MENU_SCENE)

@@ -1,4 +1,4 @@
-[gd_scene load_steps=7 format=3 uid="uid://cegjtwq1aap0r"]
+[gd_scene format=3 uid="uid://cegjtwq1aap0r"]
 
 [ext_resource type="Script" uid="uid://ccolkwnulxhj4" path="res://game_manager.gd" id="1_gfuhv"]
 [ext_resource type="Script" uid="uid://xpg4lm27qjs1" path="res://cartridge_config.gd" id="2_741xk"]
@@ -16,6 +16,6 @@ scene = ExtResource("4_5wshb")
 type = 2
 metadata/_custom_type_script = "uid://xpg4lm27qjs1"
 
-[node name="Level6" type="Node2D"]
+[node name="Level6" type="Node2D" unique_id=435606007]
 script = ExtResource("1_gfuhv")
 cartridge_configs = Array[ExtResource("2_741xk")]([SubResource("Resource_7x7cx"), SubResource("Resource_b6i88")])

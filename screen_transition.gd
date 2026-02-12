@@ -190,7 +190,13 @@ func transition_to_main_menu() -> void:
 	fade_in_tween.tween_property(color_rect, "color", Color(0, 0, 0, 1), FADE_DURATION)
 	await fade_in_tween.finished
 
-	LevelProgression.go_to_main_menu()
+	# Use MainSceneManager instead of direct scene change
+	var main_manager = get_tree().root.get_node_or_null("MainSceneManager")
+	if main_manager and main_manager.has_method("return_to_main_menu"):
+		main_manager.return_to_main_menu()
+	else:
+		# Fallback
+		LevelProgression.go_to_main_menu()
 
 	await get_tree().create_timer(HOLD_DURATION).timeout
 

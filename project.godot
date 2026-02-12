@@ -8,11 +8,15 @@
 
 config_version=5
 
+[animation]
+
+compatibility/default_parent_skeleton_in_mesh_instance_3d=true
+
 [application]
 
 config/name="platform transfer"
-run/main_scene="res://scenes/levels/main_menu.tscn"
-config/features=PackedStringArray("4.5", "Forward Plus")
+run/main_scene="res://main_scene_manager.tscn"
+config/features=PackedStringArray("4.6", "Forward Plus")
 config/icon="res://icon.svg"
 
 [audio]
@@ -30,8 +34,8 @@ ScreenTransition="*res://screen_transition.gd"
 
 [display]
 
-window/size/viewport_width=192
-window/size/viewport_height=128
+window/size/viewport_width=960
+window/size/viewport_height=640
 window/size/mode=3
 window/size/window_width_override=1920
 window/size/window_height_override=1080
@@ -78,3 +82,5 @@ exit={
 textures/canvas_textures/default_texture_filter=0
 2d/snap/snap_2d_transforms_to_pixel=true
 2d/snap/snap_2d_vertices_to_pixel=true
+2d/default_filters/use_nearest_mipmap_filter=false
+2d/size/viewport_height=640
