@@ -1,8 +1,8 @@
 [gd_resource type="TileSet" format=3 uid="uid://c7urnim3on72"]
 
 [ext_resource type="Texture2D" uid="uid://cnfixigj0cmp" path="res://tilemap fire.png" id="1_77bwj"]
+[ext_resource type="Texture2D" uid="uid://dgyocum03crim" path="res://assets/green_big.png" id="2_xj7ft"]
 [ext_resource type="Texture2D" uid="uid://c6vr85puxtwxr" path="res://TILEMAP_water_big.png" id="4_3kkmd"]
-[ext_resource type="Texture2D" uid="uid://dgyocum03crim" path="res://assets/green_big.png" id="5_y67qo"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_i84fj"]
 texture = ExtResource("4_3kkmd")
@@ -92,7 +92,7 @@ texture_region_size = Vector2i(32, 32)
 9:5/0 = 0
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_xgsm2"]
-texture = ExtResource("5_y67qo")
+texture = ExtResource("2_xj7ft")
 texture_region_size = Vector2i(32, 32)
 0:0/0 = 0
 1:0/0 = 0
