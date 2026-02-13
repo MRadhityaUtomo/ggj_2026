@@ -2,6 +2,7 @@
 
 [ext_resource type="Script" uid="uid://dgc4h4066p252" path="res://viewport_wrapper.gd" id="1_aj74m"]
 [ext_resource type="Texture2D" uid="uid://c2sitn6auvhsm" path="res://Assets_Imlek_WaterFountain_01.png" id="2_4nsvf"]
+[ext_resource type="PackedScene" uid="uid://bhcxsmkbraa1n" path="res://scenes/cartridge/shader.tscn" id="3_734b6"]
 
 [node name="viewport_wrapper" type="Node2D" unique_id=1478139259]
 script = ExtResource("1_aj74m")
@@ -50,3 +51,5 @@ grow_vertical = 2
 rotation = 0.38092694
 texture = ExtResource("2_4nsvf")
 expand_mode = 1
+
+[node name="shader" parent="UILayer" unique_id=1147309416 instance=ExtResource("3_734b6")]

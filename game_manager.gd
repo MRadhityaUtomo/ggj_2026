@@ -12,6 +12,8 @@ extends Node2D
 var cartridges: Array[Cartridge] = []  # instantiated cartridge nodes
 var current_cartridge_index = 0
 var preview_cartridge_index = 0
+var tv_outline_mat : ShaderMaterial
+
 
 # Game states
 enum GameState {PLAYING, PAUSED_SELECTION}
@@ -20,6 +22,11 @@ var current_state = GameState.PLAYING
 # Camera
 var camera: Camera2D
 var zoom_tween: Tween
+
+# Game resolution constants
+const GAME_WIDTH = 384
+const GAME_HEIGHT = 256
+const GAME_CENTER = Vector2(192, 128)
 
 # Player reference
 var player: CharacterBody2D
@@ -58,10 +65,11 @@ func _ready():
 	tv_bg = Sprite2D.new()
 	tv_bg.texture = preload("res://tv_bg.png")
 	tv_bg.centered = true
-	tv_bg.position = Vector2(192, 128)  # Fixed position
+	tv_bg.position = GAME_CENTER  # Changed from Vector2(192, 128)
 	tv_bg.z_index = -200  # Render behind everything
 	tv_bg.visible = false  # Hidden during gameplay
 	add_child(tv_bg)  # Add to main scene, not tv_container
+	
 	# Setup zoom audio player (non-positional so it plays at full volume)
 	zoom_audio = AudioStreamPlayer.new()
 	zoom_audio.stream = ZOOM_OUT_SFX
@@ -72,7 +80,7 @@ func _ready():
 	tv_container = Node2D.new()
 	add_child(tv_container)
 	tv_container.z_index = 100  # Render above gameplay
-	tv_container.position = Vector2(96, 64)  # Set pivot point to center of screen
+	tv_container.position = GAME_CENTER  # Changed from Vector2(96, 64)
 
 	# Add TV frame sprite (rotates with container)
 	tv_frame = Sprite2D.new()
@@ -83,14 +91,26 @@ func _ready():
 	tv_frame.visible = false
 	tv_container.add_child(tv_frame)  # Inside tv_container - will rotate
 
+	# Setup shader material AFTER tv_frame is created
+	tv_outline_mat = ShaderMaterial.new()
+	tv_outline_mat.shader = preload("res://outline_shader.gdshader")
+	# Initialize shader parameters
+	tv_outline_mat.set_shader_parameter("enabled", 0.0)
+	tv_outline_mat.set_shader_parameter("progress", 1.0)
+	tv_outline_mat.set_shader_parameter("outline_color", Color(1.0, 1.0, 1.0, 1.0))
+	tv_outline_mat.set_shader_parameter("thickness", 1.0)
+	tv_frame.material = tv_outline_mat
+
 	# Create clickable area for the TV frame
 	tv_frame_area = Area2D.new()
 	tv_frame.add_child(tv_frame_area)
-
+	tv_outline_mat = ShaderMaterial.new()
+	tv_outline_mat.shader = preload("res://outline_shader.gdshader")
+	tv_frame.material = tv_outline_mat
 	# Add collision shape that matches your frame size
 	var collision_shape = CollisionShape2D.new()
 	var shape = RectangleShape2D.new()
-	shape.size = Vector2(384*2, 256*2)
+	shape.size = Vector2(768, 512)  # Doubled from 384x256
 	collision_shape.shape = shape
 	tv_frame_area.add_child(collision_shape)
 
@@ -110,7 +130,7 @@ func _ready():
 			# Parent cartridges to tv_container so they rotate with the TV
 			tv_container.add_child(instance)
 			# Offset cartridges relative to container center
-			instance.position -= Vector2(96, 64)
+			instance.position -= GAME_CENTER  # Changed from Vector2(96, 64)
 			cartridges.append(instance)
 
 	# Spawn player
@@ -120,7 +140,7 @@ func _ready():
 		var player_world_pos = player.global_position
 		remove_child(player)
 		tv_container.add_child(player)
-		player.position = player_world_pos - Vector2(96, 64)
+		player.position = player_world_pos - GAME_CENTER  # Changed from Vector2(96, 64)
 
 	# Initialize cartridge visibility and collisions
 	update_cartridge_visibility()
@@ -143,8 +163,6 @@ func _process(_delta):
 				cycle_preview(1)
 			elif Input.is_action_just_pressed("exit"):  # Enter/Space / Y button
 				confirm_cartridge_change()
-			#elif Input.is_action_just_pressed("ui_cancel"):  # ESC to go back
-				#resume_game()
 			
 			# Spin level: RT (clockwise) / LT (counter-clockwise)
 			if Input.is_action_just_pressed("rotate_right"):
@@ -152,20 +170,35 @@ func _process(_delta):
 			elif Input.is_action_just_pressed("rotate_left"):
 				rotate_tv_90_degrees_ccw()
 
+func play_tv_selection_outline():
+	if not tv_outline_mat:
+		return
+	
+	tv_outline_mat.set_shader_parameter("enabled", 1.0)
+	tv_outline_mat.set_shader_parameter("progress", 0.0)
+
+	var t = create_tween()
+	t.tween_property(
+		tv_outline_mat,
+		"shader_parameter/progress",
+		1.0,
+		0.25
+	).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
+
 func spawn_player():
 	player = player_scene.instantiate()
 	# Use spawn marker if set, otherwise fallback
 	if spawn_marker:
 		player.position = spawn_marker.global_position
 	else:
-		player.position = Vector2(32, 80)
+		player.position = Vector2(64, 160)  # Adjusted for 384x256 resolution
 	add_child(player)  # Temporarily add to get position, will reparent in _ready
 
 func set_playing_view():
 	current_state = GameState.PLAYING
 	animate_camera_zoom(Vector2(1.0, 1.0))  # Zoom in
 	play_zoom_sfx(true)  # Reversed (zoom in)
-	camera.position = Vector2(192, 128)  # Static camera centered on level
+	camera.position = GAME_CENTER  # Changed from Vector2(192, 128)
 	if player:
 		# Unpause physics
 		player.set_physics_process(true)
@@ -176,7 +209,7 @@ func set_selection_view():
 	current_state = GameState.PAUSED_SELECTION
 	animate_camera_zoom(Vector2(0.5, 0.5))  # Zoom out
 	play_zoom_sfx(false)  # Normal (zoom out)
-	camera.position = Vector2(192, 128)
+	camera.position = GAME_CENTER  # Changed from Vector2(192, 128)
 	
 	# Show the TV frame and background
 	if tv_frame:
@@ -235,13 +268,14 @@ func cycle_preview(direction: int):
 	update_cartridge_preview()
 
 func update_cartridge_preview():
-	# Show only the preview cartridge, hide all others
 	for i in range(cartridges.size()):
 		var is_preview = (i == preview_cartridge_index)
 		cartridges[i].visible = is_preview
 		cartridges[i].modulate = Color(1, 1, 1, 1)
-		# Keep collisions disabled during preview since physics is paused
 		cartridges[i].set_collision_enabled(false)
+
+	play_tv_selection_outline() # ← ADD THIS LINE
+
 
 func confirm_cartridge_change():
 	current_cartridge_index = preview_cartridge_index

@@ -3,7 +3,7 @@
 [ext_resource type="Texture2D" uid="uid://cnfixigj0cmp" path="res://tilemap fire.png" id="1_iwpxm"]
 [ext_resource type="PackedScene" uid="uid://bih70aup8l3ak" path="res://scenes/flag.tscn" id="2_icbrf"]
 
-[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_6kjmi"]
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_icbrf"]
 texture = ExtResource("1_iwpxm")
 texture_region_size = Vector2i(32, 32)
 0:0/0 = 0
@@ -69,9 +69,9 @@ texture_region_size = Vector2i(32, 32)
 
 [sub_resource type="TileSet" id="TileSet_6kjmi"]
 tile_size = Vector2i(32, 32)
-sources/1 = SubResource("TileSetAtlasSource_6kjmi")
+sources/1 = SubResource("TileSetAtlasSource_icbrf")
 
-[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_icbrf"]
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_6kjmi"]
 texture = ExtResource("1_iwpxm")
 0:0/0 = 0
 1:0/0 = 0
@@ -258,7 +258,7 @@ texture_region_size = Vector2i(32, 32)
 [sub_resource type="TileSet" id="TileSet_wmi5b"]
 tile_size = Vector2i(32, 32)
 physics_layer_0/collision_layer = 1
-sources/0 = SubResource("TileSetAtlasSource_icbrf")
+sources/0 = SubResource("TileSetAtlasSource_6kjmi")
 sources/1 = SubResource("TileSetAtlasSource_nh7og")
 
 [node name="Cartridge1" type="Node2D" unique_id=692971700]

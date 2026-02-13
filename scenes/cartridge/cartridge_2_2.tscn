@@ -73,7 +73,7 @@ texture_region_size = Vector2i(32, 32)
 tile_size = Vector2i(32, 32)
 sources/1 = SubResource("TileSetAtlasSource_ynsdg")
 
-[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_lkbb3"]
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_5weln"]
 texture = ExtResource("1_5weln")
 0:0/0 = 0
 1:0/0 = 0
@@ -164,7 +164,7 @@ texture = ExtResource("1_5weln")
 8:5/0 = 0
 9:5/0 = 0
 
-[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_vumio"]
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_lkbb3"]
 texture = ExtResource("1_5weln")
 texture_region_size = Vector2i(32, 32)
 0:0/0 = 0
@@ -260,10 +260,10 @@ texture_region_size = Vector2i(32, 32)
 [sub_resource type="TileSet" id="TileSet_tchrn"]
 tile_size = Vector2i(32, 32)
 physics_layer_0/collision_layer = 1
-sources/0 = SubResource("TileSetAtlasSource_lkbb3")
-sources/1 = SubResource("TileSetAtlasSource_vumio")
+sources/0 = SubResource("TileSetAtlasSource_5weln")
+sources/1 = SubResource("TileSetAtlasSource_lkbb3")
 
-[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_5weln"]
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_vumio"]
 texture = ExtResource("4_tchrn")
 0:0/0 = 0
 0:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
@@ -455,7 +455,7 @@ texture_region_size = Vector2i(32, 32)
 [sub_resource type="TileSet" id="TileSet_kma6x"]
 tile_size = Vector2i(32, 32)
 physics_layer_0/collision_layer = 1
-sources/0 = SubResource("TileSetAtlasSource_5weln")
+sources/0 = SubResource("TileSetAtlasSource_vumio")
 sources/2 = SubResource("TileSetAtlasSource_tchrn")
 
 [node name="cartridge_2_2" type="Node2D" unique_id=1173366982]

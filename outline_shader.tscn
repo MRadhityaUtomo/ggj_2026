@@ -1,0 +1,13 @@
+[gd_scene format=3 uid="uid://b1rhlhf4vmf46"]
+
+[ext_resource type="Shader" uid="uid://t3tky54xty1" path="res://outline_shader.gdshader" id="1_jq4nw"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_2yh0w"]
+shader = ExtResource("1_jq4nw")
+shader_parameter/enabled = 0.0
+shader_parameter/progress = 1.0
+shader_parameter/outline_color = Color(1, 1, 1, 1)
+shader_parameter/thickness = 1.0
+
+[node name="OutlineShader" type="Node2D" unique_id=1515599538]
+material = SubResource("ShaderMaterial_2yh0w")
