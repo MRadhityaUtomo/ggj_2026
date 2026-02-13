@@ -5,9 +5,12 @@ extends Node2D
 @onready var sub_viewport_container: SubViewportContainer = $SubViewportContainer
 @onready var sub_viewport: SubViewport = $SubViewportContainer/SubViewport
 @onready var ui_layer: CanvasLayer = $UILayer
+@onready var white_outline_border: ColorRect = $UILayer/WhiteOutlineBorder
 
 const GAME_WIDTH = 192*2
 const GAME_HEIGHT = 128*2
+
+var outline_tween: Tween
 
 func _ready():
 	# Ensure nearest-neighbor filtering for pixel art
@@ -49,3 +52,27 @@ func get_game_viewport() -> SubViewport:
 ## Get the UI layer for adding high-res UI
 func get_ui_layer() -> CanvasLayer:
 	return ui_layer
+
+## Trigger white outline closing-in effect when cartridge is selected
+func play_outline_close_effect(duration: float = 0.5):
+	if outline_tween:
+		outline_tween.kill()
+	
+	outline_tween = create_tween()
+	outline_tween.set_ease(Tween.EASE_IN_OUT)
+	outline_tween.set_trans(Tween.TRANS_CUBIC)
+	
+	# Animate from 0 (no border) to 1 (fully closed)
+	outline_tween.tween_property(
+		white_outline_border.material,
+		"shader_parameter/progress",
+		1.0,
+		duration
+	).from(0.0)
+
+## Reset the outline effect
+func reset_outline_effect():
+	if white_outline_border and white_outline_border.material:
+		white_outline_border.material.set_shader_parameter("progress", 0.0)
+	if outline_tween:
+		outline_tween.kill()

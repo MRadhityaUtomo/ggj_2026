@@ -3,6 +3,13 @@
 [ext_resource type="Script" uid="uid://dgc4h4066p252" path="res://viewport_wrapper.gd" id="1_aj74m"]
 [ext_resource type="Texture2D" uid="uid://c2sitn6auvhsm" path="res://Assets_Imlek_WaterFountain_01.png" id="2_4nsvf"]
 [ext_resource type="PackedScene" uid="uid://bhcxsmkbraa1n" path="res://scenes/cartridge/shader.tscn" id="3_734b6"]
+[ext_resource type="Shader" path="res://white_outline_border.gdshader" id="4_outline"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_outline"]
+shader = ExtResource("4_outline")
+shader_parameter/progress = 0.0
+shader_parameter/outline_color = Color(1, 1, 1, 1)
+shader_parameter/border_width = 0.15
 
 [node name="viewport_wrapper" type="Node2D" unique_id=1478139259]
 script = ExtResource("1_aj74m")

@@ -170,21 +170,6 @@ func _process(_delta):
 			elif Input.is_action_just_pressed("rotate_left"):
 				rotate_tv_90_degrees_ccw()
 
-func play_tv_selection_outline():
-	if not tv_outline_mat:
-		return
-	
-	tv_outline_mat.set_shader_parameter("enabled", 1.0)
-	tv_outline_mat.set_shader_parameter("progress", 0.0)
-
-	var t = create_tween()
-	t.tween_property(
-		tv_outline_mat,
-		"shader_parameter/progress",
-		1.0,
-		0.25
-	).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
-
 func spawn_player():
 	player = player_scene.instantiate()
 	# Use spawn marker if set, otherwise fallback
@@ -199,6 +184,8 @@ func set_playing_view():
 	animate_camera_zoom(Vector2(1.0, 1.0))  # Zoom in
 	play_zoom_sfx(true)  # Reversed (zoom in)
 	camera.position = GAME_CENTER  # Changed from Vector2(192, 128)
+	
+	
 	if player:
 		# Unpause physics
 		player.set_physics_process(true)
@@ -273,8 +260,6 @@ func update_cartridge_preview():
 		cartridges[i].visible = is_preview
 		cartridges[i].modulate = Color(1, 1, 1, 1)
 		cartridges[i].set_collision_enabled(false)
-
-	play_tv_selection_outline() # ← ADD THIS LINE
 
 
 func confirm_cartridge_change():
@@ -366,7 +351,7 @@ func get_zoom_for_rotation(rotation_rad: float) -> Vector2:
 	
 	if is_vertical:
 		# When vertical, zoom out to fit the rotated screen
-		return Vector2(0.67, 0.67)
+		return Vector2(0.5, 0.5)
 	else:
-		# Normal horizontal view - standard zoom
+		# Horizontal orientation, normal zoom
 		return Vector2(1.0, 1.0)

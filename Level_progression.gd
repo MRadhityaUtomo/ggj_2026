@@ -7,7 +7,6 @@ extends Node
 var level_scenes: Array[String] = [
 	"res://scenes/levels/level_1.tscn",
 	"res://scenes/levels/level_2.tscn",
-	"res://scenes/levels/level_3.tscn",
 	"res://scenes/levels/level_4.tscn",
 	"res://scenes/levels/level_5.tscn",
     "res://scenes/levels/level_6.tscn"
@@ -16,12 +15,12 @@ var level_scenes: Array[String] = [
 const MAIN_MENU_SCENE: String = "res://scenes/levels/main_menu.tscn"
 
 # ─── STATE ────────────────────────────────────────────────────────────────────
-var level_flags: Array[bool] = [false, false, false, false, false, false]
+var level_flags: Array[bool] = [false, false, false, false, false]
 
 # Track which level the player is currently playing (not just first incomplete)
 var active_level_index: int = 0
 
-const TOTAL_LEVELS: int = 6
+const TOTAL_LEVELS: int = 5
 
 func _ready() -> void:
 	pass

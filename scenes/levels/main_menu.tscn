@@ -5,8 +5,10 @@
 [ext_resource type="PackedScene" uid="uid://ba2fl631xom7j" path="res://scenes/cartridge/menu.tscn" id="3_geflf"]
 [ext_resource type="PackedScene" uid="uid://c2wv4ftrbmhqw" path="res://cartridge_1.tscn" id="4_geflf"]
 [ext_resource type="PackedScene" uid="uid://p3m6fbbtemfk" path="res://scenes/cartridge/cartridge_2_1.tscn" id="5_fkd6t"]
+[ext_resource type="PackedScene" uid="uid://dhhfd3q16sb7o" path="res://scenes/cartridge/cartridge_4_1.tscn" id="7_crctu"]
+[ext_resource type="PackedScene" path="res://scenes/cartridge/cartridge_5_1.tscn" id="8_sn5u3"]
 
-[sub_resource type="Resource" id="Resource_fkd6t"]
+[sub_resource type="Resource" id="Resource_wko7x"]
 script = ExtResource("2_721jg")
 scene = ExtResource("3_geflf")
 metadata/_custom_type_script = "uid://xpg4lm27qjs1"
@@ -19,23 +21,22 @@ metadata/_custom_type_script = "uid://xpg4lm27qjs1"
 [sub_resource type="Resource" id="Resource_geflf"]
 script = ExtResource("2_721jg")
 scene = ExtResource("5_fkd6t")
-metadata/_custom_type_script = "uid://xpg4lm27qjs1"
-
-[sub_resource type="Resource" id="Resource_keln3"]
-script = ExtResource("2_721jg")
+type = 1
 metadata/_custom_type_script = "uid://xpg4lm27qjs1"
 
 [sub_resource type="Resource" id="Resource_crctu"]
 script = ExtResource("2_721jg")
+scene = ExtResource("7_crctu")
 metadata/_custom_type_script = "uid://xpg4lm27qjs1"
 
 [sub_resource type="Resource" id="Resource_sn5u3"]
 script = ExtResource("2_721jg")
+scene = ExtResource("8_sn5u3")
 metadata/_custom_type_script = "uid://xpg4lm27qjs1"
 
 [node name="MainMenu" type="Node2D" unique_id=1182983692]
 script = ExtResource("1_fsby3")
-cartridge_configs = Array[ExtResource("2_721jg")]([SubResource("Resource_fkd6t"), SubResource("Resource_cn35j"), SubResource("Resource_geflf"), SubResource("Resource_keln3"), SubResource("Resource_crctu"), SubResource("Resource_sn5u3")])
+cartridge_configs = Array[ExtResource("2_721jg")]([SubResource("Resource_wko7x"), SubResource("Resource_cn35j"), SubResource("Resource_geflf"), SubResource("Resource_crctu"), SubResource("Resource_sn5u3")])
 
 [node name="Marker2D" type="Marker2D" parent="." unique_id=202835855]
 position = Vector2(96, 80)

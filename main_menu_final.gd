@@ -1,24 +1,26 @@
 extends Node2D
 
 ## Main Menu - Works like game_manager but cartridges are level selectors
+## Cartridge 0 = Menu itself (non-selectable)
+## Cartridge 1 = Level 0 preview, Cartridge 2 = Level 1 preview, etc.
 
 ## ─── CONFIGURATION ───────────────────────────────────────────────────────────
 @export var cartridge_configs: Array[CartridgeConfig] = []
-@export var spawn_marker: Marker2D  # Add spawn marker like game_manager
+@export var spawn_marker: Marker2D
 
 ## ─── INTERNAL STATE ──────────────────────────────────────────────────────────
 var cartridges: Array[Cartridge] = []
-var current_cartridge_index = 0
+var current_cartridge_index = 0  # 0 = menu, 1+ = level previews
 var preview_cartridge_index = 0
 
-# Player reference (same as game_manager)
+# Player reference
 var player: CharacterBody2D
 var player_scene = preload("res://player.tscn")
 
 # Store player state when pausing
 var stored_player_velocity: Vector2
 
-# Level loading cooldown to prevent rapid re-triggering
+# Level loading cooldown
 var level_load_cooldown: float = 0.0
 const LOAD_COOLDOWN_TIME: float = 0.5
 
@@ -52,13 +54,20 @@ const ZOOM_EASE_TYPE = Tween.EASE_IN_OUT
 var zoom_audio: AudioStreamPlayer
 const ZOOM_OUT_SFX = preload("res://sounds/audio/Cassette Preview/AUDIO/BUTTON_03.wav")
 const ZOOM_IN_SFX = preload("res://sounds/audio/Cassette Preview/AUDIO/CASSETTE_RATTLE_12.wav")
+var cycle_audio: AudioStreamPlayer
+const CYCLE_SFX = preload("res://sounds/audio/Cassette Preview/AUDIO/BUTTON_03.wav")
 
 func _ready():
-	# Setup zoom audio player
+	# Setup audio players
 	zoom_audio = AudioStreamPlayer.new()
 	zoom_audio.stream = ZOOM_OUT_SFX
 	zoom_audio.bus = "Master"
 	add_child(zoom_audio)
+	
+	cycle_audio = AudioStreamPlayer.new()
+	cycle_audio.stream = CYCLE_SFX
+	cycle_audio.bus = "Master"
+	add_child(cycle_audio)
 	
 	# Setup camera
 	camera = Camera2D.new()
@@ -107,8 +116,8 @@ func _ready():
 	tv_frame_area.mouse_exited.connect(_on_tv_frame_mouse_exited)
 	tv_frame_area.input_pickable = true
 	
-	# Instantiate cartridge scenes from configs
-	# Cartridge 0 = Menu (playable area)
+	# Instantiate cartridge preview scenes
+	# Cartridge 0 = Menu itself (playable area with collision)
 	# Cartridge 1+ = Level previews (visual only, no collision)
 	for i in range(cartridge_configs.size()):
 		var config = cartridge_configs[i]
@@ -119,16 +128,16 @@ func _ready():
 			tv_container.add_child(instance)
 			instance.position -= GAME_CENTER
 			
-			# Disable collision for level preview cartridges (index 1+)
+			# Disable collision/physics for level preview cartridges (index 1+)
+			# Keep cartridge 0 (menu) with collision enabled for player to walk on
 			if i > 0:
 				if instance.has_method("set_collision_enabled"):
 					instance.set_collision_enabled(false)
-				# Disable physics for preview cartridges
 				_disable_cartridge_physics(instance)
 			
 			cartridges.append(instance)
 	
-	# Spawn player (ONLY interacts with cartridge 0 - the menu)
+	# Spawn player (RESTORED)
 	spawn_player()
 	# Parent player to tv_container so it rotates with the screen
 	if player:
@@ -137,19 +146,17 @@ func _ready():
 		tv_container.add_child(player)
 		player.position = player_world_pos - GAME_CENTER
 	
-	# Initialize cartridge visibility (only show menu cartridge)
+	# Verify cartridge count: should be (level count + 1) for menu
+	var expected_count = LevelProgression.level_scenes.size() + 1
+	if cartridges.size() != expected_count:
+		push_warning("Main Menu: Cartridge count (%d) doesn't match expected (%d levels + 1 menu = %d)" % [cartridges.size(), LevelProgression.level_scenes.size(), expected_count])
+	
+	# Initialize - show menu cartridge (index 0)
+	current_cartridge_index = 0
 	update_cartridge_visibility()
 	
 	# Start in playing mode (viewing menu)
 	set_playing_view()
-
-func _disable_cartridge_physics(cartridge: Node2D):
-	# Recursively disable physics for all TileMapLayer nodes in preview cartridges
-	for child in cartridge.get_children():
-		if child is TileMapLayer:
-			child.collision_enabled = false
-		elif child.get_child_count() > 0:
-			_disable_cartridge_physics(child)
 
 func spawn_player():
 	player = player_scene.instantiate()
@@ -159,6 +166,14 @@ func spawn_player():
 	else:
 		player.position = Vector2(96, 80)  # Default spawn on menu platforms
 	add_child(player)  # Temporarily add to get position, will reparent in _ready
+
+func _disable_cartridge_physics(cartridge: Node2D):
+	# Recursively disable physics for all TileMapLayer nodes
+	for child in cartridge.get_children():
+		if child is TileMapLayer:
+			child.collision_enabled = false
+		elif child.get_child_count() > 0:
+			_disable_cartridge_physics(child)
 
 func _process(delta):
 	# Update cooldown
@@ -170,19 +185,28 @@ func _process(delta):
 			# ESC to enter selection mode (zoom out to choose levels)
 			if Input.is_action_just_pressed("exit"):
 				pause_and_show_selection()
+			
+			# Jump button does nothing in menu - only works in selection mode
+			# Removed the jump input here entirely
 		
 		MenuState.PAUSED_SELECTION:
-			# Cycle cartridges
+			# Cycle cartridges (including menu at index 0)
 			if Input.is_action_just_pressed("left") or Input.is_action_just_pressed("cycle_left"):
 				cycle_preview(-1)
+				play_cycle_sfx()
 			elif Input.is_action_just_pressed("right") or Input.is_action_just_pressed("cycle_right"):
 				cycle_preview(1)
+				play_cycle_sfx()
 			
-			# JUMP BUTTON (Space/A) to load selected level
+			# JUMP BUTTON (Space/A) to either:
+			# - Load level if on level preview (cartridge 1+)
+			# - Do nothing if on menu cartridge (cartridge 0)
 			elif Input.is_action_just_pressed("up") and level_load_cooldown <= 0:
-				load_selected_level()
+				if preview_cartridge_index > 0:  # Level preview selected
+					confirm_and_load_level()
+				# If preview_cartridge_index == 0, do nothing (stay in selection mode)
 			
-			# ESC to cancel and return to menu without loading
+			# ESC to cancel and return to menu (always go back to cartridge 0)
 			elif Input.is_action_just_pressed("exit"):
 				return_to_menu()
 			
@@ -193,27 +217,34 @@ func _process(delta):
 				rotate_tv_90_degrees_ccw()
 
 func pause_and_show_selection():
-	# Start at cartridge 1 (first level preview), not cartridge 0 (menu itself)
-	preview_cartridge_index = max(1, current_cartridge_index)
+	# Enter selection mode, start at cartridge 1 (first level preview)
+	preview_cartridge_index = 1  # Always start at first level
 	set_selection_view()
 	update_cartridge_preview()
 
 func return_to_menu():
-	# Go back to viewing the menu without loading a level
+	# Always return to menu cartridge (index 0), ignore preview selection
 	current_cartridge_index = 0
 	preview_cartridge_index = 0
 	update_cartridge_visibility()
 	set_playing_view()
+
+func return_to_viewing():
+	# REMOVED - No longer used
+	# This was causing the bug where ESC would switch to a level preview
+	pass
 
 func set_playing_view():
 	current_state = MenuState.PLAYING
 	animate_camera_zoom(Vector2(1.0, 1.0))
 	play_zoom_sfx(true)
 	camera.position = GAME_CENTER
+	tv_frame.visible = true
+	tv_bg.visible = true
 	
 	if player:
-		player.set_physics_process(true)
-		player.visible = true
+		player.set_physics_process(true)  # Enable player movement
+		player.visible = true  # Show player
 
 func set_selection_view():
 	current_state = MenuState.PAUSED_SELECTION
@@ -225,56 +256,62 @@ func set_selection_view():
 	
 	if player:
 		stored_player_velocity = player.velocity
-		player.set_physics_process(false)
+		player.set_physics_process(false)  # Freeze player
 		player.visible = false  # Hide player during selection
 
 func cycle_preview(direction: int):
-	if cartridges.size() <= 1:  # Only menu cartridge
+	if cartridges.size() == 0:
 		return
 	
-	# Cycle through level previews only (skip cartridge 0)
+	# Cycle through all cartridges (0 = menu, 1+ = level previews)
 	preview_cartridge_index += direction
 	
-	# Wrap around (stay in range 1 to cartridges.size()-1)
-	if preview_cartridge_index < 1:
+	# Wrap around
+	if preview_cartridge_index < 0:
 		preview_cartridge_index = cartridges.size() - 1
 	elif preview_cartridge_index >= cartridges.size():
-		preview_cartridge_index = 1
+		preview_cartridge_index = 0
 	
 	update_cartridge_preview()
 
 func update_cartridge_visibility():
-	# When playing, only show menu cartridge (index 0)
+	# When in PLAYING mode, show currently selected cartridge
 	for i in range(cartridges.size()):
 		var is_active = (i == current_cartridge_index)
 		cartridges[i].visible = is_active
 		cartridges[i].modulate = Color(1, 1, 1, 1)
 
 func update_cartridge_preview():
-	# When in selection mode, show the preview cartridge
+	# When in PAUSED_SELECTION mode, show preview cartridge
 	for i in range(cartridges.size()):
 		var is_preview = (i == preview_cartridge_index)
 		cartridges[i].visible = is_preview
 		cartridges[i].modulate = Color(1, 1, 1, 1)
 
-func confirm_cartridge_change():
-	# This is not used in menu - we use load_selected_level() instead
-	current_cartridge_index = preview_cartridge_index
-	update_cartridge_visibility()
-	set_playing_view()
+func load_current_level():
+	# Load the level corresponding to current_cartridge_index
+	# Only call this if current_cartridge_index > 0 (not menu)
+	if current_cartridge_index > 0:
+		_load_level_by_index(current_cartridge_index)
 
-func load_selected_level():
-	# Map preview cartridge index to level index
+func confirm_and_load_level():
+	if preview_cartridge_index > 0:
+		_load_level_by_index(preview_cartridge_index)
+
+func _load_level_by_index(cartridge_index: int):
+	# Convert cartridge index to level index
 	# Cartridge 0 = Menu (skip)
-	# Cartridge 1 = Level 0
-	# Cartridge 2 = Level 1, etc.
-	if preview_cartridge_index < 1:
-		return  # Don't load if somehow on menu cartridge
+	# Cartridge 1 = Level 0 (LevelProgression.level_scenes[0])
+	# Cartridge 2 = Level 1 (LevelProgression.level_scenes[1]), etc.
 	
-	var level_index = preview_cartridge_index - 1
+	if cartridge_index <= 0:
+		push_error("Cannot load level from menu cartridge (index 0)")
+		return
+	
+	var level_index = cartridge_index - 1  # Offset by 1
 	
 	if level_index < 0 or level_index >= LevelProgression.level_scenes.size():
-		push_error("Invalid level index: %d" % level_index)
+		push_error("Invalid level index: %d (Cartridge: %d)" % [level_index, cartridge_index])
 		return
 	
 	# Check if level is unlocked
@@ -287,15 +324,11 @@ func load_selected_level():
 		# Set cooldown to prevent rapid re-loading
 		level_load_cooldown = LOAD_COOLDOWN_TIME
 		
-		# Load the level
-		var main_manager = get_tree().root.get_node_or_null("MainSceneManager")
-		if main_manager and main_manager.has_method("change_level"):
-			print("Loading Level %d (Cartridge %d)" % [level_index + 1, preview_cartridge_index])
-			main_manager.change_level(level_index)
-		else:
-			push_error("MainSceneManager not found!")
+		# Load the level via LevelProgression
+		print("Loading Level %d (Cartridge %d) from Main Menu" % [level_index, cartridge_index])
+		LevelProgression.load_level_scene(level_index)
 	else:
-		print("Level %d is locked! Complete Level %d first." % [level_index + 1, highest_unlocked])
+		print("Level %d is locked! Complete Level %d first." % [level_index, highest_unlocked])
 		# TODO: Play locked sound/show locked message
 
 func rotate_tv_90_degrees():
@@ -338,6 +371,11 @@ func play_zoom_sfx(zoom_in: bool) -> void:
 		zoom_audio.stream = ZOOM_OUT_SFX
 		zoom_audio.pitch_scale = 1.0
 	zoom_audio.play()
+
+func play_cycle_sfx() -> void:
+	cycle_audio.stop()
+	cycle_audio.pitch_scale = 1.0
+	cycle_audio.play()
 
 func _on_tv_frame_input(_viewport: Node, event: InputEvent, _shape_idx: int):
 	if event is InputEventMouseButton:
