@@ -6,8 +6,8 @@ extends Node2D
 @onready var sub_viewport: SubViewport = $SubViewportContainer/SubViewport
 @onready var ui_layer: CanvasLayer = $UILayer
 
-const GAME_WIDTH = 192
-const GAME_HEIGHT = 128
+const GAME_WIDTH = 192*2
+const GAME_HEIGHT = 128*2
 
 func _ready():
 	# Ensure nearest-neighbor filtering for pixel art

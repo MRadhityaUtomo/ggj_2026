@@ -44,8 +44,8 @@ var tv_bg: Sprite2D  # Background - NOT rotated
 
 # Audio
 var zoom_audio: AudioStreamPlayer
-const ZOOM_OUT_SFX = preload("res://sounds/Temp_Zoom_out.wav")
-const ZOOM_IN_SFX = preload("res://sounds/Temp_Zoom_in.mp3")
+const ZOOM_OUT_SFX = preload("res://sounds/audio/Cassette Preview/AUDIO/BUTTON_03.wav")
+const ZOOM_IN_SFX = preload("res://sounds/audio/Cassette Preview/AUDIO/CASSETTE_RATTLE_12.wav")
 
 func _ready():
 	# Setup camera
@@ -58,7 +58,7 @@ func _ready():
 	tv_bg = Sprite2D.new()
 	tv_bg.texture = preload("res://tv_bg.png")
 	tv_bg.centered = true
-	tv_bg.position = Vector2(96, 64)  # Fixed position
+	tv_bg.position = Vector2(192, 128)  # Fixed position
 	tv_bg.z_index = -200  # Render behind everything
 	tv_bg.visible = false  # Hidden during gameplay
 	add_child(tv_bg)  # Add to main scene, not tv_container
@@ -90,7 +90,7 @@ func _ready():
 	# Add collision shape that matches your frame size
 	var collision_shape = CollisionShape2D.new()
 	var shape = RectangleShape2D.new()
-	shape.size = Vector2(384, 256)
+	shape.size = Vector2(384*2, 256*2)
 	collision_shape.shape = shape
 	tv_frame_area.add_child(collision_shape)
 
@@ -165,7 +165,7 @@ func set_playing_view():
 	current_state = GameState.PLAYING
 	animate_camera_zoom(Vector2(1.0, 1.0))  # Zoom in
 	play_zoom_sfx(true)  # Reversed (zoom in)
-	camera.position = Vector2(96, 64)  # Static camera centered on level
+	camera.position = Vector2(192, 128)  # Static camera centered on level
 	if player:
 		# Unpause physics
 		player.set_physics_process(true)
@@ -176,7 +176,7 @@ func set_selection_view():
 	current_state = GameState.PAUSED_SELECTION
 	animate_camera_zoom(Vector2(0.5, 0.5))  # Zoom out
 	play_zoom_sfx(false)  # Normal (zoom out)
-	camera.position = Vector2(96, 64)
+	camera.position = Vector2(192, 128)
 	
 	# Show the TV frame and background
 	if tv_frame:

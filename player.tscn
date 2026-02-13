@@ -1,4 +1,4 @@
-[gd_scene load_steps=21 format=3 uid="uid://player123"]
+[gd_scene format=3 uid="uid://player123"]
 
 [ext_resource type="Script" uid="uid://dctfemfi4flhn" path="res://player.gd" id="1_player"]
 [ext_resource type="Texture2D" uid="uid://cphqxs8bukdt2" path="res://idle.png" id="2_onrkg"]
@@ -127,18 +127,18 @@ animations = [{
 }]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_player"]
-size = Vector2(8, 8)
+size = Vector2(16, 16)
 
-[node name="Player" type="CharacterBody2D"]
+[node name="Player" type="CharacterBody2D" unique_id=1713568246]
 script = ExtResource("1_player")
 
-[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=1601905188]
+position = Vector2(0, -8)
+scale = Vector2(2, 2)
 sprite_frames = SubResource("SpriteFrames_nvl01")
-animation = &"jump"
 autoplay = "default"
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-position = Vector2(0, 4)
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=2136863728]
 shape = SubResource("RectangleShape2D_player")
 
-[node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="."]
+[node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="." unique_id=1036519969]

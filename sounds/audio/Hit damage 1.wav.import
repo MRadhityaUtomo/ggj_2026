@@ -1,0 +1,24 @@
+[remap]
+
+importer="wav"
+type="AudioStreamWAV"
+uid="uid://dw81h2oypefho"
+path="res://.godot/imported/Hit damage 1.wav-4228512c249b9e3458eb1d437eda7568.sample"
+
+[deps]
+
+source_file="res://sounds/audio/Hit damage 1.wav"
+dest_files=["res://.godot/imported/Hit damage 1.wav-4228512c249b9e3458eb1d437eda7568.sample"]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop_mode=0
+edit/loop_begin=0
+edit/loop_end=-1
+compress/mode=0

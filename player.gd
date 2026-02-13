@@ -8,11 +8,11 @@ const DASH_SFX = preload("res://sounds/temp_dash.wav")
 const DEATH_SFX = preload("res://sounds/death_sfx.wav")
 
 # Movement parameters
-const SPEED = 90.0
-const JUMP_VELOCITY = -200.0
-const JUMP_CUT_MULTIPLIER = 0.5  # How much to reduce upward velocity when releasing jump early
-const GRAVITY = 580.0
-const MAX_FALL_SPEED = 300.0
+const SPEED = 180.0
+const JUMP_VELOCITY = -400.0
+const GRAVITY = 1160.0
+const MAX_FALL_SPEED = 600.0
+const JUMP_CUT_MULTIPLIER = 0.5 
 
 # Coyote time (grace period after leaving ground)
 const COYOTE_TIME = 0.1

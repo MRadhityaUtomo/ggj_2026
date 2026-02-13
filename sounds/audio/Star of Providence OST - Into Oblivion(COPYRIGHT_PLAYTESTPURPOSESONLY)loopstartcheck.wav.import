@@ -1,0 +1,24 @@
+[remap]
+
+importer="wav"
+type="AudioStreamWAV"
+uid="uid://cx8ettaasp55i"
+path="res://.godot/imported/Star of Providence OST - Into Oblivion(COPYRIGHT_PLAYTESTPURPOSESONLY)loopstartcheck.wav-2f139a95fbc77ae7d601808ec3accd5c.sample"
+
+[deps]
+
+source_file="res://sounds/audio/Star of Providence OST - Into Oblivion(COPYRIGHT_PLAYTESTPURPOSESONLY)loopstartcheck.wav"
+dest_files=["res://.godot/imported/Star of Providence OST - Into Oblivion(COPYRIGHT_PLAYTESTPURPOSESONLY)loopstartcheck.wav-2f139a95fbc77ae7d601808ec3accd5c.sample"]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop_mode=0
+edit/loop_begin=0
+edit/loop_end=-1
+compress/mode=0

@@ -1,10 +1,7 @@
-[gd_scene load_steps=17 format=3 uid="uid://bih70aup8l3ak"]
+[gd_scene format=3 uid="uid://bih70aup8l3ak"]
 
 [ext_resource type="Texture2D" uid="uid://cd8vckvgwjiv2" path="res://star.png" id="2_32e5v"]
 [ext_resource type="Script" uid="uid://cceifvapuvqgj" path="res://scenes/flag.gd" id="2_flag"]
-
-[sub_resource type="CircleShape2D" id="CircleShape2D_76ss4"]
-radius = 8.0
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_q38m2"]
 atlas = ExtResource("2_32e5v")
@@ -98,16 +95,22 @@ animations = [{
 "speed": 12.0
 }]
 
-[node name="flag" type="Area2D"]
+[sub_resource type="CircleShape2D" id="CircleShape2D_76ss4"]
+radius = 8.0
+
+[node name="flag" type="Area2D" unique_id=1838617332]
 texture_filter = 1
 script = ExtResource("2_flag")
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-shape = SubResource("CircleShape2D_76ss4")
-
-[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=959654053]
+scale = Vector2(2, 2)
 sprite_frames = SubResource("SpriteFrames_py37q")
 autoplay = "default"
 
-[node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="."]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=896065740]
+position = Vector2(0, -8)
+scale = Vector2(2, 2)
+shape = SubResource("CircleShape2D_76ss4")
+
+[node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="." unique_id=572272135]
 attenuation = 3.482203
