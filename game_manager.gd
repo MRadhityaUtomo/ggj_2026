@@ -12,7 +12,6 @@ extends Node2D
 var cartridges: Array[Cartridge] = []  # instantiated cartridge nodes
 var current_cartridge_index = 0
 var preview_cartridge_index = 0
-var tv_outline_mat : ShaderMaterial
 
 
 # Game states
@@ -91,22 +90,10 @@ func _ready():
 	tv_frame.visible = false
 	tv_container.add_child(tv_frame)  # Inside tv_container - will rotate
 
-	# Setup shader material AFTER tv_frame is created
-	tv_outline_mat = ShaderMaterial.new()
-	tv_outline_mat.shader = preload("res://outline_shader.gdshader")
-	# Initialize shader parameters
-	tv_outline_mat.set_shader_parameter("enabled", 0.0)
-	tv_outline_mat.set_shader_parameter("progress", 1.0)
-	tv_outline_mat.set_shader_parameter("outline_color", Color(1.0, 1.0, 1.0, 1.0))
-	tv_outline_mat.set_shader_parameter("thickness", 1.0)
-	tv_frame.material = tv_outline_mat
 
 	# Create clickable area for the TV frame
 	tv_frame_area = Area2D.new()
 	tv_frame.add_child(tv_frame_area)
-	tv_outline_mat = ShaderMaterial.new()
-	tv_outline_mat.shader = preload("res://outline_shader.gdshader")
-	tv_frame.material = tv_outline_mat
 	# Add collision shape that matches your frame size
 	var collision_shape = CollisionShape2D.new()
 	var shape = RectangleShape2D.new()
