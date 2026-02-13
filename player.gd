@@ -23,7 +23,7 @@ const JUMP_BUFFER_TIME = 0.1
 var jump_buffer_timer = 0.0
 
 # Dash parameters (Celeste-style)
-const DASH_SPEED = 240.0
+const DASH_SPEED = 480.0
 const DASH_DURATION = 0.15
 const DASH_END_SPEED = 80.0  # Speed retained after dash ends
 const DASH_COOLDOWN = 0.2

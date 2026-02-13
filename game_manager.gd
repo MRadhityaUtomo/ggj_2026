@@ -52,8 +52,14 @@ var tv_bg: Sprite2D  # Background - NOT rotated
 var zoom_audio: AudioStreamPlayer
 const ZOOM_OUT_SFX = preload("res://sounds/audio/Cassette Preview/AUDIO/BUTTON_03.wav")
 const ZOOM_IN_SFX = preload("res://sounds/audio/Cassette Preview/AUDIO/CASSETTE_RATTLE_12.wav")
+var cycle_audio: AudioStreamPlayer
+const CYCLE_SFX = preload("res://sounds/audio/Cassette Preview/AUDIO/BUTTON_03.wav")
 
 func _ready():
+	cycle_audio = AudioStreamPlayer.new()
+	cycle_audio.stream = CYCLE_SFX
+	cycle_audio.bus = "Master"
+	add_child(cycle_audio)
 	# Setup camera
 	camera = Camera2D.new()
 	add_child(camera)
@@ -146,8 +152,10 @@ func _process(_delta):
 			# Cycle cartridges: arrow keys OR LB/RB
 			if Input.is_action_just_pressed("left") or Input.is_action_just_pressed("cycle_left"):
 				cycle_preview(-1)
+				play_cycle_sfx()
 			elif Input.is_action_just_pressed("right") or Input.is_action_just_pressed("cycle_right"):
 				cycle_preview(1)
+				play_cycle_sfx()
 			elif Input.is_action_just_pressed("exit"):  # Enter/Space / Y button
 				confirm_cartridge_change()
 			
@@ -209,6 +217,11 @@ func play_zoom_sfx(zoom_in: bool) -> void:
 		zoom_audio.stream = ZOOM_OUT_SFX
 		zoom_audio.pitch_scale = 1.0
 	zoom_audio.play()
+
+func play_cycle_sfx() -> void:
+	cycle_audio.stop()
+	cycle_audio.pitch_scale = 1.0
+	cycle_audio.play()
 
 func animate_camera_zoom(target_zoom: Vector2):
 	# Kill existing tween if running
