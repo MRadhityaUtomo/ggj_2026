@@ -57,6 +57,15 @@ const ZOOM_IN_SFX = preload("res://sounds/audio/Cassette Preview/AUDIO/CASSETTE_
 var cycle_audio: AudioStreamPlayer
 const CYCLE_SFX = preload("res://sounds/audio/Cassette Preview/AUDIO/BUTTON_05.wav")
 
+## Optional: Custom UI elements for this specific level
+@export var custom_ui_elements: Array[PackedScene] = []
+
+## If true, uses a completely custom UI instead of the base level_hud
+@export var use_custom_ui: bool = false
+
+## Path to custom UI scene (if use_custom_ui is true)
+@export_file("*.tscn") var custom_ui_path: String = ""
+
 func _ready():
 	# Setup audio players
 	zoom_audio = AudioStreamPlayer.new()

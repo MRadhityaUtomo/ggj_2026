@@ -10,6 +10,7 @@ const GAME_WIDTH = 192*2
 const GAME_HEIGHT = 128*2
 
 var outline_tween: Tween
+var ui_manager: Node
 
 func _ready():
 	# Ensure nearest-neighbor filtering for pixel art
@@ -35,6 +36,14 @@ func _update_viewport_size():
 	# stretch_shrink keeps the SubViewport at 192×128 while the container upscales
 	sub_viewport_container.stretch_shrink = int(s)
 
+	# Initialize UI manager
+	ui_manager = preload("res://ui_manager.gd").new()
+	add_child(ui_manager)
+	ui_manager.initialize(ui_layer)
+	
+	# Load initial UI (e.g., for main menu)
+	ui_manager.load_ui_for_scene("main_menu")
+
 ## Call this to load a scene into the game viewport
 func load_scene_into_viewport(scene_path: String) -> Node:
 	for child in sub_viewport.get_children():
@@ -42,6 +51,11 @@ func load_scene_into_viewport(scene_path: String) -> Node:
 	var scene = load(scene_path)
 	var instance = scene.instantiate()
 	sub_viewport.add_child(instance)
+	
+	# Update UI based on loaded scene
+	if ui_manager:
+		ui_manager.load_ui_for_scene(scene_path)
+	
 	return instance
 
 ## Get the SubViewport so other systems can add nodes to it
