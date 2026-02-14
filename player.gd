@@ -174,6 +174,8 @@ func check_tile_collisions():
 		
 		if collider is TileMapLayer:
 			handle_tile_collision(collider)
+		elif collider is StaticBody2D:
+			handle_active_collision(collider)
 
 func update_animation():
 	if not animated_sprite:
@@ -200,6 +202,11 @@ func update_animation():
 func handle_tile_collision(tile_layer: TileMapLayer):
 	# Example:
 	if tile_layer.name == "Obstacle" or tile_layer.name == "Obstacle2" or tile_layer.name == "Spikes":
+		die()
+	pass
+func handle_active_collision(enemy_instance: Node):
+	# Example:
+	if enemy_instance.name == "MovingSpike":
 		die()
 	pass
 
