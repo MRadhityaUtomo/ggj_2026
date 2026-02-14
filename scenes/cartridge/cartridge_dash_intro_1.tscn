@@ -910,11 +910,6 @@ path_stop_at_end = true
 [node name="CollisionShape2D" type="CollisionShape2D" parent="MovingSpike/MovingSpike" unique_id=1334023873]
 shape = SubResource("CircleShape2D_ee4u1")
 
-[node name="Test" type="Area2D" parent="MovingSpike" unique_id=285611492]
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="MovingSpike/Test" unique_id=109378829]
-shape = SubResource("CircleShape2D_ee4u1")
-
 [node name="DashLabel" type="Label" parent="." unique_id=585565951]
 anchors_preset = 14
 anchor_top = 0.5

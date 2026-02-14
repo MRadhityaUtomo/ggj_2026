@@ -16,7 +16,7 @@ var level_scenes: Array[String] = [
 const MAIN_MENU_SCENE: String = "res://scenes/levels/main_menu.tscn"
 
 # ─── STATE ────────────────────────────────────────────────────────────────────
-var level_flags: Array[bool] = [true, true, true, true, true]
+var level_flags: Array[bool] = [true, true, true, true, true,true]
 
 # Track which level the player is currently playing (not just first incomplete)
 var active_level_index: int = 0
