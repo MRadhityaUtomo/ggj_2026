@@ -28,10 +28,9 @@ func _on_body_entered(body: Node2D) -> void:
 			return
 		
 		# Emit signal that level is completed
-		if not audio_player.playing:
-			audio_player.stream = Flag_sfx
-			audio_player.play()
-			await get_tree().create_timer(.2).timeout
+		audio_player.stream = Flag_sfx
+		audio_player.play()
+		await get_tree().create_timer(.2).timeout
 		level_completed.emit()
 		
 		# Finish current level and load next

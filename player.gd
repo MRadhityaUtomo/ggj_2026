@@ -37,9 +37,12 @@ var is_dashing = false
 var dash_timer = 0.0
 var dash_direction = 0  # 1 for right, -1 for left
 var parent_rotation: float = 0.0  # Track parent rotation for counter-rotation
+
+var base_scale: Vector2
 @onready var animated_sprite = $AnimatedSprite2D
 
 func _ready():
+	base_scale = animated_sprite.scale
 	pass
 
 func _physics_process(delta):
@@ -111,9 +114,27 @@ func _physics_process(delta):
 	counter_rotate_sprite()
 	update_animation()
 
+func tween_scale(target_scale: Vector2, time := 0.08):
+	var tw = create_tween()
+	tw.set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
+	tw.tween_property(animated_sprite, "scale", target_scale, time)
+
+var squash_tween: Tween
+func play_jump_stretch():
+	if squash_tween:
+		squash_tween.kill()
+
+	animated_sprite.scale = base_scale * Vector2(1.5, 1.2)
+
+	squash_tween = create_tween()
+	squash_tween.set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
+	squash_tween.tween_property(animated_sprite, "scale", base_scale, 0.30)
+
+
 func jump():
 	audio_player.stop()
 	velocity.y = JUMP_VELOCITY
+	play_jump_stretch()
 	audio_player.stream = JUMP_SFX
 	audio_player.volume_db = -20
 	audio_player.play()
@@ -121,6 +142,7 @@ func jump():
 
 func double_jump():
 	velocity.y = JUMP_VELOCITY
+	play_jump_stretch()
 	has_used_double_jump = true
 	audio_player.stream = JUMP_SFX
 	audio_player.volume_db = -20
