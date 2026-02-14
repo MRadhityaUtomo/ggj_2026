@@ -7,6 +7,7 @@
 [ext_resource type="Texture2D" uid="uid://8mpfpgmxbq64" path="res://icon.svg" id="5_6xefy"]
 [ext_resource type="Texture2D" uid="uid://du4albyvle8g8" path="res://spikesmall_big.png" id="6_u4gjw"]
 [ext_resource type="PackedScene" uid="uid://bih70aup8l3ak" path="res://scenes/flag.tscn" id="7_t0jif"]
+[ext_resource type="FontFile" uid="uid://d37q1ocuu8mfi" path="res://assets/boldpixels/BoldsPixels.ttf" id="8_mnane"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_6aca4"]
 texture = ExtResource("1_ty0xo")
@@ -868,6 +869,11 @@ physics_layer_0/collision_layer = 1
 sources/0 = SubResource("TileSetAtlasSource_nc0bt")
 sources/2 = SubResource("TileSetAtlasSource_xs1og")
 
+[sub_resource type="LabelSettings" id="LabelSettings_7sqx0"]
+font = ExtResource("8_mnane")
+font_size = 18
+font_color = Color(0.27058825, 0.57254905, 0.78431374, 0.44705883)
+
 [node name="cartridge_dash_intro_2" type="Node2D" unique_id=344694825]
 
 [node name="Background" type="TileMapLayer" parent="." unique_id=243495915]
@@ -887,3 +893,18 @@ tile_set = SubResource("TileSet_52vg7")
 
 [node name="flag" parent="." unique_id=1838617332 instance=ExtResource("7_t0jif")]
 position = Vector2(97, 209)
+
+[node name="DashLabel" type="Label" parent="." unique_id=1309718550]
+anchors_preset = 14
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = 37.0
+offset_top = 44.0
+offset_right = 358.0
+offset_bottom = 66.0
+grow_horizontal = 2
+grow_vertical = 2
+text = " Blue = Dash with \"shift\""
+label_settings = SubResource("LabelSettings_7sqx0")
+horizontal_alignment = 1

@@ -8,6 +8,7 @@
 [ext_resource type="Texture2D" uid="uid://du4albyvle8g8" path="res://spikesmall_big.png" id="6_38jii"]
 [ext_resource type="Texture2D" uid="uid://c1jkrwcr7n3m6" path="res://Spike_random.png" id="7_ufjj3"]
 [ext_resource type="Script" uid="uid://cjg5rv0ddh0yo" path="res://spike_follow.gd" id="8_apjb7"]
+[ext_resource type="FontFile" uid="uid://d37q1ocuu8mfi" path="res://assets/boldpixels/BoldsPixels.ttf" id="9_apjb7"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_6aca4"]
 texture = ExtResource("1_er5j1")
@@ -872,6 +873,11 @@ sources/2 = SubResource("TileSetAtlasSource_xs1og")
 [sub_resource type="CircleShape2D" id="CircleShape2D_ee4u1"]
 radius = 29.391296
 
+[sub_resource type="LabelSettings" id="LabelSettings_ee4u1"]
+font = ExtResource("9_apjb7")
+font_size = 18
+font_color = Color(0.27058825, 0.57254905, 0.78431374, 0.44705883)
+
 [node name="cartridge_dash_intro_1" type="Node2D" unique_id=344694825]
 
 [node name="Background" type="TileMapLayer" parent="." unique_id=243495915]
@@ -908,3 +914,33 @@ shape = SubResource("CircleShape2D_ee4u1")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="MovingSpike/Test" unique_id=109378829]
 shape = SubResource("CircleShape2D_ee4u1")
+
+[node name="DashLabel" type="Label" parent="." unique_id=585565951]
+anchors_preset = 14
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = 33.0
+offset_top = 104.0
+offset_right = 354.0
+offset_bottom = 126.0
+grow_horizontal = 2
+grow_vertical = 2
+text = " Blue = Dash with \"shift\""
+label_settings = SubResource("LabelSettings_ee4u1")
+horizontal_alignment = 1
+
+[node name="Encouragment" type="Label" parent="." unique_id=1910450087]
+anchors_preset = 14
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = 42.0
+offset_top = 39.0
+offset_right = 363.0
+offset_bottom = 61.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "Run!!!!!!"
+label_settings = SubResource("LabelSettings_ee4u1")
+horizontal_alignment = 1
