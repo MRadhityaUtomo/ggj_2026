@@ -53,7 +53,7 @@ var zoom_audio: AudioStreamPlayer
 const ZOOM_OUT_SFX = preload("res://sounds/audio/Cassette Preview/AUDIO/BUTTON_03.wav")
 const ZOOM_IN_SFX = preload("res://sounds/audio/Cassette Preview/AUDIO/CASSETTE_RATTLE_12.wav")
 var cycle_audio: AudioStreamPlayer
-const CYCLE_SFX = preload("res://sounds/audio/Cassette Preview/AUDIO/BUTTON_03.wav")
+const CYCLE_SFX = preload("res://sounds/audio/Cassette Preview/AUDIO/BUTTON_05.wav")
 
 func _ready():
 	cycle_audio = AudioStreamPlayer.new()

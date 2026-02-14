@@ -55,7 +55,7 @@ var zoom_audio: AudioStreamPlayer
 const ZOOM_OUT_SFX = preload("res://sounds/audio/Cassette Preview/AUDIO/BUTTON_03.wav")
 const ZOOM_IN_SFX = preload("res://sounds/audio/Cassette Preview/AUDIO/CASSETTE_RATTLE_12.wav")
 var cycle_audio: AudioStreamPlayer
-const CYCLE_SFX = preload("res://sounds/audio/Cassette Preview/AUDIO/BUTTON_03.wav")
+const CYCLE_SFX = preload("res://sounds/audio/Cassette Preview/AUDIO/BUTTON_05.wav")
 
 func _ready():
 	# Setup audio players
@@ -157,6 +157,7 @@ func _ready():
 	
 	# Start in playing mode (viewing menu)
 	set_playing_view()
+	update_player_abilities()
 
 func spawn_player():
 	player = player_scene.instantiate()
@@ -221,6 +222,11 @@ func pause_and_show_selection():
 	preview_cartridge_index = 1  # Always start at first level
 	set_selection_view()
 	update_cartridge_preview()
+
+func update_player_abilities():
+	if player and current_cartridge_index < cartridge_configs.size():
+		var abilities = cartridge_configs[current_cartridge_index].get_abilities()
+		player.set_cartridge_abilities(abilities["can_dash"], abilities["can_double_jump"])
 
 func return_to_menu():
 	# Always return to menu cartridge (index 0), ignore preview selection
