@@ -48,6 +48,9 @@ var tv_rotation: float = 0.0  # Current TV rotation for gravity changes
 var rotation_index: int = 0  # Track number of rotations (can be > 4)
 var tv_bg: Sprite2D  # Background - NOT rotated
 
+# Spike state persistence (survives cartridge swaps, cleared on level reload)
+var _spike_states: Dictionary = {}  # { spike_id: { position, speed, path_index, path_forward } }
+
 # Audio
 var zoom_audio: AudioStreamPlayer
 const ZOOM_OUT_SFX = preload("res://sounds/audio/Cassette Preview/AUDIO/BUTTON_03.wav")
@@ -338,6 +341,35 @@ func rotate_tv_90_degrees_ccw():
 	
 	rotate_tv_and_gravity(target_rotation_degrees)
 
+
+# ─── SPIKE STATE PERSISTENCE ──────────────────────────────────────────────────
+
+## Called by SpikeFollow nodes every frame to persist their state.
+func save_spike_state(spike_id: String, pos: Vector2, spd: float, path_idx: int, path_fwd: bool) -> void:
+	_spike_states[spike_id] = {
+		"position": pos,
+		"speed": spd,
+		"path_index": path_idx,
+		"path_forward": path_fwd,
+	}
+
+## Called by SpikeFollow on _ready to restore its saved state.
+func load_spike_state(spike_id: String):
+	if _spike_states.has(spike_id):
+		return _spike_states[spike_id]
+	return null
+
+## Wipe all spike states (call on level restart / win / lose).
+func clear_spike_states() -> void:
+	_spike_states.clear()
+
+## Reset every SpikeFollow node in the current cartridge tree.
+func reset_all_spikes() -> void:
+	clear_spike_states()
+	for cartridge in cartridges:
+		for child in cartridge.get_children():
+			if child.has_method("reset"):
+				child.reset()
 
 # Calculate appropriate zoom based on TV rotation
 func get_zoom_for_rotation(rotation_rad: float) -> Vector2:
