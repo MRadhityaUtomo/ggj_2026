@@ -6,6 +6,7 @@
 [ext_resource type="Texture2D" uid="uid://c6vr85puxtwxr" path="res://TILEMAP_water_big.png" id="4_7sqx0"]
 [ext_resource type="Texture2D" uid="uid://8mpfpgmxbq64" path="res://icon.svg" id="5_6xefy"]
 [ext_resource type="Texture2D" uid="uid://du4albyvle8g8" path="res://spikesmall_big.png" id="6_u4gjw"]
+[ext_resource type="PackedScene" uid="uid://bih70aup8l3ak" path="res://scenes/flag.tscn" id="7_t0jif"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_6aca4"]
 texture = ExtResource("1_ty0xo")
@@ -883,3 +884,6 @@ tile_set = SubResource("TileSet_llyr2")
 [node name="Obstacle" type="TileMapLayer" parent="." unique_id=1486247769]
 tile_map_data = PackedByteArray("AAADAAIAAgAHAAAAAAADAAMAAgAHAAEAAAAEAAIAAgAIAAAAAAAEAAMAAgAIAAEAAAABAAMAAgABAAAAAAACAAMAAgACAAAAAAAFAAIAAgABAAAAAAAFAAMAAgABAAEAAAAGAAIAAgACAAAAAAAGAAMAAgACAAEAAAABAAUAAgAIAAAAAAABAAYAAgAIAAEAAAAGAAYAAgAHAAAAAAAHAAYAAgAIAAAAAAAEAAYAAgAHAAAAAAAFAAYAAgAIAAAAAAABAAQAAgABAAEAAAACAAQAAgACAAEAAAA=")
 tile_set = SubResource("TileSet_52vg7")
+
+[node name="flag" parent="." unique_id=1838617332 instance=ExtResource("7_t0jif")]
+position = Vector2(97, 209)

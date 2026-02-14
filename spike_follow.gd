@@ -5,9 +5,9 @@ enum Mode { FOLLOW_PLAYER, FOLLOW_PATH }
 @export var mode: Mode = Mode.FOLLOW_PLAYER
 
 ## ─── SPEED / ACCELERATION ────────────────────────────────────────────────────
-@export var start_speed: float = 80.0        ## Initial movement speed (px/s)
-@export var max_speed: float = 120.0          ## Cap speed (px/s)
-@export var acceleration: float = 12.0        ## Speed gained per second
+@export var start_speed: float = 120.0        ## Initial movement speed (px/s)
+@export var max_speed: float = 240.0          ## Cap speed (px/s)
+@export var acceleration: float = 40.0        ## Speed gained per second
 
 ## ─── SPIN ────────────────────────────────────────────────────────────────────
 @export var spin_speed: float = 360.0        ## Degrees per second
@@ -16,26 +16,41 @@ enum Mode { FOLLOW_PLAYER, FOLLOW_PATH }
 ## Assign waypoints in the editor (local positions relative to parent).
 @export var path_points: Array[Vector2] = []
 @export var path_loop: bool = true           ## Loop back to first point?
+@export var path_stop_at_end: bool = false   ## Stop at last waypoint instead of looping/ping-pong?
 var _path_index: int = 0
 var _path_forward: bool = true               ## Used for ping-pong when not looping
+var _path_reached_end: bool = false          ## Flag for stop-at-end behavior
 
 ## ─── INTERNAL ────────────────────────────────────────────────────────────────
 var _current_speed: float = 0.0
 var _origin_position: Vector2                ## Starting position for resets
 var _spike_id: String = ""                   ## Unique identifier for persistence
 var _active: bool = false                    ## Only move when parent cartridge is visible
+var _static_body: StaticBody2D = null        ## Cached reference for collision toggling
 
 func _ready() -> void:
 	_origin_position = position
 	_current_speed = start_speed
 	_spike_id = _build_spike_id()
 	
+	# Cache the StaticBody2D child (for enabling/disabling collision)
+	for child in get_children():
+		if child is StaticBody2D:
+			_static_body = child
+			break
+	
 	# Restore position from GameManager if available
 	_try_restore_position()
+	# Sync collision state on spawn
+	_update_collision()
 
 func _process(delta: float) -> void:
-	# Only move when the parent cartridge is actually visible (active)
-	_active = _is_cartridge_active()
+	# Only move when the parent cartridge is active AND game is not paused
+	_active = _is_cartridge_active() and not _is_game_paused()
+	
+	# Toggle collision based on whether this cartridge is the active one
+	_update_collision()
+	
 	if not _active:
 		return
 	
@@ -57,18 +72,49 @@ func _process(delta: float) -> void:
 
 # ─── FOLLOW PLAYER ────────────────────────────────────────────────────────────
 func _move_toward_player(delta: float) -> void:
-	var player = _find_player()
-	if not player:
+	var player_node = _find_player()
+	if not player_node:
 		return
 	
 	# Player position in our local coordinate space
-	var target = _get_local_target(player.global_position)
+	var target = _get_local_target(player_node.global_position)
 	var direction = (target - position).normalized()
-	position += direction * _current_speed * delta
+	var step = direction * _current_speed * delta
+	
+	# ── Raycast to avoid going through solid tiles ──
+	var space_state = get_world_2d().direct_space_state
+	if space_state:
+		var from = global_position
+		var to = from + step.rotated(get_parent().global_rotation if get_parent() else 0.0)
+		var query = PhysicsRayQueryParameters2D.create(from, to, 1)  # layer 1 = terrain
+		# Exclude our own StaticBody2D so the ray doesn't hit ourselves
+		if _static_body:
+			query.exclude = [_static_body.get_rid()]
+		var result = space_state.intersect_ray(query)
+		if result:
+			# Wall hit — slide along the wall normal instead of stopping
+			var wall_normal = result["normal"]
+			var slide = step - wall_normal * step.dot(wall_normal)
+			# Verify the slide direction is also clear
+			var slide_query = PhysicsRayQueryParameters2D.create(from, from + slide.rotated(get_parent().global_rotation if get_parent() else 0.0), 1)
+			if _static_body:
+				slide_query.exclude = [_static_body.get_rid()]
+			var slide_result = space_state.intersect_ray(slide_query)
+			if not slide_result:
+				position += slide
+			# else: completely blocked, don't move
+			return
+	
+	# No wall in the way — move normally
+	position += step
 
 # ─── PATH PATROL ──────────────────────────────────────────────────────────────
 func _move_along_path(delta: float) -> void:
 	if path_points.is_empty():
+		return
+	
+	# If we've reached the end and stop_at_end is enabled, don't move
+	if path_stop_at_end and _path_reached_end:
 		return
 	
 	var target = path_points[_path_index]
@@ -88,10 +134,17 @@ func _move_along_path(delta: float) -> void:
 			step = 0.0
 
 func _advance_path_index() -> void:
-	if path_loop:
+	if path_stop_at_end:
+		# Stop at the last point
+		if _path_index >= path_points.size() - 1:
+			_path_reached_end = true
+			_path_index = path_points.size() - 1
+		else:
+			_path_index += 1
+	elif path_loop:
 		_path_index = (_path_index + 1) % path_points.size()
 	else:
-		# Ping-pong
+		# Ping-pong (go back and forth)
 		if _path_forward:
 			_path_index += 1
 			if _path_index >= path_points.size():
@@ -115,7 +168,7 @@ func _build_spike_id() -> String:
 func _save_position() -> void:
 	var gm = _get_game_manager()
 	if gm and gm.has_method("save_spike_state"):
-		gm.save_spike_state(_spike_id, position, _current_speed, _path_index, _path_forward)
+		gm.save_spike_state(_spike_id, position, _current_speed, _path_index, _path_forward, _path_reached_end)
 
 func _try_restore_position() -> void:
 	var gm = _get_game_manager()
@@ -126,6 +179,7 @@ func _try_restore_position() -> void:
 			_current_speed = state["speed"]
 			_path_index = state["path_index"]
 			_path_forward = state["path_forward"]
+			_path_reached_end = state.get("path_reached_end", false)
 
 ## Reset spike to its original position (called on level restart).
 func reset() -> void:
@@ -133,6 +187,8 @@ func reset() -> void:
 	_current_speed = start_speed
 	_path_index = 0
 	_path_forward = true
+	_path_reached_end = false
+	_update_collision()
 
 # ─── HELPERS ──────────────────────────────────────────────────────────────────
 func _find_player() -> CharacterBody2D:
@@ -158,6 +214,24 @@ func _get_game_manager():
 func _is_cartridge_active() -> bool:
 	var parent = get_parent()
 	return parent and parent.visible
+
+func _is_game_paused() -> bool:
+	var gm = _get_game_manager()
+	if gm and "current_state" in gm:
+		# GameState.PAUSED_SELECTION == 1
+		return gm.current_state != 0  # 0 = PLAYING
+	return false
+
+## Enable collision only when this cartridge is the active one AND game is playing.
+func _update_collision() -> void:
+	if not _static_body:
+		return
+	var should_collide = _is_cartridge_active() and not _is_game_paused()
+	_static_body.set_deferred("process_mode", Node.PROCESS_MODE_INHERIT if should_collide else Node.PROCESS_MODE_DISABLED)
+	# Also toggle the collision shapes directly for immediate effect
+	for child in _static_body.get_children():
+		if child is CollisionShape2D:
+			child.set_deferred("disabled", not should_collide)
 
 func _get_local_target(global_pos: Vector2) -> Vector2:
 	# Convert a global position into our parent's local space

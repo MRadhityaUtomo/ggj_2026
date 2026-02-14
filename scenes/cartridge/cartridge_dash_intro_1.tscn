@@ -894,6 +894,10 @@ position = Vector2(337, 49)
 scale = Vector2(0.44230768, 0.44230768)
 texture = ExtResource("7_ufjj3")
 script = ExtResource("8_apjb7")
+mode = 1
+path_points = Array[Vector2]([Vector2(337, 49), Vector2(51, 49), Vector2(51, 109), Vector2(337, 114)])
+path_loop = false
+path_stop_at_end = true
 
 [node name="MovingSpike" type="StaticBody2D" parent="MovingSpike" unique_id=609203039]
 

@@ -345,12 +345,13 @@ func rotate_tv_90_degrees_ccw():
 # ─── SPIKE STATE PERSISTENCE ──────────────────────────────────────────────────
 
 ## Called by SpikeFollow nodes every frame to persist their state.
-func save_spike_state(spike_id: String, pos: Vector2, spd: float, path_idx: int, path_fwd: bool) -> void:
+func save_spike_state(spike_id: String, pos: Vector2, spd: float, path_idx: int, path_fwd: bool, path_reached: bool = false) -> void:
 	_spike_states[spike_id] = {
 		"position": pos,
 		"speed": spd,
 		"path_index": path_idx,
 		"path_forward": path_fwd,
+		"path_reached_end": path_reached,
 	}
 
 ## Called by SpikeFollow on _ready to restore its saved state.
