@@ -1,7 +1,7 @@
 [gd_resource type="TileSet" format=3 uid="uid://c7urnim3on72"]
 
 [ext_resource type="Texture2D" uid="uid://cnfixigj0cmp" path="res://tilemap fire.png" id="1_77bwj"]
-[ext_resource type="Texture2D" uid="uid://dgyocum03crim" path="res://assets/green_big.png" id="2_xj7ft"]
+[ext_resource type="Texture2D" uid="uid://ooaub1q47sck" path="res://green_big.png" id="2_xj7ft"]
 [ext_resource type="Texture2D" uid="uid://c6vr85puxtwxr" path="res://TILEMAP_water_big.png" id="4_3kkmd"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_i84fj"]
