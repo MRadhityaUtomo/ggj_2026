@@ -124,10 +124,23 @@ func _move_along_path(delta: float) -> void:
 		var to_target = target - position
 		var dist = to_target.length()
 		
+		# Prevent infinite loop when already at target (dist ≈ 0)
+		if dist < 0.01:
+			_advance_path_index()
+			if _path_reached_end:
+				break
+			var new_target = path_points[_path_index]
+			if new_target.distance_to(position) < 0.01:
+				break  # Next waypoint is same as current position
+			target = new_target
+			continue
+		
 		if dist <= step:
 			position = target
 			step -= dist
 			_advance_path_index()
+			if _path_reached_end:
+				break
 			target = path_points[_path_index]
 		else:
 			position += to_target.normalized() * step

@@ -39,6 +39,7 @@ var dash_direction = 0  # 1 for right, -1 for left
 var parent_rotation: float = 0.0  # Track parent rotation for counter-rotation
 
 var base_scale: Vector2
+var is_dying: bool = false  # Guard against multiple die() calls
 @onready var animated_sprite = $AnimatedSprite2D
 
 func _ready():
@@ -191,6 +192,8 @@ func counter_rotate_sprite():
 
 func check_tile_collisions():
 	for i in get_slide_collision_count():
+		if is_dying:
+			return
 		var collision = get_slide_collision(i)
 		var collider = collision.get_collider()
 		
@@ -233,8 +236,12 @@ func handle_active_collision(enemy_instance: Node):
 	pass
 
 func die():
+	if is_dying:
+		return
+	is_dying = true
 	set_physics_process(false)
 	audio_player.stream = DEATH_SFX
 	audio_player.play()
 	await get_tree().create_timer(.2).timeout
-	ScreenTransition.death_transition(func(): LevelProgression.on_lose_condition_met())
+	# Use a direct Callable instead of a lambda to avoid capturing freed 'self'
+	ScreenTransition.death_transition(LevelProgression.on_lose_condition_met)

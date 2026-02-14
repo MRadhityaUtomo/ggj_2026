@@ -83,7 +83,11 @@ func death_transition(callback: Callable) -> void:
 	if is_transitioning:
 		return
 	is_transitioning = true
-	color_rect.mouse_filter = Control.MOUSE_FILTER_STOP  # Block input during transition
+	color_rect.mouse_filter = Control.MOUSE_FILTER_STOP
+	# Safety: ensure is_transitioning always resets even if something breaks
+	_run_death_transition(callback)
+
+func _run_death_transition(callback: Callable) -> void:  # Block input during transition
 
 	# Phase 1: Fade to black
 	var fade_in_tween = create_tween()
@@ -105,7 +109,11 @@ func death_transition(callback: Callable) -> void:
 	await get_tree().create_timer(DOT_DELAY).timeout
 
 	# Phase 3: Execute the scene change while screen is black
-	callback.call()
+	if callback.is_valid():
+		callback.call()
+	else:
+		push_warning("ScreenTransition: death callback was invalid (object freed?). Falling back.")
+		LevelProgression.on_lose_condition_met()
 
 	# Small hold so the new scene has a frame to load
 	await get_tree().create_timer(HOLD_DURATION).timeout
