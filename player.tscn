@@ -147,4 +147,4 @@ autoplay = "default"
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=2136863728]
 shape = SubResource("RectangleShape2D_player")
 
-[node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="." unique_id=1036519969]
+[node name="AudioStreamPlayer2D" type="AudioStreamPlayer" parent="." unique_id=732148972]

@@ -33,6 +33,8 @@ physics_object_picking = true
 size = Vector2i(2, 2)
 render_target_update_mode = 4
 
+[node name="cartrdigeUI" type="CanvasLayer" parent="SubViewportContainer/SubViewport" unique_id=1843178074]
+
 [node name="UILayer" type="CanvasLayer" parent="." unique_id=809391176]
 
 [node name="SelectionOutline" type="ColorRect" parent="UILayer" unique_id=1040111918]

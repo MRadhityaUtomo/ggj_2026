@@ -1,0 +1,41 @@
+[gd_scene format=3 uid="uid://cheemrnpuo6gy"]
+
+[ext_resource type="FontFile" uid="uid://d37q1ocuu8mfi" path="res://assets/boldpixels/BoldsPixels.ttf" id="1_aohfb"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_g853r"]
+font = ExtResource("1_aohfb")
+font_size = 64
+
+[node name="Control" type="Control" unique_id=2028109619]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="SubViewportContainer" type="SubViewportContainer" parent="." unique_id=1267301879]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+stretch = true
+
+[node name="SubViewport" type="SubViewport" parent="SubViewportContainer" unique_id=838004254]
+size = Vector2i(1920, 1280)
+
+[node name="Label" type="Label" parent="SubViewportContainer/SubViewport" unique_id=1465529650]
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -144.0
+offset_top = 296.0
+offset_right = 142.0
+offset_bottom = 345.0
+grow_horizontal = 2
+size_flags_horizontal = 4
+text = "Press SHIFT / CONTROLLER B to Dash
+"
+label_settings = SubResource("LabelSettings_g853r")

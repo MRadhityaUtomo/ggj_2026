@@ -3,7 +3,7 @@ extends CharacterBody2D
 @onready var audio_player = $AudioStreamPlayer2D
 
 const WALK_SFX = preload("res://sounds/walk_sfx.wav")
-const JUMP_SFX = preload("res://sounds/error Sfx.wav")#Will Change
+const JUMP_SFX = preload("res://sounds/audio/jump.wav")#Will Change
 const DASH_SFX = preload("res://sounds/temp_dash.wav")
 const DEATH_SFX = preload("res://sounds/death_sfx.wav")
 
@@ -133,22 +133,23 @@ func play_jump_stretch():
 
 
 func jump():
+	audio_player.volume_db = 0
 	audio_player.stop()
 	velocity.y = JUMP_VELOCITY
 	play_jump_stretch()
 	audio_player.stream = JUMP_SFX
-	audio_player.volume_db = -20
+	audio_player.volume_db = -10
 	audio_player.play()
-	audio_player.volume_db = 0
 
 func double_jump():
 	velocity.y = JUMP_VELOCITY
 	play_jump_stretch()
 	has_used_double_jump = true
-	audio_player.stream = JUMP_SFX
-	audio_player.volume_db = -20
-	audio_player.play()
 	audio_player.volume_db = 0
+	audio_player.stop()
+	audio_player.stream = JUMP_SFX
+	audio_player.volume_db = -10
+	audio_player.play()
 
 func start_dash():
 	# Get dash direction from input or last facing direction
