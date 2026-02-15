@@ -176,6 +176,7 @@ func _process(_delta):
 			if Input.is_action_just_pressed("rotate_right"):
 				rotate_tv_90_degrees()
 			elif Input.is_action_just_pressed("rotate_left"):
+				
 				rotate_tv_90_degrees_ccw()
 
 func spawn_player():
@@ -266,6 +267,12 @@ func cycle_preview(direction: int):
 	if preview_cartridge_index < 0:
 		preview_cartridge_index = cartridges.size() - 1
 	update_cartridge_preview()
+	
+	# If the previewed cartridge doesn't allow rotation, animate TV back to 0 (visual only)
+	if not cartridge_configs[preview_cartridge_index].get_rotate_rule():
+		if rotation_index != 0:
+			rotation_index = 0
+			animate_tv_rotation(0.0)
 
 func update_cartridge_preview():
 	for i in range(cartridges.size()):
@@ -277,6 +284,11 @@ func update_cartridge_preview():
 
 func confirm_cartridge_change():
 	current_cartridge_index = preview_cartridge_index
+	
+	# Apply gravity reset if the new cartridge doesn't allow rotation
+	if not cartridge_configs[current_cartridge_index].get_rotate_rule():
+		apply_gravity_for_rotation(0.0)
+	
 	update_cartridge_visibility()
 	update_player_abilities()
 	set_playing_view()
@@ -293,25 +305,30 @@ func update_player_abilities():
 		var abilities = cartridge_configs[current_cartridge_index].get_abilities()
 		player.set_cartridge_abilities(abilities["can_dash"], abilities["can_double_jump"])
 
-# For later when you implement gravity rotation
-func rotate_tv_and_gravity(new_rotation_degrees: float):
+# Animate only the TV container rotation (visual, no gravity change)
+func animate_tv_rotation(new_rotation_degrees: float):
 	tv_rotation = deg_to_rad(new_rotation_degrees)
-	
-	# Rotate the TV visuals AND the gameplay screen
 	var tween = create_tween()
 	tween.tween_property(tv_container, "rotation", tv_rotation, 0.5).set_trans(Tween.TRANS_CUBIC)
 	
 	# Tell player to counter-rotate its sprite
 	if player and player.has_method("set_parent_rotation"):
 		player.set_parent_rotation(tv_rotation)
-	
-	# Change gravity direction
-	var gravity_vector = Vector2.DOWN.rotated(tv_rotation)
+
+# Apply gravity direction for a given rotation (no visual tween)
+func apply_gravity_for_rotation(rotation_degrees: float):
+	var rot_rad = deg_to_rad(rotation_degrees)
+	var gravity_vector = Vector2.DOWN.rotated(rot_rad)
 	PhysicsServer2D.area_set_param(
 		get_viewport().find_world_2d().space,
 		PhysicsServer2D.AREA_PARAM_GRAVITY_VECTOR,
 		gravity_vector
 	)
+
+# Rotate TV visuals AND change gravity
+func rotate_tv_and_gravity(new_rotation_degrees: float):
+	animate_tv_rotation(new_rotation_degrees)
+	apply_gravity_for_rotation(new_rotation_degrees)
 
 func _on_tv_frame_input(_viewport: Node, event: InputEvent, _shape_idx: int):
 	if event is InputEventMouseButton:
@@ -332,6 +349,10 @@ func rotate_tv_90_degrees():
 	if current_state != GameState.PAUSED_SELECTION:
 		return  # Only allow rotation during selection
 	
+	# Check if previewed cartridge allows rotation
+	if not cartridge_configs[preview_cartridge_index].get_rotate_rule():
+		return
+	
 	# Increment rotation index (no wrapping, keeps increasing)
 	rotation_index += 1
 	
@@ -343,6 +364,10 @@ func rotate_tv_90_degrees():
 func rotate_tv_90_degrees_ccw():
 	if current_state != GameState.PAUSED_SELECTION:
 		return  # Only allow rotation during selection
+	
+	# Check if previewed cartridge allows rotation
+	if not cartridge_configs[preview_cartridge_index].get_rotate_rule():
+		return
 	
 	# Decrement rotation index for counter-clockwise
 	rotation_index -= 1
