@@ -1,0 +1,31 @@
+[gd_scene format=3 uid="uid://d310frmxyk0os"]
+
+[ext_resource type="Script" uid="uid://ccolkwnulxhj4" path="res://game_manager.gd" id="1_wnma5"]
+[ext_resource type="Script" uid="uid://xpg4lm27qjs1" path="res://cartridge_config.gd" id="2_xs5eh"]
+[ext_resource type="PackedScene" uid="uid://dbwby0ud0mq7p" path="res://scenes/cartridge/jump_intermediate_1.tscn" id="3_64apx"]
+[ext_resource type="PackedScene" uid="uid://dtv635rva6t84" path="res://scenes/cartridge/jump_intermediate_2.tscn" id="4_xjfed"]
+[ext_resource type="PackedScene" uid="uid://c6wg5756m4t33" path="res://scenes/cartridge/jump_intermediate_3.tscn" id="5_sexn5"]
+
+[sub_resource type="Resource" id="Resource_4o066"]
+script = ExtResource("2_xs5eh")
+scene = ExtResource("3_64apx")
+type = 2
+can_rotate = true
+metadata/_custom_type_script = "uid://xpg4lm27qjs1"
+
+[sub_resource type="Resource" id="Resource_qa215"]
+script = ExtResource("2_xs5eh")
+scene = ExtResource("4_xjfed")
+type = 2
+can_rotate = true
+metadata/_custom_type_script = "uid://xpg4lm27qjs1"
+
+[sub_resource type="Resource" id="Resource_0xctm"]
+script = ExtResource("2_xs5eh")
+scene = ExtResource("5_sexn5")
+type = 2
+metadata/_custom_type_script = "uid://xpg4lm27qjs1"
+
+[node name="JumpIntermediateLevel" type="Node2D" unique_id=502176313]
+script = ExtResource("1_wnma5")
+cartridge_configs = Array[ExtResource("2_xs5eh")]([SubResource("Resource_4o066"), SubResource("Resource_qa215"), SubResource("Resource_0xctm")])

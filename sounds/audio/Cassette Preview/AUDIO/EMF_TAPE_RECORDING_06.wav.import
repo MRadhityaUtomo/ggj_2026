@@ -1,0 +1,24 @@
+[remap]
+
+importer="wav"
+type="AudioStreamWAV"
+uid="uid://x5g3rbx581ix"
+path="res://.godot/imported/EMF_TAPE_RECORDING_06.wav-eb8d9d2896e14d498e908a854f2f00ad.sample"
+
+[deps]
+
+source_file="res://sounds/audio/Cassette Preview/AUDIO/EMF_TAPE_RECORDING_06.wav"
+dest_files=["res://.godot/imported/EMF_TAPE_RECORDING_06.wav-eb8d9d2896e14d498e908a854f2f00ad.sample"]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop_mode=0
+edit/loop_begin=0
+edit/loop_end=-1
+compress/mode=0

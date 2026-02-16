@@ -1,0 +1,26 @@
+[gd_scene format=3 uid="uid://b1e886kguy5vc"]
+
+[ext_resource type="Script" uid="uid://ccolkwnulxhj4" path="res://game_manager.gd" id="1_j1uj3"]
+[ext_resource type="Script" uid="uid://xpg4lm27qjs1" path="res://cartridge_config.gd" id="2_a5bmu"]
+[ext_resource type="PackedScene" uid="uid://sun7ga4vc5na" path="res://scenes/cartridge/cartridge_dash_intro_1.tscn" id="3_omdbh"]
+[ext_resource type="PackedScene" uid="uid://dqw5yxoxlq3jm" path="res://scenes/cartridge/cartridge_dash_intro_2.tscn" id="4_j1uj3"]
+
+[sub_resource type="Resource" id="Resource_3jgqt"]
+script = ExtResource("2_a5bmu")
+scene = ExtResource("3_omdbh")
+type = 1
+metadata/_custom_type_script = "uid://xpg4lm27qjs1"
+
+[sub_resource type="Resource" id="Resource_hue4o"]
+script = ExtResource("2_a5bmu")
+scene = ExtResource("4_j1uj3")
+type = 1
+metadata/_custom_type_script = "uid://xpg4lm27qjs1"
+
+[node name="Level3Dash" type="Node2D" unique_id=1849630910 node_paths=PackedStringArray("spawn_marker")]
+script = ExtResource("1_j1uj3")
+cartridge_configs = Array[ExtResource("2_a5bmu")]([SubResource("Resource_3jgqt"), SubResource("Resource_hue4o")])
+spawn_marker = NodePath("Marker2D")
+
+[node name="Marker2D" type="Marker2D" parent="." unique_id=374911452]
+position = Vector2(210, 47)

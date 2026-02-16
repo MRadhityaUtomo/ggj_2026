@@ -1,20 +1,20 @@
-[gd_scene load_steps=7 format=3 uid="uid://coy3egc103bjr"]
+[gd_scene format=3 uid="uid://bdxn36korn1dw"]
 
 [ext_resource type="Script" uid="uid://ccolkwnulxhj4" path="res://game_manager.gd" id="1_0qepi"]
 [ext_resource type="Script" uid="uid://xpg4lm27qjs1" path="res://cartridge_config.gd" id="2_fmg3e"]
-[ext_resource type="PackedScene" uid="uid://kg4jnf1ldr8d" path="res://scenes/levels/level_2/cartridge_5.tscn" id="3_ftfob"]
-[ext_resource type="PackedScene" uid="uid://be51m28ja8x7n" path="res://scenes/levels/level_2/cartridge_4.tscn" id="4_fkk1g"]
+[ext_resource type="PackedScene" uid="uid://kg4jnf1ldr8d" path="res://scenes/levels/audio_level/cartridge_5.tscn" id="3_0qepi"]
+[ext_resource type="PackedScene" uid="uid://be51m28ja8x7n" path="res://scenes/levels/audio_level/cartridge_4.tscn" id="4_fmg3e"]
 
 [sub_resource type="Resource" id="Resource_5wshb"]
 script = ExtResource("2_fmg3e")
-scene = ExtResource("3_ftfob")
+scene = ExtResource("3_0qepi")
 metadata/_custom_type_script = "uid://xpg4lm27qjs1"
 
 [sub_resource type="Resource" id="Resource_7x7cx"]
 script = ExtResource("2_fmg3e")
-scene = ExtResource("4_fkk1g")
+scene = ExtResource("4_fmg3e")
 metadata/_custom_type_script = "uid://xpg4lm27qjs1"
 
-[node name="Level3" type="Node2D"]
+[node name="Level3" type="Node2D" unique_id=1734187385]
 script = ExtResource("1_0qepi")
 cartridge_configs = Array[ExtResource("2_fmg3e")]([SubResource("Resource_5wshb"), SubResource("Resource_7x7cx")])

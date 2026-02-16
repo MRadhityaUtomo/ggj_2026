@@ -13,6 +13,7 @@ var cartridges: Array[Cartridge] = []  # instantiated cartridge nodes
 var current_cartridge_index = 0
 var preview_cartridge_index = 0
 
+
 # Game states
 enum GameState {PLAYING, PAUSED_SELECTION}
 var current_state = GameState.PLAYING
@@ -20,6 +21,11 @@ var current_state = GameState.PLAYING
 # Camera
 var camera: Camera2D
 var zoom_tween: Tween
+
+# Game resolution constants
+const GAME_WIDTH = 384
+const GAME_HEIGHT = 256
+const GAME_CENTER = Vector2(192, 128)
 
 # Player reference
 var player: CharacterBody2D
@@ -42,12 +48,31 @@ var tv_rotation: float = 0.0  # Current TV rotation for gravity changes
 var rotation_index: int = 0  # Track number of rotations (can be > 4)
 var tv_bg: Sprite2D  # Background - NOT rotated
 
+# Spike state persistence (survives cartridge swaps, cleared on level reload)
+var _spike_states: Dictionary = {}  # { spike_id: { position, speed, path_index, path_forward } }
+
 # Audio
 var zoom_audio: AudioStreamPlayer
-const ZOOM_OUT_SFX = preload("res://sounds/Temp_Zoom_out.wav")
-const ZOOM_IN_SFX = preload("res://sounds/Temp_Zoom_in.mp3")
+const ZOOM_OUT_SFX = preload("res://sounds/audio/Cassette Preview/AUDIO/BUTTON_03.wav")
+const ZOOM_IN_SFX = preload("res://sounds/audio/Cassette Preview/AUDIO/CASSETTE_RATTLE_12.wav")
+var cycle_audio: AudioStreamPlayer
+const CYCLE_SFX = preload("res://sounds/audio/Cassette Preview/AUDIO/BUTTON_05.wav")
+
+## Optional: Custom UI elements for this specific level
+@export var custom_ui_elements: Array[PackedScene] = []
+
+## If true, uses a completely custom UI instead of the base level_hud
+@export var use_custom_ui: bool = false
+
+## Path to custom UI scene (if use_custom_ui is true)
+@export_file("*.tscn") var custom_ui_path: String = ""
+
 
 func _ready():
+	cycle_audio = AudioStreamPlayer.new()
+	cycle_audio.stream = CYCLE_SFX
+	cycle_audio.bus = "Master"
+	add_child(cycle_audio)
 	# Setup camera
 	camera = Camera2D.new()
 	add_child(camera)
@@ -58,10 +83,11 @@ func _ready():
 	tv_bg = Sprite2D.new()
 	tv_bg.texture = preload("res://tv_bg.png")
 	tv_bg.centered = true
-	tv_bg.position = Vector2(96, 64)  # Fixed position
+	tv_bg.position = GAME_CENTER  # Changed from Vector2(192, 128)
 	tv_bg.z_index = -200  # Render behind everything
 	tv_bg.visible = false  # Hidden during gameplay
 	add_child(tv_bg)  # Add to main scene, not tv_container
+	
 	# Setup zoom audio player (non-positional so it plays at full volume)
 	zoom_audio = AudioStreamPlayer.new()
 	zoom_audio.stream = ZOOM_OUT_SFX
@@ -72,7 +98,7 @@ func _ready():
 	tv_container = Node2D.new()
 	add_child(tv_container)
 	tv_container.z_index = 100  # Render above gameplay
-	tv_container.position = Vector2(96, 64)  # Set pivot point to center of screen
+	tv_container.position = GAME_CENTER  # Changed from Vector2(96, 64)
 
 	# Add TV frame sprite (rotates with container)
 	tv_frame = Sprite2D.new()
@@ -83,14 +109,14 @@ func _ready():
 	tv_frame.visible = false
 	tv_container.add_child(tv_frame)  # Inside tv_container - will rotate
 
+
 	# Create clickable area for the TV frame
 	tv_frame_area = Area2D.new()
 	tv_frame.add_child(tv_frame_area)
-
 	# Add collision shape that matches your frame size
 	var collision_shape = CollisionShape2D.new()
 	var shape = RectangleShape2D.new()
-	shape.size = Vector2(384, 256)
+	shape.size = Vector2(768, 512)  # Doubled from 384x256
 	collision_shape.shape = shape
 	tv_frame_area.add_child(collision_shape)
 
@@ -110,7 +136,7 @@ func _ready():
 			# Parent cartridges to tv_container so they rotate with the TV
 			tv_container.add_child(instance)
 			# Offset cartridges relative to container center
-			instance.position -= Vector2(96, 64)
+			instance.position -= GAME_CENTER  # Changed from Vector2(96, 64)
 			cartridges.append(instance)
 
 	# Spawn player
@@ -120,7 +146,7 @@ func _ready():
 		var player_world_pos = player.global_position
 		remove_child(player)
 		tv_container.add_child(player)
-		player.position = player_world_pos - Vector2(96, 64)
+		player.position = player_world_pos - GAME_CENTER  # Changed from Vector2(96, 64)
 
 	# Initialize cartridge visibility and collisions
 	update_cartridge_visibility()
@@ -139,17 +165,18 @@ func _process(_delta):
 			# Cycle cartridges: arrow keys OR LB/RB
 			if Input.is_action_just_pressed("left") or Input.is_action_just_pressed("cycle_left"):
 				cycle_preview(-1)
+				play_cycle_sfx()
 			elif Input.is_action_just_pressed("right") or Input.is_action_just_pressed("cycle_right"):
 				cycle_preview(1)
+				play_cycle_sfx()
 			elif Input.is_action_just_pressed("exit"):  # Enter/Space / Y button
 				confirm_cartridge_change()
-			#elif Input.is_action_just_pressed("ui_cancel"):  # ESC to go back
-				#resume_game()
 			
 			# Spin level: RT (clockwise) / LT (counter-clockwise)
 			if Input.is_action_just_pressed("rotate_right"):
 				rotate_tv_90_degrees()
 			elif Input.is_action_just_pressed("rotate_left"):
+				
 				rotate_tv_90_degrees_ccw()
 
 func spawn_player():
@@ -158,14 +185,16 @@ func spawn_player():
 	if spawn_marker:
 		player.position = spawn_marker.global_position
 	else:
-		player.position = Vector2(32, 80)
+		player.position = Vector2(64, 160)  # Adjusted for 384x256 resolution
 	add_child(player)  # Temporarily add to get position, will reparent in _ready
 
 func set_playing_view():
 	current_state = GameState.PLAYING
 	animate_camera_zoom(Vector2(1.0, 1.0))  # Zoom in
 	play_zoom_sfx(true)  # Reversed (zoom in)
-	camera.position = Vector2(96, 64)  # Static camera centered on level
+	camera.position = GAME_CENTER  # Changed from Vector2(192, 128)
+	
+	
 	if player:
 		# Unpause physics
 		player.set_physics_process(true)
@@ -176,7 +205,7 @@ func set_selection_view():
 	current_state = GameState.PAUSED_SELECTION
 	animate_camera_zoom(Vector2(0.5, 0.5))  # Zoom out
 	play_zoom_sfx(false)  # Normal (zoom out)
-	camera.position = Vector2(96, 64)
+	camera.position = GAME_CENTER  # Changed from Vector2(192, 128)
 	
 	# Show the TV frame and background
 	if tv_frame:
@@ -202,6 +231,11 @@ func play_zoom_sfx(zoom_in: bool) -> void:
 		zoom_audio.stream = ZOOM_OUT_SFX
 		zoom_audio.pitch_scale = 1.0
 	zoom_audio.play()
+
+func play_cycle_sfx() -> void:
+	cycle_audio.stop()
+	cycle_audio.pitch_scale = 1.0
+	cycle_audio.play()
 
 func animate_camera_zoom(target_zoom: Vector2):
 	# Kill existing tween if running
@@ -233,18 +267,28 @@ func cycle_preview(direction: int):
 	if preview_cartridge_index < 0:
 		preview_cartridge_index = cartridges.size() - 1
 	update_cartridge_preview()
+	
+	# If the previewed cartridge doesn't allow rotation, animate TV back to 0 (visual only)
+	if not cartridge_configs[preview_cartridge_index].get_rotate_rule():
+		if rotation_index != 0:
+			rotation_index = 0
+			animate_tv_rotation(0.0)
 
 func update_cartridge_preview():
-	# Show only the preview cartridge, hide all others
 	for i in range(cartridges.size()):
 		var is_preview = (i == preview_cartridge_index)
 		cartridges[i].visible = is_preview
 		cartridges[i].modulate = Color(1, 1, 1, 1)
-		# Keep collisions disabled during preview since physics is paused
 		cartridges[i].set_collision_enabled(false)
+
 
 func confirm_cartridge_change():
 	current_cartridge_index = preview_cartridge_index
+	
+	# Apply gravity reset if the new cartridge doesn't allow rotation
+	if not cartridge_configs[current_cartridge_index].get_rotate_rule():
+		apply_gravity_for_rotation(0.0)
+	
 	update_cartridge_visibility()
 	update_player_abilities()
 	set_playing_view()
@@ -261,25 +305,30 @@ func update_player_abilities():
 		var abilities = cartridge_configs[current_cartridge_index].get_abilities()
 		player.set_cartridge_abilities(abilities["can_dash"], abilities["can_double_jump"])
 
-# For later when you implement gravity rotation
-func rotate_tv_and_gravity(new_rotation_degrees: float):
+# Animate only the TV container rotation (visual, no gravity change)
+func animate_tv_rotation(new_rotation_degrees: float):
 	tv_rotation = deg_to_rad(new_rotation_degrees)
-	
-	# Rotate the TV visuals AND the gameplay screen
 	var tween = create_tween()
 	tween.tween_property(tv_container, "rotation", tv_rotation, 0.5).set_trans(Tween.TRANS_CUBIC)
 	
 	# Tell player to counter-rotate its sprite
 	if player and player.has_method("set_parent_rotation"):
 		player.set_parent_rotation(tv_rotation)
-	
-	# Change gravity direction
-	var gravity_vector = Vector2.DOWN.rotated(tv_rotation)
+
+# Apply gravity direction for a given rotation (no visual tween)
+func apply_gravity_for_rotation(rotation_degrees: float):
+	var rot_rad = deg_to_rad(rotation_degrees)
+	var gravity_vector = Vector2.DOWN.rotated(rot_rad)
 	PhysicsServer2D.area_set_param(
 		get_viewport().find_world_2d().space,
 		PhysicsServer2D.AREA_PARAM_GRAVITY_VECTOR,
 		gravity_vector
 	)
+
+# Rotate TV visuals AND change gravity
+func rotate_tv_and_gravity(new_rotation_degrees: float):
+	animate_tv_rotation(new_rotation_degrees)
+	apply_gravity_for_rotation(new_rotation_degrees)
 
 func _on_tv_frame_input(_viewport: Node, event: InputEvent, _shape_idx: int):
 	if event is InputEventMouseButton:
@@ -300,6 +349,10 @@ func rotate_tv_90_degrees():
 	if current_state != GameState.PAUSED_SELECTION:
 		return  # Only allow rotation during selection
 	
+	# Check if previewed cartridge allows rotation
+	if not cartridge_configs[preview_cartridge_index].get_rotate_rule():
+		return
+	
 	# Increment rotation index (no wrapping, keeps increasing)
 	rotation_index += 1
 	
@@ -312,6 +365,10 @@ func rotate_tv_90_degrees_ccw():
 	if current_state != GameState.PAUSED_SELECTION:
 		return  # Only allow rotation during selection
 	
+	# Check if previewed cartridge allows rotation
+	if not cartridge_configs[preview_cartridge_index].get_rotate_rule():
+		return
+	
 	# Decrement rotation index for counter-clockwise
 	rotation_index -= 1
 	
@@ -319,6 +376,36 @@ func rotate_tv_90_degrees_ccw():
 	
 	rotate_tv_and_gravity(target_rotation_degrees)
 
+
+# ─── SPIKE STATE PERSISTENCE ──────────────────────────────────────────────────
+
+## Called by SpikeFollow nodes every frame to persist their state.
+func save_spike_state(spike_id: String, pos: Vector2, spd: float, path_idx: int, path_fwd: bool, path_reached: bool = false) -> void:
+	_spike_states[spike_id] = {
+		"position": pos,
+		"speed": spd,
+		"path_index": path_idx,
+		"path_forward": path_fwd,
+		"path_reached_end": path_reached,
+	}
+
+## Called by SpikeFollow on _ready to restore its saved state.
+func load_spike_state(spike_id: String):
+	if _spike_states.has(spike_id):
+		return _spike_states[spike_id]
+	return null
+
+## Wipe all spike states (call on level restart / win / lose).
+func clear_spike_states() -> void:
+	_spike_states.clear()
+
+## Reset every SpikeFollow node in the current cartridge tree.
+func reset_all_spikes() -> void:
+	clear_spike_states()
+	for cartridge in cartridges:
+		for child in cartridge.get_children():
+			if child.has_method("reset"):
+				child.reset()
 
 # Calculate appropriate zoom based on TV rotation
 func get_zoom_for_rotation(rotation_rad: float) -> Vector2:
@@ -332,7 +419,7 @@ func get_zoom_for_rotation(rotation_rad: float) -> Vector2:
 	
 	if is_vertical:
 		# When vertical, zoom out to fit the rotated screen
-		return Vector2(0.67, 0.67)
+		return Vector2(0.5, 0.5)
 	else:
-		# Normal horizontal view - standard zoom
+		# Horizontal orientation, normal zoom
 		return Vector2(1.0, 1.0)

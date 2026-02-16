@@ -1,0 +1,44 @@
+[gd_scene format=3 uid="uid://dnh07yiu1i6pj"]
+
+[ext_resource type="Script" uid="uid://bs20sil5hdfnf" path="res://ui/level_hud.gd" id="1"]
+[ext_resource type="FontFile" uid="uid://d37q1ocuu8mfi" path="res://assets/boldpixels/BoldsPixels.ttf" id="2_mbb4e"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_jdufq"]
+font = ExtResource("2_mbb4e")
+font_size = 64
+
+[node name="LevelHUD" type="Control" unique_id=1549550114]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("1")
+
+[node name="TopBar" type="HBoxContainer" parent="." unique_id=1020351008]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_top = 79.0
+offset_bottom = 135.0
+grow_horizontal = 2
+
+[node name="Spacer" type="Control" parent="TopBar" unique_id=1263624940]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="TimeLabel" type="Label" parent="TopBar" unique_id=875849455]
+layout_mode = 2
+text = "Time: 0:00  "
+label_settings = SubResource("LabelSettings_jdufq")
+
+[node name="CustomElements" type="Control" parent="." unique_id=1469326809]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2

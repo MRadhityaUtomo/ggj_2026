@@ -28,16 +28,22 @@ func _on_body_entered(body: Node2D) -> void:
 			return
 		
 		# Emit signal that level is completed
-		if not audio_player.playing:
-			audio_player.stream = Flag_sfx
-			audio_player.play()
-			await get_tree().create_timer(.2).timeout
+		$AnimatedSprite2D.play("got")
+		audio_player.stream = Flag_sfx
+		audio_player.play()
+		await get_tree().create_timer(1).timeout
 		level_completed.emit()
 		
 		# Finish current level and load next
 		var current = LevelProgression.get_active_level_index()
-		LevelProgression.finish_level(current)
-		print("Completed level %d, loading next..." % current)
-		ScreenTransition.level_completed_transition(func(): LevelProgression.load_level_scene(LevelProgression.get_active_level_index()))
+		# Check if this was the last level
+		if current >= LevelProgression.level_scenes.size() - 1:
+			# Last level completed - return to main menu
+			print("All levels completed! Returning to main menu...")
+			ScreenTransition.level_completed_transition(func(): LevelProgression.go_to_main_menu())
+		else:
+			# Load next level
+			print("Loading next level...")
+			ScreenTransition.level_completed_transition(func(): LevelProgression.load_level_scene(LevelProgression.get_active_level_index()))
 		
 		queue_free()

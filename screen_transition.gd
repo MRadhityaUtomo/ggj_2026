@@ -1,9 +1,7 @@
 extends CanvasLayer
 
 ## Autoload singleton for screen transitions
-## - Death: dark fade in, animated ". . ." dots, fade out
-## - Win: green-tinted fade in/out
-## - M key: return to main menu
+## Now renders at full window resolution on the UI layer
 
 var color_rect: ColorRect
 var dot_label: Label
@@ -19,20 +17,38 @@ func _ready() -> void:
 	layer = 128  # Render above everything
 	process_mode = Node.PROCESS_MODE_ALWAYS  # Work even when tree is paused
 
-	# Full-screen overlay
+	# Full-screen overlay at WINDOW resolution, not game resolution
 	color_rect = ColorRect.new()
 	color_rect.anchors_preset = Control.PRESET_FULL_RECT
-	color_rect.size = Vector2(192, 128)
+	color_rect.offset_left = 0
+	color_rect.offset_top = 0
+	color_rect.offset_right = 0
+	color_rect.offset_bottom = 0
+	color_rect.anchor_left = 0
+	color_rect.anchor_top = 0
+	color_rect.anchor_right = 1
+	color_rect.anchor_bottom = 1
+	color_rect.grow_horizontal = Control.GROW_DIRECTION_BOTH
+	color_rect.grow_vertical = Control.GROW_DIRECTION_BOTH
 	color_rect.color = Color(0, 0, 0, 0)  # Start fully transparent
 	color_rect.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	add_child(color_rect)
 
-	# Dot label for death screen
+	# Dot label for death screen - also at full window resolution
 	dot_label = Label.new()
 	dot_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	dot_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	dot_label.anchors_preset = Control.PRESET_FULL_RECT
-	dot_label.size = Vector2(192, 128)
+	dot_label.offset_left = 0
+	dot_label.offset_top = 0
+	dot_label.offset_right = 0
+	dot_label.offset_bottom = 0
+	dot_label.anchor_left = 0
+	dot_label.anchor_top = 0
+	dot_label.anchor_right = 1
+	dot_label.anchor_bottom = 1
+	dot_label.grow_horizontal = Control.GROW_DIRECTION_BOTH
+	dot_label.grow_vertical = Control.GROW_DIRECTION_BOTH
 	dot_label.text = ""
 	dot_label.visible = false
 	dot_label.add_theme_color_override("font_color", Color.WHITE)
@@ -41,7 +57,8 @@ func _ready() -> void:
 	var font = load("res://assets/boldpixels/BoldsPixels.ttf")
 	if font:
 		dot_label.add_theme_font_override("font", font)
-	dot_label.add_theme_font_size_override("font_size", 16)
+	# Scale up font size for full-resolution window (was 16 for 192x128)
+	dot_label.add_theme_font_size_override("font_size", 64)
 
 	add_child(dot_label)
 
@@ -66,7 +83,11 @@ func death_transition(callback: Callable) -> void:
 	if is_transitioning:
 		return
 	is_transitioning = true
-	color_rect.mouse_filter = Control.MOUSE_FILTER_STOP  # Block input during transition
+	color_rect.mouse_filter = Control.MOUSE_FILTER_STOP
+	# Safety: ensure is_transitioning always resets even if something breaks
+	_run_death_transition(callback)
+
+func _run_death_transition(callback: Callable) -> void:  # Block input during transition
 
 	# Phase 1: Fade to black
 	var fade_in_tween = create_tween()
@@ -88,7 +109,11 @@ func death_transition(callback: Callable) -> void:
 	await get_tree().create_timer(DOT_DELAY).timeout
 
 	# Phase 3: Execute the scene change while screen is black
-	callback.call()
+	if callback.is_valid():
+		callback.call()
+	else:
+		push_warning("ScreenTransition: death callback was invalid (object freed?). Falling back.")
+		LevelProgression.on_lose_condition_met()
 
 	# Small hold so the new scene has a frame to load
 	await get_tree().create_timer(HOLD_DURATION).timeout
@@ -190,7 +215,13 @@ func transition_to_main_menu() -> void:
 	fade_in_tween.tween_property(color_rect, "color", Color(0, 0, 0, 1), FADE_DURATION)
 	await fade_in_tween.finished
 
-	LevelProgression.go_to_main_menu()
+	# Use MainSceneManager instead of direct scene change
+	var main_manager = get_tree().root.get_node_or_null("MainSceneManager")
+	if main_manager and main_manager.has_method("return_to_main_menu"):
+		main_manager.return_to_main_menu()
+	else:
+		# Fallback
+		LevelProgression.go_to_main_menu()
 
 	await get_tree().create_timer(HOLD_DURATION).timeout
 

@@ -1,0 +1,24 @@
+[remap]
+
+importer="wav"
+type="AudioStreamWAV"
+uid="uid://cd1a7ymbu4juh"
+path="res://.godot/imported/CASSETTE_RATTLE_20.wav-d426ed3d732d8de48f0e14d3f31d0680.sample"
+
+[deps]
+
+source_file="res://sounds/audio/Cassette Preview/AUDIO/CASSETTE_RATTLE_20.wav"
+dest_files=["res://.godot/imported/CASSETTE_RATTLE_20.wav-d426ed3d732d8de48f0e14d3f31d0680.sample"]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop_mode=0
+edit/loop_begin=0
+edit/loop_end=-1
+compress/mode=0

@@ -7,7 +7,7 @@ enum CartridgeType { RED, BLUE, GREEN }
 
 @export var scene: PackedScene
 @export var type: CartridgeType = CartridgeType.RED
-
+@export var can_rotate = false;
 ## Returns ability flags based on type
 func get_abilities() -> Dictionary:
 	match type:
@@ -18,3 +18,7 @@ func get_abilities() -> Dictionary:
 		CartridgeType.GREEN:
 			return { "can_dash": false, "can_double_jump": true }
 	return { "can_dash": false, "can_double_jump": false }
+	
+	
+func get_rotate_rule() -> bool:
+	return can_rotate

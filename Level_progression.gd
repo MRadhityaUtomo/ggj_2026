@@ -6,22 +6,24 @@ extends Node
 # ─── CONFIGURATION ────────────────────────────────────────────────────────────
 var level_scenes: Array[String] = [
 	"res://scenes/levels/level_1.tscn",
+	"res://scenes/levels/level_dash_tutorial.tscn",
 	"res://scenes/levels/level_2.tscn",
-	"res://scenes/levels/level_3.tscn",
 	"res://scenes/levels/level_4.tscn",
 	"res://scenes/levels/level_5.tscn",
-    "res://scenes/levels/level_6.tscn"
+	"res://scenes/levels/level_6.tscn",
+	"res://scenes/levels/jump_intermediate_level.tscn",
+	"res://scenes/levels/level_dash_intro.tscn",
 ]
 
 const MAIN_MENU_SCENE: String = "res://scenes/levels/main_menu.tscn"
 
 # ─── STATE ────────────────────────────────────────────────────────────────────
-var level_flags: Array[bool] = [false, false, false, false, false, false]
+var level_flags: Array[bool] = [true, true, true, true, true, true, true, true]
 
 # Track which level the player is currently playing (not just first incomplete)
 var active_level_index: int = 0
 
-const TOTAL_LEVELS: int = 6
+const TOTAL_LEVELS: int = 8
 
 func _ready() -> void:
 	pass
@@ -79,17 +81,15 @@ func on_lose_condition_met() -> void:
 
 ## Helper to safely load a level scene by index
 func load_level_scene(index: int) -> void:
-	if index >= 0 and index < level_scenes.size():
-		set_active_level(index)  # Track which level we're loading
-		var path = level_scenes[index]
-		if ResourceLoader.exists(path):
-			get_tree().change_scene_to_file(path)
+	if index >= 0 and index < TOTAL_LEVELS:
+		active_level_index = index
+		
+		# Use MainSceneManager - DO NOT fall back to direct scene change
+		var main_manager = get_tree().root.get_node_or_null("MainSceneManager")
+		if main_manager and main_manager.has_method("change_level"):
+			main_manager.change_level(index)
 		else:
-			push_error("LevelProgression: Scene path not found: %s" % path)
-	elif index >= TOTAL_LEVELS:
-		# All levels done - return to main menu or show credits
-		print("🎉 All levels complete!")
-		go_to_main_menu()
+			push_error("CRITICAL: MainSceneManager not found! Cannot load level. Make sure main_scene_manager.tscn is the main scene.")
 	else:
 		push_error("LevelProgression: Invalid level index for loading: %d" % index)
 
@@ -102,4 +102,8 @@ func reset_progress() -> void:
 	print("⟲ Progress Reset")
 
 func go_to_main_menu() -> void:
-	get_tree().change_scene_to_file(MAIN_MENU_SCENE)
+	var main_manager = get_tree().root.get_node_or_null("MainSceneManager")
+	if main_manager and main_manager.has_method("return_to_main_menu"):
+		main_manager.return_to_main_menu()
+	else:
+		push_error("CRITICAL: MainSceneManager not found! Cannot return to menu.")

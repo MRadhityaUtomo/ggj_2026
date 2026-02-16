@@ -1,6 +1,66 @@
-[gd_scene load_steps=2 format=3 uid="uid://c363tskrwem0j"]
+[gd_scene format=3 uid="uid://c363tskrwem0j"]
 
-[ext_resource type="Script" uid="uid://1jghiuv6nyq0" path="res://main_menu.gd" id="1_main_menu"]
+[ext_resource type="Script" uid="uid://p6375ockty6r" path="res://main_menu_final.gd" id="1_fsby3"]
+[ext_resource type="Script" uid="uid://xpg4lm27qjs1" path="res://cartridge_config.gd" id="2_721jg"]
+[ext_resource type="PackedScene" uid="uid://ba2fl631xom7j" path="res://scenes/cartridge/menu.tscn" id="3_geflf"]
+[ext_resource type="PackedScene" uid="uid://c2wv4ftrbmhqw" path="res://cartridge_1.tscn" id="4_geflf"]
+[ext_resource type="PackedScene" uid="uid://b8ki550ohniaj" path="res://cartridge_dash_tutorial.tscn" id="5_pwqr4"]
+[ext_resource type="PackedScene" uid="uid://duyrx7ml37i7p" path="res://scenes/cartridge/cartridge_2_2.tscn" id="5_sn5u3"]
+[ext_resource type="PackedScene" uid="uid://dhhfd3q16sb7o" path="res://scenes/cartridge/cartridge_4_1.tscn" id="7_crctu"]
+[ext_resource type="PackedScene" uid="uid://b8gl6o5ruk444" path="res://scenes/cartridge/cartridge_6_2.tscn" id="8_cn35j"]
+[ext_resource type="PackedScene" uid="uid://cic3jcuc15u1g" path="res://scenes/cartridge/cartridge_5_2.tscn" id="8_ohdsy"]
+[ext_resource type="PackedScene" uid="uid://dbwby0ud0mq7p" path="res://scenes/cartridge/jump_intermediate_1.tscn" id="10_fwnpy"]
+[ext_resource type="PackedScene" uid="uid://c2ibrdtfgfwie" path="res://scenes/cartridge/cartridge_dash_intro_1.tscn" id="11_k0nyb"]
 
-[node name="MainMenu" type="Node2D"]
-script = ExtResource("1_main_menu")
+[sub_resource type="Resource" id="Resource_wko7x"]
+script = ExtResource("2_721jg")
+scene = ExtResource("3_geflf")
+metadata/_custom_type_script = "uid://xpg4lm27qjs1"
+
+[sub_resource type="Resource" id="Resource_cn35j"]
+script = ExtResource("2_721jg")
+scene = ExtResource("4_geflf")
+metadata/_custom_type_script = "uid://xpg4lm27qjs1"
+
+[sub_resource type="Resource" id="Resource_geflf"]
+script = ExtResource("2_721jg")
+scene = ExtResource("5_pwqr4")
+type = 1
+metadata/_custom_type_script = "uid://xpg4lm27qjs1"
+
+[sub_resource type="Resource" id="Resource_wgqco"]
+script = ExtResource("2_721jg")
+scene = ExtResource("5_sn5u3")
+metadata/_custom_type_script = "uid://xpg4lm27qjs1"
+
+[sub_resource type="Resource" id="Resource_crctu"]
+script = ExtResource("2_721jg")
+scene = ExtResource("7_crctu")
+metadata/_custom_type_script = "uid://xpg4lm27qjs1"
+
+[sub_resource type="Resource" id="Resource_sn5u3"]
+script = ExtResource("2_721jg")
+scene = ExtResource("8_ohdsy")
+metadata/_custom_type_script = "uid://xpg4lm27qjs1"
+
+[sub_resource type="Resource" id="Resource_pwqr4"]
+script = ExtResource("2_721jg")
+scene = ExtResource("8_cn35j")
+metadata/_custom_type_script = "uid://xpg4lm27qjs1"
+
+[sub_resource type="Resource" id="Resource_7gp8n"]
+script = ExtResource("2_721jg")
+scene = ExtResource("10_fwnpy")
+metadata/_custom_type_script = "uid://xpg4lm27qjs1"
+
+[sub_resource type="Resource" id="Resource_gdcvq"]
+script = ExtResource("2_721jg")
+scene = ExtResource("11_k0nyb")
+metadata/_custom_type_script = "uid://xpg4lm27qjs1"
+
+[node name="MainMenu" type="Node2D" unique_id=1182983692]
+script = ExtResource("1_fsby3")
+cartridge_configs = Array[ExtResource("2_721jg")]([SubResource("Resource_wko7x"), SubResource("Resource_cn35j"), SubResource("Resource_geflf"), SubResource("Resource_wgqco"), SubResource("Resource_crctu"), SubResource("Resource_sn5u3"), SubResource("Resource_pwqr4"), SubResource("Resource_7gp8n"), SubResource("Resource_gdcvq")])
+
+[node name="Marker2D" type="Marker2D" parent="." unique_id=202835855]
+position = Vector2(96, 80)

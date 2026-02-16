@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=3 uid="uid://dg73lnvpkr1tw"]
+[gd_scene format=3 uid="uid://dg73lnvpkr1tw"]
 
 [ext_resource type="Script" uid="uid://ccolkwnulxhj4" path="res://game_manager.gd" id="1_l37oo"]
 [ext_resource type="Script" uid="uid://xpg4lm27qjs1" path="res://cartridge_config.gd" id="2_qpwj6"]
@@ -22,10 +22,10 @@ script = ExtResource("2_qpwj6")
 scene = ExtResource("5_3p04p")
 metadata/_custom_type_script = "uid://xpg4lm27qjs1"
 
-[node name="Level2" type="Node2D" node_paths=PackedStringArray("spawn_marker")]
+[node name="Level2" type="Node2D" unique_id=200810336 node_paths=PackedStringArray("spawn_marker")]
 script = ExtResource("1_l37oo")
 cartridge_configs = Array[ExtResource("2_qpwj6")]([SubResource("Resource_qsp8v"), SubResource("Resource_nt80m"), SubResource("Resource_brxtv")])
 spawn_marker = NodePath("Marker2D")
 
-[node name="Marker2D" type="Marker2D" parent="."]
-position = Vector2(20, 21)
+[node name="Marker2D" type="Marker2D" parent="." unique_id=1972211186]
+position = Vector2(64, 64)

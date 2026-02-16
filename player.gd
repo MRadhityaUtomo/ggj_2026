@@ -3,16 +3,16 @@ extends CharacterBody2D
 @onready var audio_player = $AudioStreamPlayer2D
 
 const WALK_SFX = preload("res://sounds/walk_sfx.wav")
-const JUMP_SFX = preload("res://sounds/error Sfx.wav")#Will Change
+const JUMP_SFX = preload("res://sounds/audio/jump.wav")#Will Change
 const DASH_SFX = preload("res://sounds/temp_dash.wav")
 const DEATH_SFX = preload("res://sounds/death_sfx.wav")
 
 # Movement parameters
-const SPEED = 90.0
-const JUMP_VELOCITY = -200.0
-const JUMP_CUT_MULTIPLIER = 0.5  # How much to reduce upward velocity when releasing jump early
-const GRAVITY = 580.0
-const MAX_FALL_SPEED = 300.0
+const SPEED = 180.0
+const JUMP_VELOCITY = -400.0
+const GRAVITY = 1160.0
+const MAX_FALL_SPEED = 600.0
+const JUMP_CUT_MULTIPLIER = 0.5 
 
 # Coyote time (grace period after leaving ground)
 const COYOTE_TIME = 0.1
@@ -23,7 +23,7 @@ const JUMP_BUFFER_TIME = 0.1
 var jump_buffer_timer = 0.0
 
 # Dash parameters (Celeste-style)
-const DASH_SPEED = 240.0
+const DASH_SPEED = 480.0
 const DASH_DURATION = 0.15
 const DASH_END_SPEED = 80.0  # Speed retained after dash ends
 const DASH_COOLDOWN = 0.2
@@ -37,9 +37,13 @@ var is_dashing = false
 var dash_timer = 0.0
 var dash_direction = 0  # 1 for right, -1 for left
 var parent_rotation: float = 0.0  # Track parent rotation for counter-rotation
+
+var base_scale: Vector2
+var is_dying: bool = false  # Guard against multiple die() calls
 @onready var animated_sprite = $AnimatedSprite2D
 
 func _ready():
+	base_scale = animated_sprite.scale
 	pass
 
 func _physics_process(delta):
@@ -54,6 +58,7 @@ func _physics_process(delta):
 	else:
 		coyote_timer = max(0, coyote_timer - delta)
 	
+		
 	# Handle dash
 	if is_dashing:
 		dash_timer -= delta
@@ -73,6 +78,8 @@ func _physics_process(delta):
 		# Jump cut: release jump early for variable height
 		if velocity.y < 0 and not Input.is_action_pressed("up"):
 			velocity.y *= JUMP_CUT_MULTIPLIER
+		update_animation()
+		
 	
 	# Jump buffering: remember jump input slightly before landing
 	if Input.is_action_just_pressed("up"):
@@ -111,21 +118,41 @@ func _physics_process(delta):
 	counter_rotate_sprite()
 	update_animation()
 
+func tween_scale(target_scale: Vector2, time := 0.08):
+	var tw = create_tween()
+	tw.set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
+	tw.tween_property(animated_sprite, "scale", target_scale, time)
+
+var squash_tween: Tween
+func play_jump_stretch():
+	if squash_tween:
+		squash_tween.kill()
+
+	animated_sprite.scale = base_scale * Vector2(1.5, 1.2)
+
+	squash_tween = create_tween()
+	squash_tween.set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
+	squash_tween.tween_property(animated_sprite, "scale", base_scale, 0.30)
+
+
 func jump():
+	audio_player.volume_db = 0
 	audio_player.stop()
 	velocity.y = JUMP_VELOCITY
+	play_jump_stretch()
 	audio_player.stream = JUMP_SFX
-	audio_player.volume_db = -20
+	audio_player.volume_db = -10
 	audio_player.play()
-	audio_player.volume_db = 0
 
 func double_jump():
 	velocity.y = JUMP_VELOCITY
+	play_jump_stretch()
 	has_used_double_jump = true
-	audio_player.stream = JUMP_SFX
-	audio_player.volume_db = -20
-	audio_player.play()
 	audio_player.volume_db = 0
+	audio_player.stop()
+	audio_player.stream = JUMP_SFX
+	audio_player.volume_db = -10
+	audio_player.play()
 
 func start_dash():
 	# Get dash direction from input or last facing direction
@@ -169,11 +196,15 @@ func counter_rotate_sprite():
 
 func check_tile_collisions():
 	for i in get_slide_collision_count():
+		if is_dying:
+			return
 		var collision = get_slide_collision(i)
 		var collider = collision.get_collider()
 		
 		if collider is TileMapLayer:
 			handle_tile_collision(collider)
+		elif collider is StaticBody2D:
+			handle_active_collision(collider)
 
 func update_animation():
 	if not animated_sprite:
@@ -191,6 +222,8 @@ func update_animation():
 			animated_sprite.play("jump")
 		else:
 			animated_sprite.play("mid_jumping")
+	elif is_dying:
+		animated_sprite.play("death")
 	else:
 		if abs(velocity.x) > 5:
 			animated_sprite.play("move")
@@ -202,10 +235,21 @@ func handle_tile_collision(tile_layer: TileMapLayer):
 	if tile_layer.name == "Obstacle" or tile_layer.name == "Obstacle2" or tile_layer.name == "Spikes":
 		die()
 	pass
+func handle_active_collision(enemy_instance: Node):
+	# Example:
+	if enemy_instance.name == "MovingSpike":
+		die()
+	pass
 
 func die():
+	animated_sprite.play("death")
+	if is_dying:
+		return
+	is_dying = true
 	set_physics_process(false)
+	animated_sprite.play("death")
 	audio_player.stream = DEATH_SFX
 	audio_player.play()
 	await get_tree().create_timer(.2).timeout
-	ScreenTransition.death_transition(func(): LevelProgression.on_lose_condition_met())
+	# Use a direct Callable instead of a lambda to avoid capturing freed 'self'
+	ScreenTransition.death_transition(LevelProgression.on_lose_condition_met)
