@@ -1,6 +1,5 @@
 extends Control
 
-@onready var lives_label: Label = $TopBar/LivesLabel
 @onready var time_label: Label = $TopBar/TimeLabel
 @onready var custom_container: Control = %CustomElements
 
@@ -14,8 +13,6 @@ func _process(delta: float):
 	game_time += delta
 	update_time_display()
 
-func update_lives(lives: int):
-	lives_label.text = "Lives: %d" % lives
 
 func update_time_display():
 	var minutes = int(game_time) / 60
