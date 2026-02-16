@@ -58,6 +58,7 @@ func _physics_process(delta):
 	else:
 		coyote_timer = max(0, coyote_timer - delta)
 	
+		
 	# Handle dash
 	if is_dashing:
 		dash_timer -= delta
@@ -77,6 +78,8 @@ func _physics_process(delta):
 		# Jump cut: release jump early for variable height
 		if velocity.y < 0 and not Input.is_action_pressed("up"):
 			velocity.y *= JUMP_CUT_MULTIPLIER
+		update_animation()
+		
 	
 	# Jump buffering: remember jump input slightly before landing
 	if Input.is_action_just_pressed("up"):
@@ -219,6 +222,8 @@ func update_animation():
 			animated_sprite.play("jump")
 		else:
 			animated_sprite.play("mid_jumping")
+	elif is_dying:
+		animated_sprite.play("death")
 	else:
 		if abs(velocity.x) > 5:
 			animated_sprite.play("move")
@@ -237,10 +242,12 @@ func handle_active_collision(enemy_instance: Node):
 	pass
 
 func die():
+	animated_sprite.play("death")
 	if is_dying:
 		return
 	is_dying = true
 	set_physics_process(false)
+	animated_sprite.play("death")
 	audio_player.stream = DEATH_SFX
 	audio_player.play()
 	await get_tree().create_timer(.2).timeout

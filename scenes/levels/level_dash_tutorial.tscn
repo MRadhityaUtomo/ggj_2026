@@ -1,0 +1,19 @@
+[gd_scene format=3 uid="uid://40mje6wyy3wo"]
+
+[ext_resource type="Script" uid="uid://ccolkwnulxhj4" path="res://game_manager.gd" id="1_17kqh"]
+[ext_resource type="Script" uid="uid://xpg4lm27qjs1" path="res://cartridge_config.gd" id="2_gryr8"]
+[ext_resource type="PackedScene" uid="uid://b8ki550ohniaj" path="res://cartridge_dash_tutorial.tscn" id="3_i2tgj"]
+
+[sub_resource type="Resource" id="Resource_06mn5"]
+script = ExtResource("2_gryr8")
+scene = ExtResource("3_i2tgj")
+type = 1
+metadata/_custom_type_script = "uid://xpg4lm27qjs1"
+
+[node name="level_dash_tutorial" type="Node2D" unique_id=126038752 node_paths=PackedStringArray("spawn_marker")]
+script = ExtResource("1_17kqh")
+cartridge_configs = Array[ExtResource("2_gryr8")]([SubResource("Resource_06mn5")])
+spawn_marker = NodePath("Marker2D")
+
+[node name="Marker2D" type="Marker2D" parent="." unique_id=370209318]
+position = Vector2(64, 64)
