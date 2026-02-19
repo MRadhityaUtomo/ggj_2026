@@ -907,7 +907,7 @@ offset_bottom = 93.0
 grow_horizontal = 2
 grow_vertical = 2
 text = " BLUE = DASH with \"SHIFT\"/
-Controller Y"
+Controller B"
 label_settings = SubResource("LabelSettings_p2o50")
 horizontal_alignment = 1
 script = ExtResource("9_u504g")

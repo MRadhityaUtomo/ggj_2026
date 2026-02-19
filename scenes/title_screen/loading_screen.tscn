@@ -1,0 +1,158 @@
+[gd_scene format=3 uid="uid://c6p7bseq2ikla"]
+
+[ext_resource type="Script" uid="uid://djdqj63r6s0j1" path="res://scenes/title_screen/loading_screen.gd" id="1_script"]
+[ext_resource type="Texture2D" uid="uid://bocm1vyivwjsq" path="res://loading.png" id="2_j7xjx"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_2rrwf"]
+atlas = ExtResource("2_j7xjx")
+region = Rect2(0, 0, 240, 135)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_khb4b"]
+atlas = ExtResource("2_j7xjx")
+region = Rect2(240, 0, 240, 135)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_df7sc"]
+atlas = ExtResource("2_j7xjx")
+region = Rect2(480, 0, 240, 135)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_np32h"]
+atlas = ExtResource("2_j7xjx")
+region = Rect2(720, 0, 240, 135)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_qqjrh"]
+atlas = ExtResource("2_j7xjx")
+region = Rect2(960, 0, 240, 135)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_kro6l"]
+atlas = ExtResource("2_j7xjx")
+region = Rect2(1200, 0, 240, 135)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_2hqi1"]
+atlas = ExtResource("2_j7xjx")
+region = Rect2(1440, 0, 240, 135)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_tlsw2"]
+atlas = ExtResource("2_j7xjx")
+region = Rect2(1680, 0, 240, 135)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_s6aiu"]
+atlas = ExtResource("2_j7xjx")
+region = Rect2(1920, 0, 240, 135)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_do4cw"]
+atlas = ExtResource("2_j7xjx")
+region = Rect2(2160, 0, 240, 135)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ks103"]
+atlas = ExtResource("2_j7xjx")
+region = Rect2(2400, 0, 240, 135)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_5n3sp"]
+atlas = ExtResource("2_j7xjx")
+region = Rect2(2640, 0, 240, 135)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_bkuc0"]
+atlas = ExtResource("2_j7xjx")
+region = Rect2(2880, 0, 240, 135)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_g6aap"]
+atlas = ExtResource("2_j7xjx")
+region = Rect2(3120, 0, 240, 135)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_2htjb"]
+atlas = ExtResource("2_j7xjx")
+region = Rect2(3360, 0, 240, 135)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_g5k1k"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_2rrwf")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_khb4b")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_df7sc")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_np32h")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_qqjrh")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_kro6l")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_2hqi1")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_tlsw2")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_s6aiu")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_do4cw")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ks103")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_5n3sp")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_bkuc0")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_g6aap")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_2htjb")
+}],
+"loop": true,
+"name": &"default",
+"speed": 12.0
+}]
+
+[node name="LoadingScreen" type="Control" unique_id=1113657247]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_script")
+
+[node name="Background" type="ColorRect" parent="." unique_id=1786857395]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 1)
+
+[node name="AnimationAnchor" type="Control" parent="." unique_id=739795062]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -96.0
+offset_top = -96.0
+grow_vertical = 2
+
+[node name="TextureRect" type="TextureRect" parent="AnimationAnchor" unique_id=1447943605]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="AnimationAnchor" unique_id=832421339]
+position = Vector2(-200, -48)
+scale = Vector2(2, 2)
+sprite_frames = SubResource("SpriteFrames_g5k1k")
+autoplay = "default"
+frame_progress = 0.09505905
