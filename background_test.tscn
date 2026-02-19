@@ -1,0 +1,32 @@
+[gd_scene format=3 uid="uid://b4gqhsqw6n7x2"]
+
+[ext_resource type="Texture2D" uid="uid://dgsoa86tkbdrj" path="res://tv_bg_imlek.png" id="1_qqv0i"]
+
+[node name="Control" type="Control" unique_id=1298384250]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="SubViewportContainer" type="SubViewportContainer" parent="." unique_id=2123663894]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+stretch = true
+
+[node name="SubViewport" type="SubViewport" parent="SubViewportContainer" unique_id=1550792493]
+size = Vector2i(1920, 1280)
+
+[node name="TextureRect" type="TextureRect" parent="." unique_id=1944858338]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("1_qqv0i")

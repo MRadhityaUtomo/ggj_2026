@@ -58,6 +58,5 @@ texture = ExtResource("2_4nsvf")
 expand_mode = 1
 
 [node name="shader" parent="UILayer" unique_id=1147309416 instance=ExtResource("3_734b6")]
-visible = false
 mouse_filter = 2
 mouse_behavior_recursive = 1

@@ -88,7 +88,7 @@ func _ready():
 
 	# Add TV background sprite OUTSIDE tv_container
 	tv_bg = Sprite2D.new()
-	tv_bg.texture = preload("res://tv_bg.png")
+	tv_bg.texture = preload("res://tv_bg_imlek.png")
 	tv_bg.centered = true
 	tv_bg.position = GAME_CENTER
 	tv_bg.z_index = -200

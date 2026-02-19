@@ -44,6 +44,6 @@ func _on_body_entered(body: Node2D) -> void:
 		else:
 			# Load next level
 			print("Loading next level...")
-			ScreenTransition.level_completed_transition(func(): LevelProgression.load_level_scene(LevelProgression.get_active_level_index()))
+			ScreenTransition.level_completed_transition(func(): LevelProgression.load_level_scene(LevelProgression.get_active_level_index()+1))
 		
 		queue_free()
