@@ -3,6 +3,7 @@
 [ext_resource type="Script" uid="uid://dgc4h4066p252" path="res://viewport_wrapper.gd" id="1_aj74m"]
 [ext_resource type="Texture2D" uid="uid://c2sitn6auvhsm" path="res://Assets_Imlek_WaterFountain_01.png" id="2_4nsvf"]
 [ext_resource type="PackedScene" uid="uid://bhcxsmkbraa1n" path="res://scenes/cartridge/shader.tscn" id="3_734b6"]
+[ext_resource type="Script" uid="uid://bqvy3ckd1lav6" path="res://ui/decor_container.gd" id="4_decor"]
 
 [node name="viewport_wrapper" type="Node2D" unique_id=1478139259]
 script = ExtResource("1_aj74m")
@@ -38,6 +39,49 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 
+[node name="BgColor" type="ColorRect" parent="UILayer/Control" unique_id=347487287]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0.12, 0.08, 0.15, 1)
+
+[node name="DecorContainer" type="Control" parent="UILayer/Control" unique_id=2098765432]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("4_decor")
+
+[node name="DecorLeft" type="TextureRect" parent="UILayer/Control/DecorContainer" unique_id=490296789]
+layout_mode = 0
+offset_left = 50.0
+offset_top = 300.0
+offset_right = 350.0
+offset_bottom = 640.0
+mouse_filter = 2
+texture = ExtResource("2_4nsvf")
+expand_mode = 1
+metadata/slide_from = "left"
+
+[node name="DecorRight" type="TextureRect" parent="UILayer/Control/DecorContainer" unique_id=775995888]
+layout_mode = 0
+offset_left = 1570.0
+offset_top = 250.0
+offset_right = 1870.0
+offset_bottom = 590.0
+mouse_filter = 2
+texture = ExtResource("2_4nsvf")
+expand_mode = 1
+metadata/slide_from = "right"
+
 [node name="TextureRect" type="TextureRect" parent="UILayer/Control" unique_id=814977104]
 visible = false
 texture_filter = 1
@@ -58,6 +102,5 @@ texture = ExtResource("2_4nsvf")
 expand_mode = 1
 
 [node name="shader" parent="UILayer" unique_id=1147309416 instance=ExtResource("3_734b6")]
-visible = false
 mouse_filter = 2
 mouse_behavior_recursive = 1
