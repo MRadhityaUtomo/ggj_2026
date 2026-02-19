@@ -85,7 +85,7 @@ func _ready():
 
 	# Add TV background sprite OUTSIDE tv_container (so it doesn't rotate)
 	tv_bg = Sprite2D.new()
-	tv_bg.texture = preload("res://tv_bg_imlek.png")
+	tv_bg.texture = preload("res://Frame 1_page-0001.jpg")
 	tv_bg.centered = true
 	tv_bg.position = GAME_CENTER  # Changed from Vector2(192, 128)
 	tv_bg.z_index = -200  # Render behind everything

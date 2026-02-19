@@ -7,6 +7,7 @@
 [ext_resource type="Texture2D" uid="uid://c6vr85puxtwxr" path="res://TILEMAP_water_big.png" id="4_y1wic"]
 [ext_resource type="Texture2D" uid="uid://du4albyvle8g8" path="res://spikesmall_big.png" id="6_y1wic"]
 [ext_resource type="Script" uid="uid://mac1mox6oqp6" path="res://scenes/cartridge/obstacle.gd" id="7_u63sh"]
+[ext_resource type="FontFile" uid="uid://d37q1ocuu8mfi" path="res://assets/boldpixels/BoldsPixels.ttf" id="8_tx8hr"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_6aca4"]
 texture = ExtResource("1_6aca4")
@@ -868,6 +869,11 @@ physics_layer_0/collision_layer = 1
 sources/0 = SubResource("TileSetAtlasSource_nc0bt")
 sources/2 = SubResource("TileSetAtlasSource_xs1og")
 
+[sub_resource type="LabelSettings" id="LabelSettings_0xia1"]
+font = ExtResource("8_tx8hr")
+font_size = 28
+font_color = Color(0.0307278, 0.3623518, 0.38221973, 1)
+
 [node name="cartridge_2_1" type="Node2D" unique_id=344694825]
 
 [node name="Background" type="TileMapLayer" parent="." unique_id=243495915]
@@ -885,3 +891,11 @@ tile_set = SubResource("TileSet_llyr2")
 tile_map_data = PackedByteArray("AAAEAAYAAgABAAAAAAAFAAYAAgACAAAAAAAIAAEAAgALAAAAAAAIAAIAAgALAAEAAAAIAAMAAgALAAIAAAAJAAEAAgAMAAAAAAAJAAIAAgAMAAEAAAAJAAMAAgAMAAIAAAAKAAEAAgANAAAAAAAKAAIAAgANAAEAAAAKAAMAAgANAAIAAAA=")
 tile_set = SubResource("TileSet_52vg7")
 script = ExtResource("7_u63sh")
+
+[node name="Label" type="Label" parent="." unique_id=1258694250]
+offset_left = 144.0
+offset_top = 168.0
+offset_right = 200.0
+offset_bottom = 196.0
+text = ">>>"
+label_settings = SubResource("LabelSettings_0xia1")

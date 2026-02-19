@@ -5,6 +5,7 @@ extends Node2D
 @onready var sub_viewport_container: SubViewportContainer = $SubViewportContainer
 @onready var sub_viewport: SubViewport = $SubViewportContainer/SubViewport
 @onready var ui_layer: CanvasLayer = $UILayer
+@onready var decor_container: Control = $UILayer/Control/DecorContainer
 
 const GAME_WIDTH = 192*2
 const GAME_HEIGHT = 128*2
@@ -65,3 +66,7 @@ func get_game_viewport() -> SubViewport:
 ## Get the UI layer for adding high-res UI
 func get_ui_layer() -> CanvasLayer:
 	return ui_layer
+
+## Get the decor container for show/hide animations
+func get_decor_container() -> Control:
+	return decor_container

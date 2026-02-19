@@ -66,6 +66,11 @@ const CYCLE_SFX = preload("res://sounds/audio/Cassette Preview/AUDIO/BUTTON_05.w
 ## Path to custom UI scene (if use_custom_ui is true)
 @export_file("*.tscn") var custom_ui_path: String = ""
 
+# Decor reference
+var decor_container: Control = null
+
+var level_hud: Control = null
+
 func _ready():
 	# Setup audio players
 	zoom_audio = AudioStreamPlayer.new()
@@ -88,7 +93,7 @@ func _ready():
 
 	# Add TV background sprite OUTSIDE tv_container
 	tv_bg = Sprite2D.new()
-	tv_bg.texture = preload("res://tv_bg_imlek.png")
+	tv_bg.texture = preload("res://Frame 1_page-0001.jpg")
 	tv_bg.centered = true
 	tv_bg.position = GAME_CENTER
 	tv_bg.z_index = -200

@@ -2,7 +2,17 @@
 
 [ext_resource type="Script" uid="uid://bs20sil5hdfnf" path="res://ui/level_hud.gd" id="1"]
 [ext_resource type="Texture2D" uid="uid://bxfix1kpyl7cb" path="res://03_Logo_Harmoni_Imlek_Nusantara_Lockup_Horizontal_White.png" id="2_mbb4e"]
+[ext_resource type="Texture2D" uid="uid://ei2ngd017q1n" path="res://imlek_assets/Assets_Imlek_Flower_vas bunga 06.png" id="2_waboj"]
 [ext_resource type="Script" uid="uid://c3uwo8apbaltv" path="res://ui/texture_rect.gd" id="3_jdufq"]
+[ext_resource type="Texture2D" uid="uid://xhxqtgorxtk2" path="res://Ellipse_big.png" id="3_x3l6f"]
+[ext_resource type="Texture2D" uid="uid://bkdtv2q3a5plp" path="res://Ellipse 2.png" id="4_74i8e"]
+[ext_resource type="Texture2D" uid="uid://ttk7gbwco8hy" path="res://Ellipse_outline.png" id="4_ufgtv"]
+[ext_resource type="Texture2D" uid="uid://d3e4afbrjqbjm" path="res://imlek_assets/Assets_Imlek_Flower_08.png" id="5_74i8e"]
+[ext_resource type="Texture2D" uid="uid://casx21aklklxl" path="res://imlek_assets/Assets_Imlek_Lampion_02.png" id="5_oxecl"]
+[ext_resource type="Texture2D" uid="uid://7ms4hnybjcfm" path="res://imlek_assets/Assets_Imlek_Lampion_01.png" id="6_3uk21"]
+[ext_resource type="Texture2D" uid="uid://bbfblf7e2i16i" path="res://imlek_assets/Assets_Imlek_Flower_07.png" id="7_ftb1y"]
+[ext_resource type="Texture2D" uid="uid://ccvxf2krvmnq7" path="res://imlek_assets/Assets_Imlek_Flower_09.png" id="8_ftb1y"]
+[ext_resource type="Texture2D" uid="uid://c5e7v2mvi7f31" path="res://imlek_assets/Assets_Imlek_Flower_06.png" id="10_gye63"]
 
 [node name="LevelHUD" type="Control" unique_id=1549550114]
 layout_mode = 3
@@ -13,6 +23,143 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 script = ExtResource("1")
+
+[node name="ColorRect" type="ColorRect" parent="." unique_id=1204944552]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.4922372, 0.49223727, 0.49223727, 1)
+
+[node name="TextureRect2" type="TextureRect" parent="." unique_id=252372762]
+layout_mode = 0
+offset_left = -280.0
+offset_top = 360.0
+offset_right = 368.0
+offset_bottom = 1277.1692
+texture = ExtResource("2_waboj")
+expand_mode = 1
+metadata/slide_from = "left"
+
+[node name="circle_bottomleft" type="TextureRect" parent="." unique_id=1463706741]
+layout_mode = 0
+offset_left = -240.0
+offset_top = 912.0
+offset_right = 416.0
+offset_bottom = 1568.0
+pivot_offset = Vector2(320, 320)
+texture = ExtResource("3_x3l6f")
+metadata/slide_from = "bottom_left"
+metadata/spin_speed = 5.0
+
+[node name="circle_topright" type="TextureRect" parent="." unique_id=1072873835]
+layout_mode = 0
+offset_left = 1392.0
+offset_top = -512.0
+offset_right = 2472.0
+offset_bottom = 568.0
+pivot_offset = Vector2(544, 512)
+texture = ExtResource("4_74i8e")
+metadata/slide_from = "top_right"
+metadata/spin_speed = 10.0
+
+[node name="lantern2" type="TextureRect" parent="." unique_id=1429020155]
+layout_mode = 0
+offset_left = 1696.0
+offset_top = 232.0
+offset_right = 2008.0
+offset_bottom = 626.0936
+texture = ExtResource("5_oxecl")
+expand_mode = 1
+metadata/slide_from = "top"
+
+[node name="lantern" type="TextureRect" parent="." unique_id=647701248]
+layout_mode = 0
+offset_left = 1576.0
+offset_top = -40.0
+offset_right = 1816.0
+offset_bottom = 599.5593
+texture = ExtResource("6_3uk21")
+expand_mode = 1
+metadata/slide_from = "top"
+
+[node name="circle_bottomleft2" type="TextureRect" parent="." unique_id=519230812]
+layout_mode = 0
+offset_left = 144.0
+offset_top = 1024.0
+offset_right = 800.0
+offset_bottom = 1680.0
+pivot_offset = Vector2(328, 320)
+texture = ExtResource("4_ufgtv")
+metadata/slide_from = "bottom"
+metadata/spin_speed = 10.0
+
+[node name="flower1" type="TextureRect" parent="." unique_id=482563215]
+layout_mode = 0
+offset_left = -208.0
+offset_top = 1048.0
+offset_right = 336.0
+offset_bottom = 1592.0
+texture = ExtResource("5_74i8e")
+expand_mode = 1
+metadata/slide_from = "bottom_left"
+
+[node name="flower4_topright" type="TextureRect" parent="." unique_id=1657151380]
+layout_mode = 0
+offset_left = 1616.0
+offset_top = 176.00005
+offset_right = 1981.7091
+offset_bottom = 541.70935
+rotation = 4.1887903
+texture = ExtResource("7_ftb1y")
+expand_mode = 1
+metadata/slide_from = "top_right"
+
+[node name="flower4_topright2" type="TextureRect" parent="." unique_id=1109490030]
+layout_mode = 0
+offset_left = 1848.0
+offset_top = 176.0
+offset_right = 2160.6682
+offset_bottom = 488.66837
+rotation = 6.2831855
+texture = ExtResource("10_gye63")
+expand_mode = 1
+metadata/slide_from = "top_right"
+
+[node name="flower4_topright3" type="TextureRect" parent="." unique_id=1434897497]
+layout_mode = 0
+offset_left = 1695.9999
+offset_top = 368.0
+offset_right = 2184.7798
+offset_bottom = 856.7804
+rotation = 10.733775
+texture = ExtResource("8_ftb1y")
+expand_mode = 1
+metadata/slide_from = "top_right"
+
+[node name="flower2" type="TextureRect" parent="." unique_id=1869072956]
+layout_mode = 0
+offset_left = 608.00006
+offset_top = 1080.0001
+offset_right = 1072.0
+offset_bottom = 1544.0001
+rotation = 1.2429556
+texture = ExtResource("7_ftb1y")
+expand_mode = 1
+metadata/slide_from = "bottom"
+
+[node name="flower3" type="TextureRect" parent="." unique_id=128157112]
+layout_mode = 0
+offset_left = 584.0
+offset_top = 1112.0
+offset_right = 1008.0
+offset_bottom = 1536.0
+texture = ExtResource("8_ftb1y")
+expand_mode = 1
+metadata/slide_from = "bottom"
 
 [node name="TopBar" type="HBoxContainer" parent="." unique_id=1020351008]
 layout_mode = 1
@@ -27,6 +174,7 @@ layout_mode = 2
 size_flags_horizontal = 3
 
 [node name="CustomElements" type="Control" parent="." unique_id=1469326809]
+visible = false
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -38,10 +186,10 @@ mouse_filter = 2
 [node name="TextureRect" type="TextureRect" parent="." unique_id=2056439962]
 texture_filter = 2
 layout_mode = 0
-offset_left = 64.0
-offset_top = 64.0
-offset_right = 419.9713
-offset_bottom = 224.0
+offset_left = 16.0
+offset_top = 24.0
+offset_right = 443.1656
+offset_bottom = 216.0
 texture = ExtResource("2_mbb4e")
 expand_mode = 1
 script = ExtResource("3_jdufq")

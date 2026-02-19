@@ -24,11 +24,9 @@ func load_ui_for_scene(scene_path: String):
 	if game_manager and game_manager.use_custom_ui and game_manager.custom_ui_path:
 		# Use completely custom UI
 		ui_scene_path = game_manager.custom_ui_path
-	elif scene_path.contains("level"):
-		# Use base level UI
+	elif scene_path.contains("level") or scene_path.contains("main_menu"):
+		# Use base level UI for both levels AND main menu (has decor system)
 		ui_scene_path = LEVEL_UI_PATH
-	elif scene_path.contains("main_menu"):
-		ui_scene_path = MENU_UI_PATH
 	
 	# Load UI
 	if ui_scene_path and ResourceLoader.exists(ui_scene_path):
