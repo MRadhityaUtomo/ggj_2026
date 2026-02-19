@@ -27,6 +27,10 @@ const GAME_WIDTH = 384
 const GAME_HEIGHT = 256
 const GAME_CENTER = Vector2(192, 128)
 
+# Project resolution (full window)
+const PROJECT_WIDTH = 1920
+const PROJECT_HEIGHT = 1080
+
 # Player reference
 var player: CharacterBody2D
 var player_scene = preload("res://player.tscn")

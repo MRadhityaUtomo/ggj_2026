@@ -2,6 +2,7 @@
 
 [ext_resource type="Script" uid="uid://bs20sil5hdfnf" path="res://ui/level_hud.gd" id="1"]
 [ext_resource type="Texture2D" uid="uid://bxfix1kpyl7cb" path="res://03_Logo_Harmoni_Imlek_Nusantara_Lockup_Horizontal_White.png" id="2_mbb4e"]
+[ext_resource type="Script" uid="uid://c3uwo8apbaltv" path="res://ui/texture_rect.gd" id="3_jdufq"]
 
 [node name="LevelHUD" type="Control" unique_id=1549550114]
 layout_mode = 3
@@ -35,8 +36,12 @@ grow_vertical = 2
 mouse_filter = 2
 
 [node name="TextureRect" type="TextureRect" parent="." unique_id=2056439962]
+texture_filter = 2
 layout_mode = 0
-offset_right = 516.1584
-offset_bottom = 232.0
+offset_left = 64.0
+offset_top = 64.0
+offset_right = 419.9713
+offset_bottom = 224.0
 texture = ExtResource("2_mbb4e")
 expand_mode = 1
+script = ExtResource("3_jdufq")

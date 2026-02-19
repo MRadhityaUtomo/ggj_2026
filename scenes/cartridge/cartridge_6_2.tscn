@@ -4,6 +4,7 @@
 [ext_resource type="Texture2D" uid="uid://bj0x5l72tqumo" path="res://TILEMAP_water.png" id="2_sbqgv"]
 [ext_resource type="Texture2D" uid="uid://cq0in16oteeku" path="res://green.png" id="3_ijfgd"]
 [ext_resource type="Texture2D" uid="uid://8mpfpgmxbq64" path="res://icon.svg" id="4_ijfgd"]
+[ext_resource type="Script" uid="uid://mac1mox6oqp6" path="res://scenes/cartridge/obstacle.gd" id="5_t87ql"]
 [ext_resource type="PackedScene" uid="uid://bih70aup8l3ak" path="res://scenes/flag.tscn" id="6_xnxva"]
 [ext_resource type="Texture2D" uid="uid://dr83m1ttnspci" path="res://assets/rotate-right-svgrepo-com.png" id="7_7gcjn"]
 [ext_resource type="Texture2D" uid="uid://cvo127royv0au" path="res://assets/mouse-left-button-svgrepo-com.png" id="8_t87ql"]
@@ -1002,6 +1003,7 @@ tile_set = SubResource("TileSet_pgy2x")
 [node name="Obstacle" type="TileMapLayer" parent="." unique_id=1462251335]
 tile_map_data = PackedByteArray("AAABAAUAAQADAAAAAAABAAYAAQADAAEAAAABAAcAAQADAAIAAAACAAcAAQAEAAIAAAADAAcAAQAFAAIAAAAFAAYAAQABAAAAAAAGAAYAAQACAAAAAAAHAAYAAQABAAAAAAAIAAYAAQACAAAAAAABAAQAAQABAAEAAAACAAQAAQACAAEAAAA=")
 tile_set = SubResource("TileSet_ejql5")
+script = ExtResource("5_t87ql")
 
 [node name="flag" parent="." unique_id=1903803331 instance=ExtResource("6_xnxva")]
 position = Vector2(65, 70)

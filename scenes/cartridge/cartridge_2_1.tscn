@@ -6,6 +6,7 @@
 [ext_resource type="Texture2D" uid="uid://8mpfpgmxbq64" path="res://icon.svg" id="4_tx8hr"]
 [ext_resource type="Texture2D" uid="uid://c6vr85puxtwxr" path="res://TILEMAP_water_big.png" id="4_y1wic"]
 [ext_resource type="Texture2D" uid="uid://du4albyvle8g8" path="res://spikesmall_big.png" id="6_y1wic"]
+[ext_resource type="Script" uid="uid://mac1mox6oqp6" path="res://scenes/cartridge/obstacle.gd" id="7_u63sh"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_6aca4"]
 texture = ExtResource("1_6aca4")
@@ -883,3 +884,4 @@ tile_set = SubResource("TileSet_llyr2")
 [node name="Obstacle" type="TileMapLayer" parent="." unique_id=1486247769]
 tile_map_data = PackedByteArray("AAAEAAYAAgABAAAAAAAFAAYAAgACAAAAAAAIAAEAAgALAAAAAAAIAAIAAgALAAEAAAAIAAMAAgALAAIAAAAJAAEAAgAMAAAAAAAJAAIAAgAMAAEAAAAJAAMAAgAMAAIAAAAKAAEAAgANAAAAAAAKAAIAAgANAAEAAAAKAAMAAgANAAIAAAA=")
 tile_set = SubResource("TileSet_52vg7")
+script = ExtResource("7_u63sh")

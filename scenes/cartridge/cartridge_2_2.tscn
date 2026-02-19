@@ -2,6 +2,7 @@
 
 [ext_resource type="Texture2D" uid="uid://cnfixigj0cmp" path="res://tilemap fire.png" id="1_5weln"]
 [ext_resource type="Texture2D" uid="uid://du4albyvle8g8" path="res://spikesmall_big.png" id="3_ynsdg"]
+[ext_resource type="Script" uid="uid://mac1mox6oqp6" path="res://scenes/cartridge/obstacle.gd" id="4_5weln"]
 [ext_resource type="Texture2D" uid="uid://8mpfpgmxbq64" path="res://icon.svg" id="4_tchrn"]
 [ext_resource type="PackedScene" uid="uid://bih70aup8l3ak" path="res://scenes/flag.tscn" id="6_lkbb3"]
 
@@ -473,6 +474,7 @@ tile_set = SubResource("TileSet_tchrn")
 [node name="Obstacle" type="TileMapLayer" parent="." unique_id=2144060524]
 tile_map_data = PackedByteArray("AAAIAAMAAgANAAEAAAAKAAEAAgANAAAAAAABAAUAAgALAAAAAAABAAYAAgALAAEAAAABAAcAAgALAAIAAAACAAUAAgAMAAAAAAACAAYAAgAMAAEAAAACAAcAAgAMAAIAAAADAAUAAgANAAAAAAADAAYAAgANAAEAAAADAAcAAgANAAIAAAAGAAIAAgALAAAAAAAGAAMAAgALAAEAAAAGAAQAAgALAAIAAAAHAAIAAgAMAAAAAAAHAAMAAgAMAAEAAAAHAAQAAgAMAAIAAAAIAAQAAgANAAIAAAAIAAIAAgANAAAAAAAIAAUAAgALAAAAAAAIAAYAAgALAAEAAAAIAAcAAgALAAIAAAAJAAUAAgAMAAAAAAAJAAYAAgAMAAEAAAAJAAcAAgAMAAIAAAAKAAUAAgANAAAAAAAKAAYAAgANAAEAAAAKAAcAAgANAAIAAAA=")
 tile_set = SubResource("TileSet_kma6x")
+script = ExtResource("4_5weln")
 
 [node name="flag" parent="." unique_id=374957359 instance=ExtResource("6_lkbb3")]
 position = Vector2(328, 73)
