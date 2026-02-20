@@ -31,6 +31,7 @@ buses/channel_disable_threshold_db=-16.0
 ControllerSetup="*res://controller_setup.gd"
 LevelProgression="*res://Level_progression.gd"
 ScreenTransition="*res://screen_transition.gd"
+Leaderboard="*uid://c18jav4bbk1aq"
 
 [display]
 
