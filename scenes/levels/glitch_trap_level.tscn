@@ -1,6 +1,22 @@
 [gd_scene format=3 uid="uid://cyx72ptv8awi5"]
 
 [ext_resource type="Script" uid="uid://ccolkwnulxhj4" path="res://game_manager.gd" id="1_g6hj0"]
+[ext_resource type="Script" uid="uid://xpg4lm27qjs1" path="res://cartridge_config.gd" id="2_g6hj0"]
+[ext_resource type="PackedScene" uid="uid://crbqqsj7j62q4" path="res://scenes/cartridge/Glitch_trap_1.tscn" id="3_0en5q"]
+[ext_resource type="PackedScene" uid="uid://ct0525tkq6gqu" path="res://scenes/cartridge/Glitch_trap_2.tscn" id="4_2mak7"]
+
+[sub_resource type="Resource" id="Resource_t6h41"]
+script = ExtResource("2_g6hj0")
+scene = ExtResource("3_0en5q")
+can_rotate = true
+metadata/_custom_type_script = "uid://xpg4lm27qjs1"
+
+[sub_resource type="Resource" id="Resource_p0103"]
+script = ExtResource("2_g6hj0")
+scene = ExtResource("4_2mak7")
+can_rotate = true
+metadata/_custom_type_script = "uid://xpg4lm27qjs1"
 
 [node name="level1" type="Node2D" unique_id=305227707]
 script = ExtResource("1_g6hj0")
+cartridge_configs = Array[ExtResource("2_g6hj0")]([SubResource("Resource_t6h41"), SubResource("Resource_p0103")])

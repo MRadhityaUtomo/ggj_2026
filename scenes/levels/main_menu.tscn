@@ -11,6 +11,7 @@
 [ext_resource type="PackedScene" uid="uid://cic3jcuc15u1g" path="res://scenes/cartridge/cartridge_5_2.tscn" id="8_ohdsy"]
 [ext_resource type="PackedScene" uid="uid://dbwby0ud0mq7p" path="res://scenes/cartridge/jump_intermediate_1.tscn" id="10_fwnpy"]
 [ext_resource type="PackedScene" uid="uid://c2ibrdtfgfwie" path="res://scenes/cartridge/cartridge_dash_intro_1.tscn" id="11_k0nyb"]
+[ext_resource type="PackedScene" uid="uid://crbqqsj7j62q4" path="res://scenes/cartridge/Glitch_trap_1.tscn" id="12_ohdsy"]
 
 [sub_resource type="Resource" id="Resource_wko7x"]
 script = ExtResource("2_721jg")
@@ -58,9 +59,14 @@ script = ExtResource("2_721jg")
 scene = ExtResource("11_k0nyb")
 metadata/_custom_type_script = "uid://xpg4lm27qjs1"
 
+[sub_resource type="Resource" id="Resource_fwnpy"]
+script = ExtResource("2_721jg")
+scene = ExtResource("12_ohdsy")
+metadata/_custom_type_script = "uid://xpg4lm27qjs1"
+
 [node name="MainMenu" type="Node2D" unique_id=1182983692]
 script = ExtResource("1_fsby3")
-cartridge_configs = Array[ExtResource("2_721jg")]([SubResource("Resource_wko7x"), SubResource("Resource_cn35j"), SubResource("Resource_geflf"), SubResource("Resource_wgqco"), SubResource("Resource_crctu"), SubResource("Resource_sn5u3"), SubResource("Resource_pwqr4"), SubResource("Resource_7gp8n"), SubResource("Resource_gdcvq")])
+cartridge_configs = Array[ExtResource("2_721jg")]([SubResource("Resource_wko7x"), SubResource("Resource_cn35j"), SubResource("Resource_geflf"), SubResource("Resource_wgqco"), SubResource("Resource_crctu"), SubResource("Resource_sn5u3"), SubResource("Resource_pwqr4"), SubResource("Resource_7gp8n"), SubResource("Resource_gdcvq"), SubResource("Resource_fwnpy")])
 
 [node name="Marker2D" type="Marker2D" parent="." unique_id=202835855]
 position = Vector2(96, 80)
