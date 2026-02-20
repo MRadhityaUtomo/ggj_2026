@@ -64,6 +64,18 @@ theme_override_fonts/font = ExtResource("2_font")
 theme_override_font_sizes/font_size = 24
 text = "TUTORIAL"
 
+[node name="ChallengeButton" type="Button" parent="VBoxContainer" unique_id=390195909]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("2_font")
+theme_override_font_sizes/font_size = 24
+text = "CHALLENGE"
+
+[node name="LeaderboardButton" type="Button" parent="VBoxContainer" unique_id=497297276]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("2_font")
+theme_override_font_sizes/font_size = 24
+text = "LEADERBOARD"
+
 [node name="ExitButton" type="Button" parent="VBoxContainer" unique_id=1032852947]
 layout_mode = 2
 theme_override_fonts/font = ExtResource("2_font")
@@ -78,4 +90,6 @@ mouse_behavior_recursive = 1
 
 [connection signal="pressed" from="VBoxContainer/PlayButton" to="." method="_on_play_button_pressed"]
 [connection signal="pressed" from="VBoxContainer/TutorialButton" to="." method="_on_tutorial_button_pressed"]
+[connection signal="pressed" from="VBoxContainer/ChallengeButton" to="." method="_on_challenge_button_pressed"]
+[connection signal="pressed" from="VBoxContainer/LeaderboardButton" to="." method="_on_leaderboard_button_pressed"]
 [connection signal="pressed" from="VBoxContainer/ExitButton" to="." method="_on_exit_button_pressed"]
