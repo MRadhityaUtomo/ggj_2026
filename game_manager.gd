@@ -203,6 +203,8 @@ func set_playing_view():
 	play_zoom_sfx(true)  # Reversed (zoom in)
 	camera.position = GAME_CENTER  # Changed from Vector2(192, 128)
 	
+	# Resume challenge timer when playing
+	LevelProgression.resume_challenge_timer()
 	
 	if player:
 		# Unpause physics
@@ -215,6 +217,9 @@ func set_selection_view():
 	animate_camera_zoom(Vector2(0.5, 0.5))  # Zoom out
 	play_zoom_sfx(false)  # Normal (zoom out)
 	camera.position = GAME_CENTER  # Changed from Vector2(192, 128)
+	
+	# Pause challenge timer when zoomed out
+	LevelProgression.pause_challenge_timer()
 	
 	# Show the TV frame and background
 	if tv_frame:

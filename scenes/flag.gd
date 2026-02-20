@@ -38,9 +38,18 @@ func _on_body_entered(body: Node2D) -> void:
 		var current = LevelProgression.get_active_level_index()
 		# Check if this was the last level
 		if current >= LevelProgression.level_scenes.size() - 1:
-			# Last level completed - return to main menu
-			print("All levels completed! Returning to main menu...")
-			ScreenTransition.level_completed_transition(func(): LevelProgression.go_to_main_menu())
+			if LevelProgression.is_challenge_mode():
+				# Challenge mode: stop timer and show username entry
+				var final_time = LevelProgression.finish_challenge_mode()
+				ScreenTransition.level_completed_transition(func():
+					# Use autoload refs only — the flag node is freed by now
+					LevelProgression.set_meta("challenge_final_time", final_time)
+					LevelProgression.get_tree().change_scene_to_file("res://scenes/title_screen/username_entry.tscn")
+				)
+			else:
+				# Last level completed - return to main menu
+				print("All levels completed! Returning to main menu...")
+				ScreenTransition.level_completed_transition(func(): LevelProgression.go_to_main_menu())
 		else:
 			# Load next level
 			print("Loading next level...")

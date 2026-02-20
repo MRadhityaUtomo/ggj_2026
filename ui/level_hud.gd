@@ -5,6 +5,9 @@ extends Control
 
 var game_time: float = 0.0
 
+# Challenge mode timer label (created dynamically)
+var challenge_timer_label: Label = null
+
 # Decor slide system
 var _decor_sprites: Array[Control] = []
 var _decor_home_positions: Dictionary = {}
@@ -24,10 +27,36 @@ func _ready():
 	_collect_decor_sprites()
 	_place_all_offscreen()
 	call_deferred("_find_game_node")
+	_setup_challenge_timer_label()
+
+func _setup_challenge_timer_label():
+	if not LevelProgression.is_challenge_mode():
+		return
+	# Create a label at top-left for the challenge timer
+	challenge_timer_label = Label.new()
+	challenge_timer_label.text = "00:00.00"
+	challenge_timer_label.position = Vector2(20, 20)
+	challenge_timer_label.add_theme_font_size_override("font_size", 32)
+	challenge_timer_label.add_theme_color_override("font_color", Color(1, 1, 1))
+	challenge_timer_label.add_theme_color_override("font_shadow_color", Color(0, 0, 0, 0.8))
+	challenge_timer_label.add_theme_constant_override("shadow_offset_x", 2)
+	challenge_timer_label.add_theme_constant_override("shadow_offset_y", 2)
+	challenge_timer_label.z_index = 300
+	# Try to load the same pixel font used elsewhere
+	var font = load("res://assets/boldpixels/BoldsPixels.ttf")
+	if font:
+		challenge_timer_label.add_theme_font_override("font", font)
+	add_child(challenge_timer_label)
 
 func _process(delta: float):
 	game_time += delta
 	update_time_display()
+	
+	# Update challenge timer label
+	if challenge_timer_label and LevelProgression.is_challenge_mode():
+		challenge_timer_label.text = LevelProgression.get_challenge_time_string()
+		# Hide when zoomed out (decor shown = zoomed out)
+		challenge_timer_label.visible = not _decor_shown
 	
 	if not _game_node:
 		if _find_attempts < MAX_FIND_ATTEMPTS:
