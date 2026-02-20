@@ -27,6 +27,10 @@ const GAME_WIDTH = 384
 const GAME_HEIGHT = 256
 const GAME_CENTER = Vector2(192, 128)
 
+# Project resolution (full window)
+const PROJECT_WIDTH = 1920
+const PROJECT_HEIGHT = 1080
+
 # Player reference
 var player: CharacterBody2D
 var player_scene = preload("res://player.tscn")
@@ -58,6 +62,9 @@ const ZOOM_IN_SFX = preload("res://sounds/audio/Cassette Preview/AUDIO/CASSETTE_
 var cycle_audio: AudioStreamPlayer
 const CYCLE_SFX = preload("res://sounds/audio/Cassette Preview/AUDIO/BUTTON_05.wav")
 
+# Decor reference
+var tv_frame_decoration: Node2D  # The TV frame decoration (e.g., a border or a logo)
+
 ## Optional: Custom UI elements for this specific level
 @export var custom_ui_elements: Array[PackedScene] = []
 
@@ -81,7 +88,7 @@ func _ready():
 
 	# Add TV background sprite OUTSIDE tv_container (so it doesn't rotate)
 	tv_bg = Sprite2D.new()
-	tv_bg.texture = preload("res://tv_bg_imlek.png")
+	tv_bg.texture = preload("res://Frame 1_page-0001.jpg")
 	tv_bg.centered = true
 	tv_bg.position = GAME_CENTER  # Changed from Vector2(192, 128)
 	tv_bg.z_index = -200  # Render behind everything

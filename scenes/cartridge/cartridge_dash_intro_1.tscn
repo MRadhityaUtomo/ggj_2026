@@ -6,6 +6,7 @@
 [ext_resource type="Texture2D" uid="uid://c6vr85puxtwxr" path="res://TILEMAP_water_big.png" id="4_apjb7"]
 [ext_resource type="Texture2D" uid="uid://8mpfpgmxbq64" path="res://icon.svg" id="5_ee4u1"]
 [ext_resource type="Texture2D" uid="uid://du4albyvle8g8" path="res://spikesmall_big.png" id="6_38jii"]
+[ext_resource type="Script" uid="uid://mac1mox6oqp6" path="res://scenes/cartridge/obstacle.gd" id="7_ee4u1"]
 [ext_resource type="Texture2D" uid="uid://c1jkrwcr7n3m6" path="res://Spike_random.png" id="7_ufjj3"]
 [ext_resource type="Script" uid="uid://cjg5rv0ddh0yo" path="res://spike_follow.gd" id="8_apjb7"]
 [ext_resource type="FontFile" uid="uid://d37q1ocuu8mfi" path="res://assets/boldpixels/BoldsPixels.ttf" id="9_apjb7"]
@@ -894,6 +895,7 @@ tile_set = SubResource("TileSet_llyr2")
 [node name="Obstacle" type="TileMapLayer" parent="." unique_id=1486247769]
 tile_map_data = PackedByteArray("AAAJAAYAAgAEAAAAAAAKAAYAAgAFAAAAAAAFAAYAAgAEAAAAAAAGAAYAAgAFAAAAAAABAAYAAgAEAAAAAAACAAYAAgAFAAAAAAADAAYAAgABAAAAAAAEAAYAAgACAAAAAAAHAAYAAgABAAAAAAAIAAYAAgACAAAAAAA=")
 tile_set = SubResource("TileSet_52vg7")
+script = ExtResource("7_ee4u1")
 
 [node name="MovingSpike" type="Sprite2D" parent="." unique_id=1216332736]
 position = Vector2(337, 49)

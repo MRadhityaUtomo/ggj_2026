@@ -15,7 +15,7 @@ compatibility/default_parent_skeleton_in_mesh_instance_3d=true
 [application]
 
 config/name="platform transfer"
-run/main_scene="res://main_scene_manager.tscn"
+run/main_scene="uid://c2tecl2jh75gi"
 config/features=PackedStringArray("4.6", "Forward Plus")
 config/icon="res://icon.svg"
 
