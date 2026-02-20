@@ -3,6 +3,99 @@
 [ext_resource type="Script" uid="uid://b821817mxl3ad" path="res://scenes/title_screen/title_screen.gd" id="1_script"]
 [ext_resource type="FontFile" uid="uid://d37q1ocuu8mfi" path="res://assets/boldpixels/BoldsPixels.ttf" id="2_font"]
 [ext_resource type="PackedScene" uid="uid://bhcxsmkbraa1n" path="res://scenes/cartridge/shader.tscn" id="3_shader"]
+[ext_resource type="Texture2D" uid="uid://c713qvxmt8ovy" path="res://logo_fallthrough.png" id="4_d6x3v"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_5uxxq"]
+atlas = ExtResource("4_d6x3v")
+region = Rect2(0, 0, 640, 448)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_cxcmr"]
+atlas = ExtResource("4_d6x3v")
+region = Rect2(640, 0, 640, 448)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_j12ko"]
+atlas = ExtResource("4_d6x3v")
+region = Rect2(1280, 0, 640, 448)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_yegqs"]
+atlas = ExtResource("4_d6x3v")
+region = Rect2(1920, 0, 640, 448)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_xoykc"]
+atlas = ExtResource("4_d6x3v")
+region = Rect2(2560, 0, 640, 448)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ju3lf"]
+atlas = ExtResource("4_d6x3v")
+region = Rect2(3200, 0, 640, 448)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_xetrx"]
+atlas = ExtResource("4_d6x3v")
+region = Rect2(3840, 0, 640, 448)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_yepnq"]
+atlas = ExtResource("4_d6x3v")
+region = Rect2(4480, 0, 640, 448)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_4u6ih"]
+atlas = ExtResource("4_d6x3v")
+region = Rect2(5120, 0, 640, 448)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_v2f8g"]
+atlas = ExtResource("4_d6x3v")
+region = Rect2(5760, 0, 640, 448)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_k2vsc"]
+atlas = ExtResource("4_d6x3v")
+region = Rect2(6400, 0, 640, 448)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_aihkd"]
+atlas = ExtResource("4_d6x3v")
+region = Rect2(7040, 0, 640, 448)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_seoxh"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_5uxxq")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_cxcmr")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_j12ko")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_yegqs")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_xoykc")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ju3lf")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_xetrx")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_yepnq")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_4u6ih")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_v2f8g")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_k2vsc")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_aihkd")
+}],
+"loop": true,
+"name": &"default",
+"speed": 10.0
+}]
 
 [sub_resource type="LabelSettings" id="LabelSettings_vuv2h"]
 font_size = 128
@@ -23,7 +116,14 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-color = Color(0.5255925, 0.118059255, 0.15395135, 1)
+color = Color(0.4858303, 0.10170209, 0.13285998, 1)
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=659900177]
+position = Vector2(983.99994, 392)
+scale = Vector2(3, 3)
+sprite_frames = SubResource("SpriteFrames_seoxh")
+autoplay = "default"
+frame_progress = 0.96660453
 
 [node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=720774366]
 layout_mode = 1
@@ -32,15 +132,17 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -150.0
-offset_top = -100.0
-offset_right = 150.0
-offset_bottom = 100.0
+offset_left = -344.0
+offset_top = 208.0
+offset_right = -44.0
+offset_bottom = 408.0
 grow_horizontal = 2
 grow_vertical = 2
+scale = Vector2(2, 2)
 theme_override_constants/separation = 16
 
 [node name="Title" type="Label" parent="VBoxContainer" unique_id=1400549837]
+visible = false
 layout_mode = 2
 theme_override_fonts/font = ExtResource("2_font")
 theme_override_font_sizes/font_size = 48
@@ -71,7 +173,6 @@ theme_override_font_sizes/font_size = 24
 text = "EXIT"
 
 [node name="CRTShader" parent="." unique_id=1667639961 instance=ExtResource("3_shader")]
-visible = false
 layout_mode = 1
 mouse_filter = 2
 mouse_behavior_recursive = 1
