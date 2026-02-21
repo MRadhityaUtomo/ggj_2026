@@ -5,6 +5,7 @@ extends Node
 
 # ─── CONFIGURATION ────────────────────────────────────────────────────────────
 var level_scenes: Array[String] = [
+	"res://scenes/levels/tutorial.tscn",
 	"res://scenes/levels/level_1.tscn",
 	"res://scenes/levels/level_dash_tutorial.tscn",
 	"res://scenes/levels/level_2.tscn",
@@ -19,12 +20,12 @@ var level_scenes: Array[String] = [
 const MAIN_MENU_SCENE: String = "res://scenes/levels/main_menu.tscn"
 
 # ─── STATE ────────────────────────────────────────────────────────────────────
-var level_flags: Array[bool] = [true, true, true, true, true, true, true, true,true]
+var level_flags: Array[bool] = [true, true, true, true, true, true, true, true, true, true]
 
 # Track which level the player is currently playing (not just first incomplete)
 var active_level_index: int = 0
 
-const TOTAL_LEVELS: int = 9
+const TOTAL_LEVELS: int = 10
 
 # ─── CHALLENGE MODE ──────────────────────────────────────────────────────────
 var challenge_mode: bool = false

@@ -311,8 +311,15 @@ func confirm_cartridge_change():
 			player.set_parent_rotation(0.0)
 	
 	update_cartridge_visibility()
+	_check_active_flag_overlap()
 	update_player_abilities()
 	set_playing_view()
+
+func _check_active_flag_overlap() -> void:
+	var active_cartridge = cartridges[current_cartridge_index]
+	for child in active_cartridge.get_children():
+		if child is Area2D and child.has_method("check_player_overlap"):
+			child.check_player_overlap()
 
 func update_cartridge_visibility():
 	for i in range(cartridges.size()):

@@ -34,18 +34,6 @@ grow_horizontal = 2
 grow_vertical = 2
 color = Color(0.4922372, 0.49223727, 0.49223727, 1)
 
-[node name="TextureRect" type="TextureRect" parent="." unique_id=2056439962]
-texture_filter = 2
-layout_mode = 0
-offset_left = 16.0
-offset_top = 24.0
-offset_right = 443.1656
-offset_bottom = 216.0
-texture = ExtResource("2_mbb4e")
-expand_mode = 1
-script = ExtResource("3_jdufq")
-metadata/slide_from = "left"
-
 [node name="TextureRect2" type="TextureRect" parent="." unique_id=252372762]
 layout_mode = 0
 offset_left = -280.0
@@ -194,3 +182,14 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
+
+[node name="TextureRect" type="TextureRect" parent="." unique_id=2056439962]
+texture_filter = 2
+layout_mode = 0
+offset_left = 16.0
+offset_top = 24.0
+offset_right = 443.1656
+offset_bottom = 216.0
+texture = ExtResource("2_mbb4e")
+expand_mode = 1
+script = ExtResource("3_jdufq")

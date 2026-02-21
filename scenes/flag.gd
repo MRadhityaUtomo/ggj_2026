@@ -10,6 +10,12 @@ var is_collecting: bool = false
 func _ready() -> void:
 	body_entered.connect(_on_body_entered)
 
+func check_player_overlap() -> void:
+	for body in get_overlapping_bodies():
+		if body.name == "Player":
+			_on_body_entered(body)
+			return
+
 func _on_body_entered(body: Node2D) -> void:
 	# 1. Immediate exit if we are already in the middle of collecting or it's not the player
 	if is_collecting or body.name != "Player":
