@@ -1,0 +1,20 @@
+[gd_scene load_steps=7 format=3 uid="uid://d3hdyhfpdl4nq"]
+
+[ext_resource type="Script" uid="uid://ccolkwnulxhj4" path="res://game_manager.gd" id="1_u4f7j"]
+[ext_resource type="Script" uid="uid://xpg4lm27qjs1" path="res://cartridge_config.gd" id="2_1wklo"]
+[ext_resource type="PackedScene" uid="uid://cq4fxtxqtx80w" path="res://cartridge_tutorial_1.tscn" id="3_1wklo"]
+[ext_resource type="PackedScene" uid="uid://bcdv5nmpkqk5f" path="res://cartridge_tutorial_2.tscn" id="3_u4f7j"]
+
+[sub_resource type="Resource" id="Resource_7ac3l"]
+script = ExtResource("2_1wklo")
+scene = ExtResource("3_1wklo")
+metadata/_custom_type_script = "uid://xpg4lm27qjs1"
+
+[sub_resource type="Resource" id="Resource_iig34"]
+script = ExtResource("2_1wklo")
+scene = ExtResource("3_u4f7j")
+metadata/_custom_type_script = "uid://xpg4lm27qjs1"
+
+[node name="tutorial" type="Node2D"]
+script = ExtResource("1_u4f7j")
+cartridge_configs = Array[ExtResource("2_1wklo")]([SubResource("Resource_7ac3l"), SubResource("Resource_iig34")])

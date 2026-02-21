@@ -1,6 +1,8 @@
 [gd_scene format=4 uid="uid://ba2fl631xom7j"]
 
 [ext_resource type="Texture2D" uid="uid://cnfixigj0cmp" path="res://tilemap fire.png" id="1_306kr"]
+[ext_resource type="FontFile" uid="uid://d37q1ocuu8mfi" path="res://assets/boldpixels/BoldsPixels.ttf" id="2_30y0v"]
+[ext_resource type="Script" uid="uid://jr2q4vpdl5eo" path="res://scenes/cartridge/double_jump_label.gd" id="3_3oga1"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_ossmt"]
 texture = ExtResource("1_306kr")
@@ -260,6 +262,10 @@ physics_layer_0/collision_layer = 1
 sources/0 = SubResource("TileSetAtlasSource_30y0v")
 sources/1 = SubResource("TileSetAtlasSource_3oga1")
 
+[sub_resource type="LabelSettings" id="LabelSettings_306kr"]
+font = ExtResource("2_30y0v")
+font_color = Color(0.39652884, 0.23959446, 0.24957353, 1)
+
 [node name="cartridge_2_3" type="Node2D" unique_id=1494884560]
 
 [node name="Background" type="TileMapLayer" parent="." unique_id=1927262507]
@@ -271,3 +277,32 @@ tile_set = SubResource("TileSet_w78y5")
 position = Vector2(32, 32)
 tile_map_data = PackedByteArray("AAD/////AQAAAAEAAAD//wAAAQACAAQAAAD//wEAAQAIAAQAAAD//wIAAQADAAQAAFD//wMAAQAFAAQAAAD//wQAAQAFAAUAAAD//wUAAQABAAUAAAD//wYAAQACAAQAAAAAAP//AQADAAUAAAAAAAYAAQAFAAUAAAABAP//AQABAAQAAAABAAYAAQAGAAUAAAACAP//AQACAAQAAAACAAYAAQACAAQAAAADAP//AQADAAUAAAADAAYAAQADAAQAAAAEAP//AQAEAAMAADAEAAYAAQAEAAQAAAAFAP//AQAHAAQAAAAFAAYAAQADAAMAAAAGAP//AQABAAUAAAAGAAYAAQAEAAMAAAAHAP//AQADAAMAAAAHAAYAAQAEAAQAAAAIAP//AQAHAAQAAAAIAAYAAQAFAAUAAAAJAP//AQAEAAQAAAAJAAYAAQAGAAUAAAAKAP//AQAAAAEAAAAKAAAAAQAEAAQAAAAKAAEAAQAHAAQAAAAKAAIAAQAIAAQAAAAKAAMAAQAGAAQAAAAKAAQAAQAGAAUAAAAKAAUAAQAEAAMAAAAKAAYAAQAIAAQAAAAAAAMAAQAGAAQAAAAAAAQAAQAGAAUAAAAAAAUAAQAFAAQAAAAJAAUAAQAGAAQAAAAIAAUAAQAFAAQAAAAJAAMAAQAFAAQAAAAJAAQAAQAFAAUAAAABAAUAAQAGAAQAAAA=")
 tile_set = SubResource("TileSet_306kr")
+
+[node name="Label" type="Label" parent="." unique_id=1328394424]
+offset_left = 48.0
+offset_top = 56.0
+offset_right = 320.0
+offset_bottom = 87.0
+text = "PRESS ENTER, \"Q\", OR CONTROLLER Y 
+TO SELECT LEVELS"
+label_settings = SubResource("LabelSettings_306kr")
+script = ExtResource("3_3oga1")
+
+[node name="Label2" type="Label" parent="." unique_id=312180354]
+offset_left = 72.0
+offset_top = 96.0
+offset_right = 344.0
+offset_bottom = 127.0
+text = "PRESS SPACE TO CONFIRM LEVEL!"
+label_settings = SubResource("LabelSettings_306kr")
+script = ExtResource("3_3oga1")
+
+[node name="Label3" type="Label" parent="." unique_id=56974444]
+offset_left = 56.0
+offset_top = 144.0
+offset_right = 328.0
+offset_bottom = 175.0
+text = "COLLECT ALL STARS TO WIN"
+label_settings = SubResource("LabelSettings_306kr")
+horizontal_alignment = 1
+script = ExtResource("3_3oga1")

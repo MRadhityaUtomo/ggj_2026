@@ -18,6 +18,10 @@ func load_ui_for_scene(scene_path: String):
 	
 	var ui_scene_path = ""
 	
+	# Don't load level HUD for non-gameplay screens
+	if scene_path.contains("username_entry") or scene_path.contains("leaderboard_screen") or scene_path.contains("title_screen"):
+		return
+	
 	if scene_path.contains("level") or scene_path.contains("main_menu"):
 		ui_scene_path = LEVEL_UI_PATH
 	

@@ -1008,13 +1008,13 @@ position = Vector2(65, 70)
 [node name="RotateRightSvgrepoCom" type="Sprite2D" parent="." unique_id=1118702404]
 z_index = 300
 texture_filter = 1
-position = Vector2(129, -35)
+position = Vector2(384.8, -42.199997)
 scale = Vector2(0.18, 0.18)
 texture = ExtResource("7_7gcjn")
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=826206218]
 z_index = 300
 texture_filter = 1
-position = Vector2(87, -43)
+position = Vector2(342.8, -50.199997)
 scale = Vector2(0.18, 0.18)
 texture = ExtResource("8_t87ql")

@@ -165,7 +165,9 @@ func _ready():
 func _process(_delta):
 	match current_state:
 		GameState.PLAYING:
-			if Input.is_action_just_pressed("exit"):  # ESC key / Y button
+			if Input.is_action_just_pressed("ui_cancel"):  # ESC key
+				show_pause_menu()
+			if Input.is_action_just_pressed("exit"):  # Y button / Q key
 				pause_and_show_selection()
 		
 		GameState.PAUSED_SELECTION:
@@ -197,10 +199,14 @@ func spawn_player():
 
 func set_playing_view():
 	current_state = GameState.PLAYING
-	animate_camera_zoom(Vector2(1.0, 1.0))  # Zoom in
+	# Use rotation-aware zoom: full zoom when horizontal, zoomed out when vertical
+	var target_zoom = get_zoom_for_rotation(tv_rotation)
+	animate_camera_zoom(target_zoom)
 	play_zoom_sfx(true)  # Reversed (zoom in)
 	camera.position = GAME_CENTER  # Changed from Vector2(192, 128)
 	
+	# Resume challenge timer when playing
+	LevelProgression.resume_challenge_timer()
 	
 	if player:
 		# Unpause physics
@@ -213,6 +219,9 @@ func set_selection_view():
 	animate_camera_zoom(Vector2(0.5, 0.5))  # Zoom out
 	play_zoom_sfx(false)  # Normal (zoom out)
 	camera.position = GAME_CENTER  # Changed from Vector2(192, 128)
+	
+	# Pause challenge timer when zoomed out
+	LevelProgression.pause_challenge_timer()
 	
 	# Show the TV frame and background
 	if tv_frame:
@@ -294,11 +303,23 @@ func confirm_cartridge_change():
 	
 	# Apply gravity reset if the new cartridge doesn't allow rotation
 	if not cartridge_configs[current_cartridge_index].get_rotate_rule():
+		rotation_index = 0
+		tv_rotation = 0.0
+		tv_container.rotation = 0.0
 		apply_gravity_for_rotation(0.0)
+		if player and player.has_method("set_parent_rotation"):
+			player.set_parent_rotation(0.0)
 	
 	update_cartridge_visibility()
+	_check_active_flag_overlap()
 	update_player_abilities()
 	set_playing_view()
+
+func _check_active_flag_overlap() -> void:
+	var active_cartridge = cartridges[current_cartridge_index]
+	for child in active_cartridge.get_children():
+		if child is Area2D and child.has_method("check_player_overlap"):
+			child.check_player_overlap()
 
 func update_cartridge_visibility():
 	for i in range(cartridges.size()):
@@ -422,11 +443,39 @@ func get_zoom_for_rotation(rotation_rad: float) -> Vector2:
 		rotation_deg += 360.0
 	
 	# Check if rotation is vertical (90° or 270°)
-	var is_vertical = (abs(rotation_deg - 90.0) < 5.0) or (abs(rotation_deg - 270.0) < 5.0)
+	var is_vertical = (abs(fmod(rotation_deg, 180.0) - 90.0) < 5.0)
 	
 	if is_vertical:
-		# When vertical, zoom out to fit the rotated screen
-		return Vector2(0.5, 0.5)
+		# Zoom out so the full rotated height (GAME_WIDTH) fits in viewport height (GAME_HEIGHT)
+		# 256 / 384 ≈ 0.6667
+		var zoom_factor = float(GAME_HEIGHT) / float(GAME_WIDTH)
+		return Vector2(zoom_factor, zoom_factor)
 	else:
 		# Horizontal orientation, normal zoom
 		return Vector2(1.0, 1.0)
+
+var pause_menu_scene = preload("res://scenes/pause_menu/pause_menu.tscn")
+var pause_menu_instance: Control = null
+
+func show_pause_menu():
+	if pause_menu_instance:
+		return
+	pause_menu_instance = pause_menu_scene.instantiate()
+	pause_menu_instance.process_mode = Node.PROCESS_MODE_ALWAYS
+	get_tree().root.add_child(pause_menu_instance)  # Add to ROOT not self
+	pause_menu_instance.resume_pressed.connect(_on_pause_resume)
+	pause_menu_instance.exit_to_title_pressed.connect(_on_pause_exit_title)
+	get_tree().paused = true  # Pause AFTER adding to tree
+
+func _on_pause_resume():
+	get_tree().paused = false
+	if pause_menu_instance:
+		pause_menu_instance.queue_free()
+		pause_menu_instance = null
+
+func _on_pause_exit_title():
+	get_tree().paused = false
+	if pause_menu_instance:
+		pause_menu_instance.queue_free()
+		pause_menu_instance = null
+	get_tree().change_scene_to_file("res://scenes/title_screen/title_screen.tscn")

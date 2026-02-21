@@ -188,7 +188,11 @@ func level_completed_transition(callback: Callable) -> void:
 	await get_tree().create_timer(HOLD_DURATION * 2).timeout
 
 	# Phase 4: Execute callback while still showing
-	callback.call()
+	if callback.is_valid():
+		callback.call()
+	else:
+		push_warning("ScreenTransition: level_completed callback was invalid (object freed?). Falling back.")
+		LevelProgression.go_to_main_menu()
 
 	await get_tree().create_timer(HOLD_DURATION).timeout
 

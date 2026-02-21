@@ -60,28 +60,6 @@ grow_vertical = 2
 mouse_filter = 2
 script = ExtResource("4_decor")
 
-[node name="DecorLeft" type="TextureRect" parent="UILayer/Control/DecorContainer" unique_id=490296789]
-layout_mode = 0
-offset_left = 50.0
-offset_top = 300.0
-offset_right = 350.0
-offset_bottom = 640.0
-mouse_filter = 2
-texture = ExtResource("2_4nsvf")
-expand_mode = 1
-metadata/slide_from = "left"
-
-[node name="DecorRight" type="TextureRect" parent="UILayer/Control/DecorContainer" unique_id=775995888]
-layout_mode = 0
-offset_left = 1570.0
-offset_top = 250.0
-offset_right = 1870.0
-offset_bottom = 590.0
-mouse_filter = 2
-texture = ExtResource("2_4nsvf")
-expand_mode = 1
-metadata/slide_from = "right"
-
 [node name="TextureRect" type="TextureRect" parent="UILayer/Control" unique_id=814977104]
 visible = false
 texture_filter = 1
