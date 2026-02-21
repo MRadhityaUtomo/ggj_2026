@@ -13,20 +13,31 @@ var level_scenes: Array[String] = [
 	"res://scenes/levels/level_6.tscn",
 	"res://scenes/levels/jump_intermediate_level.tscn",
 	"res://scenes/levels/level_dash_intro.tscn",
+	"res://scenes/levels/glitch_trap_level.tscn",
 ]
 
 const MAIN_MENU_SCENE: String = "res://scenes/levels/main_menu.tscn"
 
 # ─── STATE ────────────────────────────────────────────────────────────────────
-var level_flags: Array[bool] = [true, true, true, true, true, true, true, true]
+var level_flags: Array[bool] = [true, true, true, true, true, true, true, true,true]
 
 # Track which level the player is currently playing (not just first incomplete)
 var active_level_index: int = 0
 
-const TOTAL_LEVELS: int = 8
+const TOTAL_LEVELS: int = 9
+
+# ─── CHALLENGE MODE ──────────────────────────────────────────────────────────
+var challenge_mode: bool = false
+var challenge_timer: float = 0.0
+var challenge_timer_running: bool = false
+var _challenge_level_start_time: float = 0.0  # Timer snapshot when entering a level
 
 func _ready() -> void:
-	pass
+	set_process(true)
+
+func _process(delta: float) -> void:
+	if challenge_mode and challenge_timer_running:
+		challenge_timer += delta
 
 # ─── PROGRESSION LOGIC ────────────────────────────────────────────────────────
 
@@ -77,12 +88,19 @@ func all_levels_complete() -> bool:
 ## Reload the SAME level the player was playing
 func on_lose_condition_met() -> void:
 	print("⚠ Lose condition met. Restarting level %d..." % (active_level_index + 1))
+	# In challenge mode, revert timer to level start checkpoint
+	if challenge_mode:
+		on_challenge_death()
 	load_level_scene(active_level_index)
 
 ## Helper to safely load a level scene by index
 func load_level_scene(index: int) -> void:
 	if index >= 0 and index < TOTAL_LEVELS:
 		active_level_index = index
+		
+		# Save challenge checkpoint when entering a new level
+		if challenge_mode:
+			save_challenge_checkpoint()
 		
 		# Use MainSceneManager - DO NOT fall back to direct scene change
 		var main_manager = get_tree().root.get_node_or_null("MainSceneManager")
@@ -107,3 +125,59 @@ func go_to_main_menu() -> void:
 		main_manager.return_to_main_menu()
 	else:
 		push_error("CRITICAL: MainSceneManager not found! Cannot return to menu.")
+
+# ─── CHALLENGE MODE HELPERS ───────────────────────────────────────────────────
+
+## Start challenge mode: reset everything and begin at level 0
+func start_challenge_mode() -> void:
+	challenge_mode = true
+	challenge_timer = 0.0
+	challenge_timer_running = false
+	_challenge_level_start_time = 0.0
+	reset_progress()
+	active_level_index = 0
+	print("⏱ Challenge Mode started!")
+
+## Call when a level begins playing (resumes timer and saves checkpoint)
+func resume_challenge_timer() -> void:
+	if challenge_mode:
+		challenge_timer_running = true
+
+## Save a checkpoint so we can revert on death
+func save_challenge_checkpoint() -> void:
+	if challenge_mode:
+		_challenge_level_start_time = challenge_timer
+		print("⏱ Checkpoint saved at %s" % Leaderboard.format_time(_challenge_level_start_time))
+
+## Call when zoomed out / paused (pauses timer)
+func pause_challenge_timer() -> void:
+	if challenge_mode:
+		challenge_timer_running = false
+
+## Call when player dies / restarts level — revert timer to level start
+func on_challenge_death() -> void:
+	if challenge_mode:
+		challenge_timer_running = false
+		challenge_timer = _challenge_level_start_time
+		print("⏱ Timer reverted to %s" % Leaderboard.format_time(challenge_timer))
+
+## Call when all levels complete in challenge mode
+func finish_challenge_mode() -> float:
+	challenge_timer_running = false
+	var final_time = challenge_timer
+	print("⏱ Challenge Mode finished! Time: %s" % Leaderboard.format_time(final_time))
+	return final_time
+
+## End challenge mode and return to normal
+func exit_challenge_mode() -> void:
+	challenge_mode = false
+	challenge_timer = 0.0
+	challenge_timer_running = false
+
+## Get formatted challenge timer string
+func get_challenge_time_string() -> String:
+	return Leaderboard.format_time(challenge_timer)
+
+## Check if we are in challenge mode
+func is_challenge_mode() -> bool:
+	return challenge_mode

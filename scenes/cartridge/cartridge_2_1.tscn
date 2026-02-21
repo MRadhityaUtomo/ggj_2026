@@ -8,6 +8,7 @@
 [ext_resource type="Texture2D" uid="uid://du4albyvle8g8" path="res://spikesmall_big.png" id="6_y1wic"]
 [ext_resource type="Script" uid="uid://mac1mox6oqp6" path="res://scenes/cartridge/obstacle.gd" id="7_u63sh"]
 [ext_resource type="FontFile" uid="uid://d37q1ocuu8mfi" path="res://assets/boldpixels/BoldsPixels.ttf" id="8_tx8hr"]
+[ext_resource type="Script" uid="uid://jr2q4vpdl5eo" path="res://scenes/cartridge/double_jump_label.gd" id="9_0xia1"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_6aca4"]
 texture = ExtResource("1_6aca4")
@@ -874,6 +875,11 @@ font = ExtResource("8_tx8hr")
 font_size = 28
 font_color = Color(0.0307278, 0.3623518, 0.38221973, 1)
 
+[sub_resource type="LabelSettings" id="LabelSettings_tx8hr"]
+font = ExtResource("8_tx8hr")
+font_size = 12
+font_color = Color(0.0307278, 0.3623518, 0.38221973, 1)
+
 [node name="cartridge_2_1" type="Node2D" unique_id=344694825]
 
 [node name="Background" type="TileMapLayer" parent="." unique_id=243495915]
@@ -899,3 +905,13 @@ offset_right = 200.0
 offset_bottom = 196.0
 text = ">>>"
 label_settings = SubResource("LabelSettings_0xia1")
+
+[node name="Label2" type="Label" parent="." unique_id=909419208]
+offset_left = 200.0
+offset_top = 144.0
+offset_right = 352.0
+offset_bottom = 176.0
+text = "hint: if you get stuck
+R or START to restart level"
+label_settings = SubResource("LabelSettings_tx8hr")
+script = ExtResource("9_0xia1")

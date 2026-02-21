@@ -14,8 +14,14 @@ func _ready() -> void:
 	# Wait one frame for viewport wrapper to initialize
 	await get_tree().process_frame
 	
-	# Load initial scene (main menu)
-	load_scene("res://scenes/levels/main_menu.tscn")
+	# Check if challenge mode is active - skip menu and go straight to level 1
+	if LevelProgression.is_challenge_mode():
+		LevelProgression.set_active_level(0)
+		LevelProgression.resume_challenge_timer()
+		load_scene(LevelProgression.level_scenes[0])
+	else:
+		# Load initial scene (main menu)
+		load_scene("res://scenes/levels/main_menu.tscn")
 
 ## Switch the content inside the SubViewport using viewport_wrapper's method
 func load_scene(scene_path: String) -> void:

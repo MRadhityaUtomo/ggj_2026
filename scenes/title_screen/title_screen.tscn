@@ -3,9 +3,108 @@
 [ext_resource type="Script" uid="uid://b821817mxl3ad" path="res://scenes/title_screen/title_screen.gd" id="1_script"]
 [ext_resource type="FontFile" uid="uid://d37q1ocuu8mfi" path="res://assets/boldpixels/BoldsPixels.ttf" id="2_font"]
 [ext_resource type="PackedScene" uid="uid://bhcxsmkbraa1n" path="res://scenes/cartridge/shader.tscn" id="3_shader"]
+[ext_resource type="Texture2D" uid="uid://c713qvxmt8ovy" path="res://logo_fallthrough.png" id="4_d6x3v"]
+[ext_resource type="Texture2D" uid="uid://dk5ytxgkwji6d" path="res://controls sheet.png" id="5_5uxxq"]
+[ext_resource type="Script" uid="uid://jr2q4vpdl5eo" path="res://scenes/cartridge/double_jump_label.gd" id="6_cxcmr"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_5uxxq"]
+atlas = ExtResource("4_d6x3v")
+region = Rect2(0, 0, 640, 448)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_cxcmr"]
+atlas = ExtResource("4_d6x3v")
+region = Rect2(640, 0, 640, 448)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_j12ko"]
+atlas = ExtResource("4_d6x3v")
+region = Rect2(1280, 0, 640, 448)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_yegqs"]
+atlas = ExtResource("4_d6x3v")
+region = Rect2(1920, 0, 640, 448)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_xoykc"]
+atlas = ExtResource("4_d6x3v")
+region = Rect2(2560, 0, 640, 448)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ju3lf"]
+atlas = ExtResource("4_d6x3v")
+region = Rect2(3200, 0, 640, 448)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_xetrx"]
+atlas = ExtResource("4_d6x3v")
+region = Rect2(3840, 0, 640, 448)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_yepnq"]
+atlas = ExtResource("4_d6x3v")
+region = Rect2(4480, 0, 640, 448)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_4u6ih"]
+atlas = ExtResource("4_d6x3v")
+region = Rect2(5120, 0, 640, 448)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_v2f8g"]
+atlas = ExtResource("4_d6x3v")
+region = Rect2(5760, 0, 640, 448)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_k2vsc"]
+atlas = ExtResource("4_d6x3v")
+region = Rect2(6400, 0, 640, 448)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_aihkd"]
+atlas = ExtResource("4_d6x3v")
+region = Rect2(7040, 0, 640, 448)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_seoxh"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_5uxxq")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_cxcmr")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_j12ko")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_yegqs")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_xoykc")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ju3lf")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_xetrx")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_yepnq")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_4u6ih")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_v2f8g")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_k2vsc")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_aihkd")
+}],
+"loop": true,
+"name": &"default",
+"speed": 10.0
+}]
 
 [sub_resource type="LabelSettings" id="LabelSettings_vuv2h"]
 font_size = 128
+
+[sub_resource type="LabelSettings" id="LabelSettings_5uxxq"]
+font = ExtResource("2_font")
+font_size = 56
 
 [node name="TitleScreen" type="Control" unique_id=1785011443]
 layout_mode = 3
@@ -23,7 +122,14 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-color = Color(0.5255925, 0.118059255, 0.15395135, 1)
+color = Color(0.4858303, 0.10170209, 0.13285998, 1)
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=659900177]
+position = Vector2(983.99994, 392)
+scale = Vector2(3, 3)
+sprite_frames = SubResource("SpriteFrames_seoxh")
+autoplay = "default"
+frame_progress = 0.96660453
 
 [node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=720774366]
 layout_mode = 1
@@ -32,15 +138,17 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -150.0
-offset_top = -100.0
-offset_right = 150.0
-offset_bottom = 100.0
+offset_left = -208.0
+offset_top = 240.0
+offset_right = 92.0
+offset_bottom = 490.0
 grow_horizontal = 2
 grow_vertical = 2
+scale = Vector2(1.4, 1.4)
 theme_override_constants/separation = 16
 
 [node name="Title" type="Label" parent="VBoxContainer" unique_id=1400549837]
+visible = false
 layout_mode = 2
 theme_override_fonts/font = ExtResource("2_font")
 theme_override_font_sizes/font_size = 48
@@ -62,7 +170,19 @@ text = "PLAY"
 layout_mode = 2
 theme_override_fonts/font = ExtResource("2_font")
 theme_override_font_sizes/font_size = 24
-text = "TUTORIAL"
+text = "CONTROLS"
+
+[node name="ChallengeButton" type="Button" parent="VBoxContainer" unique_id=390195909]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("2_font")
+theme_override_font_sizes/font_size = 24
+text = "CHALLENGE"
+
+[node name="LeaderboardButton" type="Button" parent="VBoxContainer" unique_id=497297276]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("2_font")
+theme_override_font_sizes/font_size = 24
+text = "LEADERBOARD"
 
 [node name="ExitButton" type="Button" parent="VBoxContainer" unique_id=1032852947]
 layout_mode = 2
@@ -70,12 +190,66 @@ theme_override_fonts/font = ExtResource("2_font")
 theme_override_font_sizes/font_size = 24
 text = "EXIT"
 
-[node name="CRTShader" parent="." unique_id=1667639961 instance=ExtResource("3_shader")]
+[node name="shadow" type="ColorRect" parent="." unique_id=1747723978]
 visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.03, 0.03, 0.03, 0.65882355)
+
+[node name="CRTShader" parent="." unique_id=1667639961 instance=ExtResource("3_shader")]
 layout_mode = 1
 mouse_filter = 2
 mouse_behavior_recursive = 1
 
+[node name="Button" type="Button" parent="." unique_id=1750017906]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+flat = true
+
+[node name="tutorial_image" type="TextureRect" parent="." unique_id=1716314804]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 176.0
+offset_top = 48.0
+offset_right = -172.0
+offset_bottom = -184.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("5_5uxxq")
+
+[node name="Label" type="Label" parent="." unique_id=348969014]
+visible = false
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -347.0
+offset_top = 508.0
+offset_right = 347.0
+offset_bottom = 558.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "PRESS ANYTHING TO CLOSE"
+label_settings = SubResource("LabelSettings_5uxxq")
+script = ExtResource("6_cxcmr")
+
 [connection signal="pressed" from="VBoxContainer/PlayButton" to="." method="_on_play_button_pressed"]
 [connection signal="pressed" from="VBoxContainer/TutorialButton" to="." method="_on_tutorial_button_pressed"]
+[connection signal="pressed" from="VBoxContainer/ChallengeButton" to="." method="_on_challenge_button_pressed"]
+[connection signal="pressed" from="VBoxContainer/LeaderboardButton" to="." method="_on_leaderboard_button_pressed"]
 [connection signal="pressed" from="VBoxContainer/ExitButton" to="." method="_on_exit_button_pressed"]
+[connection signal="pressed" from="Button" to="." method="_on_close_overlay_pressed"]
