@@ -4,7 +4,9 @@
 [ext_resource type="Texture2D" uid="uid://bj0x5l72tqumo" path="res://TILEMAP_water.png" id="2_3vo8j"]
 [ext_resource type="Texture2D" uid="uid://ooaub1q47sck" path="res://green_big.png" id="3_jxbvm"]
 [ext_resource type="Texture2D" uid="uid://c6vr85puxtwxr" path="res://TILEMAP_water_big.png" id="4_m5h7t"]
+[ext_resource type="Texture2D" uid="uid://dr83m1ttnspci" path="res://assets/rotate-right-svgrepo-com.png" id="6_7ayre"]
 [ext_resource type="Texture2D" uid="uid://du4albyvle8g8" path="res://spikesmall_big.png" id="6_pmasp"]
+[ext_resource type="Texture2D" uid="uid://cvo127royv0au" path="res://assets/mouse-left-button-svgrepo-com.png" id="7_5oar5"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_iwpxm"]
 texture = ExtResource("1_p4k6p")
@@ -1186,3 +1188,17 @@ tile_set = SubResource("TileSet_wmi5b")
 [node name="Obstacle" type="TileMapLayer" parent="." unique_id=1432008743]
 tile_map_data = PackedByteArray("AAABAAMAAgABAAAAAAABAAQAAgABAAEAAAACAAMAAgACAAAAAAACAAQAAgACAAEAAAACAAUAAgABAAAAAAACAAYAAgABAAEAAAADAAUAAgACAAAAAAADAAYAAgACAAEAAAAJAAUAAgABAAAAAAAJAAYAAgABAAEAAAAKAAUAAgACAAAAAAAKAAYAAgACAAEAAAAEAAUAAgAEAAAAAAAFAAUAAgAFAAAAAAAGAAUAAgAEAAAAAAAHAAUAAgAFAAAAAAAEAAIAAgAEAAEAAAAFAAIAAgAFAAEAAAAGAAIAAgAEAAEAAAAHAAIAAgAFAAEAAAA=")
 tile_set = SubResource("TileSet_wgoff")
+
+[node name="RotateRightSvgrepoCom" type="Sprite2D" parent="." unique_id=292558763]
+z_index = 300
+texture_filter = 1
+position = Vector2(384.8, -42.199997)
+scale = Vector2(0.18, 0.18)
+texture = ExtResource("6_7ayre")
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=1034052094]
+z_index = 300
+texture_filter = 1
+position = Vector2(342.8, -50.199997)
+scale = Vector2(0.18, 0.18)
+texture = ExtResource("7_5oar5")

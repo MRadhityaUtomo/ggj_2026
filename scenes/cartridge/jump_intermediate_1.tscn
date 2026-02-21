@@ -6,6 +6,8 @@
 [ext_resource type="Texture2D" uid="uid://c6vr85puxtwxr" path="res://TILEMAP_water_big.png" id="4_qtrhq"]
 [ext_resource type="Texture2D" uid="uid://8mpfpgmxbq64" path="res://icon.svg" id="5_dtsup"]
 [ext_resource type="Texture2D" uid="uid://du4albyvle8g8" path="res://spikesmall_big.png" id="6_1rcvn"]
+[ext_resource type="Texture2D" uid="uid://dr83m1ttnspci" path="res://assets/rotate-right-svgrepo-com.png" id="7_qtrhq"]
+[ext_resource type="Texture2D" uid="uid://cvo127royv0au" path="res://assets/mouse-left-button-svgrepo-com.png" id="8_hdufx"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_iwpxm"]
 texture = ExtResource("1_oqtoq")
@@ -1319,3 +1321,17 @@ tile_set = SubResource("TileSet_0dnr4")
 position = Vector2(32, 32)
 tile_map_data = PackedByteArray("AAABAP//AQAEAAQAAGAEAP//AQAEAAUAAAAFAP//AQAHAAMAADAGAP//AQAEAAUAAAAHAP//AQAEAAUAAAAIAP//AQACAAUAAAAJAP//AQAFAAUAAAAKAP//AQACAAQAAAAKAAAAAQAGAAMAAAACAP//AQACAAQAAAADAP//AQAGAAQAAAAKAAIAAQAAAAQAADAKAAEAAQAAAAUAADAKAAQAAQAEAAQAAAAKAAUAAQAGAAMAAFAKAAYAAQAHAAMAADAJAAYAAQAGAAMAAAAIAAYAAQABAAMAAAAHAAYAAQAFAAQAAAAGAAYAAQAEAAUAAAAFAAYAAQAFAAQAAAACAAYAAQAEAAMAAAAEAAYAAQABAAUAAAADAAYAAQAAAAUAAAABAAYAAQADAAUAADD/////AQAAAAQAAAD//wAAAQAAAAUAAAD//wEAAQAFAAQAAAD//wIAAQAGAAMAAAD//wMAAQADAAQAAGD//wQAAQACAAQAAAD//wUAAQAFAAQAAAD//wYAAQAEAAUAAAAAAAYAAQACAAQAAAAAAP//AQABAAQAAAADAAUAAQAAAAQAAAAEAAUAAQABAAQAAAAAAAAAAQABAAUAAAAIAAQAAQAAAAQAAAAIAAUAAQAAAAUAAAAJAAQAAQABAAQAAAAJAAUAAQABAAUAAAAJAAAAAQAGAAQAAFABAAAAAQAHAAQAAAAIAAAAAQAGAAUAABAJAAEAAQAHAAQAABAJAAIAAQAHAAUAABABAAEAAQAHAAUAAAAKAAMAAQADAAQAAAAHAAQAAQADAAQAAAAHAAUAAQADAAUAAAADAAQAAQABAAMAAAAEAAQAAQACAAMAAAA=")
 tile_set = SubResource("TileSet_wmi5b")
+
+[node name="RotateRightSvgrepoCom" type="Sprite2D" parent="." unique_id=1739768324]
+z_index = 300
+texture_filter = 1
+position = Vector2(384.8, -42.199997)
+scale = Vector2(0.18, 0.18)
+texture = ExtResource("7_qtrhq")
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=753203235]
+z_index = 300
+texture_filter = 1
+position = Vector2(342.8, -50.199997)
+scale = Vector2(0.18, 0.18)
+texture = ExtResource("8_hdufx")

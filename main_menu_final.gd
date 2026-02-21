@@ -62,6 +62,9 @@ var decor_container: Control = null
 
 var level_hud: Control = null
 
+var pause_menu_scene = preload("res://scenes/pause_menu/pause_menu.tscn")
+var pause_menu_instance: Control = null
+
 func _ready():
 	# Setup audio players
 	zoom_audio = AudioStreamPlayer.new()
@@ -188,12 +191,10 @@ func _process(delta):
 	
 	match current_state:
 		MenuState.PLAYING:
-			# ESC to enter selection mode (zoom out to choose levels)
-			if Input.is_action_just_pressed("exit"):
+			if Input.is_action_just_pressed("ui_cancel"):  # ESC - pause menu
+				show_pause_menu()
+			elif Input.is_action_just_pressed("exit"):  # Y / Q - level selection
 				pause_and_show_selection()
-			
-			# Jump button does nothing in menu - only works in selection mode
-			# Removed the jump input here entirely
 		
 		MenuState.PAUSED_SELECTION:
 			# Cycle cartridges (including menu at index 0)
@@ -203,20 +204,12 @@ func _process(delta):
 			elif Input.is_action_just_pressed("right") or Input.is_action_just_pressed("cycle_right"):
 				cycle_preview(1)
 				play_cycle_sfx()
-			
-			# JUMP BUTTON (Space/A) to either:
-			# - Load level if on level preview (cartridge 1+)
-			# - Do nothing if on menu cartridge (cartridge 0)
 			elif Input.is_action_just_pressed("up") and level_load_cooldown <= 0:
-				if preview_cartridge_index > 0:  # Level preview selected
+				if preview_cartridge_index > 0:
 					confirm_and_load_level()
-				# If preview_cartridge_index == 0, do nothing (stay in selection mode)
-			
-			# ESC to cancel and return to menu (always go back to cartridge 0)
 			elif Input.is_action_just_pressed("exit"):
 				return_to_menu()
 			
-			# Rotate TV
 			if Input.is_action_just_pressed("rotate_right"):
 				rotate_tv_90_degrees()
 			elif Input.is_action_just_pressed("rotate_left"):
@@ -400,3 +393,26 @@ func _on_tv_frame_mouse_entered():
 func _on_tv_frame_mouse_exited():
 	if tv_frame:
 		tv_frame.modulate = Color(1, 1, 1)
+
+func show_pause_menu():
+	if pause_menu_instance:
+		return
+	pause_menu_instance = pause_menu_scene.instantiate()
+	pause_menu_instance.process_mode = Node.PROCESS_MODE_ALWAYS
+	get_tree().root.add_child(pause_menu_instance)
+	pause_menu_instance.resume_pressed.connect(_on_pause_resume)
+	pause_menu_instance.exit_to_title_pressed.connect(_on_pause_exit_title)
+	get_tree().paused = true
+
+func _on_pause_resume():
+	get_tree().paused = false
+	if pause_menu_instance:
+		pause_menu_instance.queue_free()
+		pause_menu_instance = null
+
+func _on_pause_exit_title():
+	get_tree().paused = false
+	if pause_menu_instance:
+		pause_menu_instance.queue_free()
+		pause_menu_instance = null
+	get_tree().change_scene_to_file("res://scenes/title_screen/title_screen.tscn")

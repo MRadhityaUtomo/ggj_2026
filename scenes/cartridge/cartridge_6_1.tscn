@@ -6,6 +6,10 @@
 [ext_resource type="Texture2D" uid="uid://8mpfpgmxbq64" path="res://icon.svg" id="4_vutj7"]
 [ext_resource type="Texture2D" uid="uid://du4albyvle8g8" path="res://spikesmall_big.png" id="5_vutj7"]
 [ext_resource type="Script" uid="uid://mac1mox6oqp6" path="res://scenes/cartridge/obstacle.gd" id="6_l05vt"]
+[ext_resource type="FontFile" uid="uid://d37q1ocuu8mfi" path="res://assets/boldpixels/BoldsPixels.ttf" id="7_2p22t"]
+[ext_resource type="Script" uid="uid://jr2q4vpdl5eo" path="res://scenes/cartridge/double_jump_label.gd" id="8_5w1gm"]
+[ext_resource type="Texture2D" uid="uid://dr83m1ttnspci" path="res://assets/rotate-right-svgrepo-com.png" id="9_jshqc"]
+[ext_resource type="Texture2D" uid="uid://cvo127royv0au" path="res://assets/mouse-left-button-svgrepo-com.png" id="10_rsk83"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_iwpxm"]
 texture = ExtResource("1_v6ybi")
@@ -962,6 +966,10 @@ physics_layer_0/collision_layer = 1
 sources/0 = SubResource("TileSetAtlasSource_vutj7")
 sources/1 = SubResource("TileSetAtlasSource_l05vt")
 
+[sub_resource type="LabelSettings" id="LabelSettings_jshqc"]
+font = ExtResource("7_2p22t")
+font_color = Color(0.27058825, 0.57254905, 0.18431373, 1)
+
 [node name="Cartridge1" type="Node2D" unique_id=1998148459]
 
 [node name="Background" type="TileMapLayer" parent="." unique_id=377043486]
@@ -978,3 +986,26 @@ tile_set = SubResource("TileSet_wmi5b")
 tile_map_data = PackedByteArray("AAABAAUAAQADAAAAAAABAAYAAQADAAEAAAABAAcAAQADAAIAAAACAAcAAQAEAAIAAAADAAcAAQAFAAIAAAAEAAUAAQABAAAAAAAEAAYAAQABAAEAAAAFAAUAAQACAAAAAAAFAAYAAQACAAEAAAABAAMAAQAEAAAAAAACAAMAAQAFAAAAAAABAAQAAQAEAAEAAAACAAQAAQAFAAEAAAA=")
 tile_set = SubResource("TileSet_5w1gm")
 script = ExtResource("6_l05vt")
+
+[node name="Label" type="Label" parent="." unique_id=2117355822]
+offset_left = 99.0
+offset_top = 134.0
+offset_right = 301.0
+offset_bottom = 157.0
+text = "CLICK OR R2/L2 TO ROTATE"
+label_settings = SubResource("LabelSettings_jshqc")
+script = ExtResource("8_5w1gm")
+
+[node name="RotateRightSvgrepoCom" type="Sprite2D" parent="." unique_id=203856049]
+z_index = 300
+texture_filter = 1
+position = Vector2(384.8, -42.199997)
+scale = Vector2(0.18, 0.18)
+texture = ExtResource("9_jshqc")
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=1489784074]
+z_index = 300
+texture_filter = 1
+position = Vector2(342.8, -50.199997)
+scale = Vector2(0.18, 0.18)
+texture = ExtResource("10_rsk83")

@@ -165,7 +165,9 @@ func _ready():
 func _process(_delta):
 	match current_state:
 		GameState.PLAYING:
-			if Input.is_action_just_pressed("exit"):  # ESC key / Y button
+			if Input.is_action_just_pressed("ui_cancel"):  # ESC key
+				show_pause_menu()
+			if Input.is_action_just_pressed("exit"):  # Y button / Q key
 				pause_and_show_selection()
 		
 		GameState.PAUSED_SELECTION:
@@ -444,3 +446,29 @@ func get_zoom_for_rotation(rotation_rad: float) -> Vector2:
 	else:
 		# Horizontal orientation, normal zoom
 		return Vector2(1.0, 1.0)
+
+var pause_menu_scene = preload("res://scenes/pause_menu/pause_menu.tscn")
+var pause_menu_instance: Control = null
+
+func show_pause_menu():
+	if pause_menu_instance:
+		return
+	pause_menu_instance = pause_menu_scene.instantiate()
+	pause_menu_instance.process_mode = Node.PROCESS_MODE_ALWAYS
+	get_tree().root.add_child(pause_menu_instance)  # Add to ROOT not self
+	pause_menu_instance.resume_pressed.connect(_on_pause_resume)
+	pause_menu_instance.exit_to_title_pressed.connect(_on_pause_exit_title)
+	get_tree().paused = true  # Pause AFTER adding to tree
+
+func _on_pause_resume():
+	get_tree().paused = false
+	if pause_menu_instance:
+		pause_menu_instance.queue_free()
+		pause_menu_instance = null
+
+func _on_pause_exit_title():
+	get_tree().paused = false
+	if pause_menu_instance:
+		pause_menu_instance.queue_free()
+		pause_menu_instance = null
+	get_tree().change_scene_to_file("res://scenes/title_screen/title_screen.tscn")

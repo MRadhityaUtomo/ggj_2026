@@ -24,7 +24,7 @@ var level_flags: Array[bool] = [true, true, true, true, true, true, true, true,t
 # Track which level the player is currently playing (not just first incomplete)
 var active_level_index: int = 0
 
-const TOTAL_LEVELS: int = 1
+const TOTAL_LEVELS: int = 9
 
 # ─── CHALLENGE MODE ──────────────────────────────────────────────────────────
 var challenge_mode: bool = false

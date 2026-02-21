@@ -296,3 +296,13 @@ offset_bottom = 127.0
 text = "PRESS SPACE TO CONFIRM LEVEL!"
 label_settings = SubResource("LabelSettings_306kr")
 script = ExtResource("3_3oga1")
+
+[node name="Label3" type="Label" parent="." unique_id=56974444]
+offset_left = 56.0
+offset_top = 144.0
+offset_right = 328.0
+offset_bottom = 175.0
+text = "COLLECT ALL STARS TO WIN"
+label_settings = SubResource("LabelSettings_306kr")
+horizontal_alignment = 1
+script = ExtResource("3_3oga1")
